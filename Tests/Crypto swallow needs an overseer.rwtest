@@ -1,0 +1,43 @@
+rwtest 1
+test "Crypto swallow needs an overseer" project="Apex Mechanoids" group="Ability" created=2026-09-26T00:00:00
+
+# A player Frostivus uses its commands only while a mechanitor controls it.
+# What the player meets first is vanilla's gate: Pawn_AbilityTracker.GetGizmos
+# shows a colony mech's abilities only while IsColonyMechPlayerControlled, and
+# that needs an overseer. A colony Frostivus without one has no "Crypto Swallow"
+# gizmo at all, so the first half asserts the gizmo absent. Behind it stands the
+# mod's own gate: FrostivusFoodPreservationUtility.HasFoodPreservationControl
+# asks IsColonyMechPlayerControlled, GetOverseer() != null and a control group -
+# the same gate that closes its two work givers.
+#
+# The downed colonist is a target the faction rule accepts, so the only gate
+# left to refuse the first use is control.
+#
+# The second half links a mechanitor to the Frostivus the player's way
+# ("overseer" walks the Connect-to job), then presses the same gizmo and clicks
+# the colonist - which is also the control that the gizmo label is right.
+# Verb_CastAbilityTouch walks the Frostivus to the colonist first, then the 1 s
+# warmup (60 ticks) and the APM_CryptoSwallow job run; the waitfor budget of 600
+# is that walk plus the warmup, with slack.
+
+requires dlc=Biotech
+requires mod=Mortis.ApexMechanoids
+spawn Pawn:APM_Mech_Frostivus faction=player name="Keeper"
+spawn Pawn:Colonist name="Fallen"
+down "Fallen"
+
+select "Keeper"
+gizmo "Crypto Swallow" expect=absent
+deselect
+assert pawn "Fallen" hediff=APM_Hediff_Devoured expect=absent
+
+requires verb=overseer
+spawn Pawn:Colonist name="Mechanitor"
+overseer "Keeper" by="Mechanitor"
+select "Keeper"
+gizmo "Crypto Swallow"
+target "Fallen"
+deselect
+waitfor pawn "Fallen" hediff=APM_Hediff_Devoured ticks=600
+assert pawn "Keeper" inventory=Human
+assert log clean

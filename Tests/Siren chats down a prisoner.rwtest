@@ -1,0 +1,43 @@
+rwtest 1
+test "Siren chats down a prisoner" project="Apex Mechanoids" group="Work" created=2026-09-26T00:00:00
+
+# The Siren is a warden mech: work type APM_SirenWarden, giver
+# APM_SirenChatWithPrisoner (WorkGiver_SirenWardenChat, JobDriver_SirenSong).
+# The gate SirenWardenUtility.CanSirenWork asks for a living, spawned, awake
+# APM_Mech_Siren and nothing about an overseer, so a colony Siren is asked here
+# directly, the way the work loop would ask it.
+#
+# Gate order of the giver: a pawn, vanilla ShouldTakeCareOfPrisoner, the Siren
+# can sing (Talking), the prisoner is secure, awake and not downed, the
+# interaction mode is AttemptRecruit or ReduceResistance, the prisoner is
+# scheduled for an interaction, then reservation and reach. All exits but the
+# schedule one are silent, so "assert prisoner ... secure" and "assert reach"
+# stand above the work line to say which half closed if it turns red.
+#
+# The song: two verses of 350 ticks at the prisoner, the outcome at the end:
+# resistance -= 1 x NegotiationAbility x moodCurve(0 -> 0.2, 0.5 -> 1, 1 -> 1.5).
+# A fresh prisoner sits near the middle of its mood, the Siren's fixed skill of
+# 10 puts NegotiationAbility close to 1, so 10 drops by roughly 0.5 to 1.5.
+# The bounds 7.0 .. 9.8 hold that with room, and still fail both on "nothing
+# happened" and on a runaway factor.
+#
+# Budget: two walks inside the prison block plus 700 ticks of singing; 3000 is
+# generous, and "job" reports the JobCondition it ended with.
+
+requires dlc=Biotech
+requires mod=Mortis.ApexMechanoids
+room size=5,5 prison=true name="cell"
+spawn Thing:Bed in="cell"
+spawn Pawn:Colonist in="cell" name="Prisoner"
+spawn Pawn:APM_Mech_Siren faction=player name="Siren"
+prisoner "Prisoner" resistance=10 mode=ReduceResistance
+
+assert prisoner "Prisoner" secure
+assert pawn "Prisoner" room=PrisonCell
+assert reach "Siren" to="Prisoner"
+assert pawn "Prisoner" resistance min=9.9 max=10.1
+work "Siren" giver=APM_SirenChatWithPrisoner on="Prisoner"
+job "Siren" giver=APM_SirenChatWithPrisoner on="Prisoner" until=done ticks=3000
+
+assert pawn "Prisoner" resistance min=7.0 max=9.8
+assert log clean

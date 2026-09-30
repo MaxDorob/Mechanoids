@@ -1,0 +1,38 @@
+rwtest 1
+test "Unity grows with conqueror allies" project="Apex Mechanoids" group="Hediff" created=2026-09-26T00:00:00
+
+# HediffComp_Unity (Comps/HediffComp_Unity.cs) sets APM_Hediff_Unity on every
+# Conqueror to 0.1 per other Conqueror of the same faction on the map, capped at
+# 1.0 by the race comp, and falls back to initialSeverity 0.001 when alone. It
+# recounts every 250 ticks from a random offset, so a budget of 600 ticks holds
+# two full intervals whatever the offset.
+#
+# Stages: from 0.1 MoveSpeed +0.05 (plus MeleeDPS x1.03), from 0.3 MoveSpeed +0.10.
+# The DMR is the one that is read. The Conqueror base writes MoveSpeed 4.3, so
+# alone it reads 4.3 and with two allies (severity 0.2, first stage) 4.35. The
+# gap is small but it is the whole effect of that stage; both bounds sit inside
+# half of it, so a lost statOffsets block turns the second read red.
+#
+# The third Conqueror is a colony mech: another faction, so it must not count.
+# It is spawned before the second hostile one, and the severity after it is
+# asserted to still sit at the lone value.
+
+requires dlc=Biotech
+requires mod=Mortis.ApexMechanoids
+spawn Pawn:APM_Mech_Conqueror_DMR name="DMR"
+tick 600 reason="two 250 tick recount intervals from a random offset"
+assert pawn "DMR" hediff=APM_Hediff_Unity expect=present
+assert pawn "DMR" hediff=APM_Hediff_Unity severity max=0.05
+assert pawn "DMR" stat=MoveSpeed min=4.25 max=4.32
+
+spawn Pawn:APM_Mech_Conqueror_SMG faction=player name="Colony SMG"
+tick 600 reason="two recount intervals; a colony Conqueror is no ally of a hostile one"
+assert pawn "DMR" hediff=APM_Hediff_Unity severity max=0.05
+
+spawn Pawn:APM_Mech_Conqueror_AR name="AR"
+spawn Pawn:APM_Mech_Conqueror_SMG name="SMG"
+tick 600 reason="two recount intervals after the allies arrived"
+assert pawn "DMR" hediff=APM_Hediff_Unity severity min=0.19 max=0.21
+assert pawn "AR" hediff=APM_Hediff_Unity severity min=0.19 max=0.21
+assert pawn "DMR" stat=MoveSpeed min=4.33 max=4.40
+assert log clean

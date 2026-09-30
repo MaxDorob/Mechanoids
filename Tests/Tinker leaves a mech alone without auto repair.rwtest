@@ -1,0 +1,41 @@
+rwtest 1
+test "Tinker leaves a mech alone without auto repair" project="Apex Mechanoids" group="Work" created=2026-09-30T00:00:00
+
+# The other direction of "Tinker repairs a mech on its own": with the patient's
+# CompMechRepairable.autoRepair off - vanilla's default - the unforced route
+# (JobGiver_Work -> APM_TinkerRepairMech) must leave it alone.
+# TinkerRepairUtility.CanRepairMechNow (:175) returns
+# "forced || repairable.autoRepair || pawn.Faction != Faction.OfPlayer", so a
+# colony Tinker repairs unasked only what the player switched on - the same rule
+# vanilla's mechanitors follow.
+#
+# A negation alone would also be green on a Tinker that does nothing at all
+# (the ShouldSkip failure of "Tinker repairs a damaged mech" is exactly that).
+# So the scene carries its own control: after the quiet stretch the toggle goes
+# on, and the same Tinker has to pick the job up within the same budget. Only
+# then does the quiet stretch mean "it chose not to", not "it could not".
+#
+# 2500 ticks of quiet is the budget the positive file grants for the pick-up;
+# if that file ever reports "held at" near its end, raise both together.
+
+requires dlc=Biotech
+requires mod=Mortis.ApexMechanoids
+spawn Pawn:APM_Mech_Tinker at 0,0 faction=player name="Tinker"
+spawn Pawn:Mech_Lifter at 6,0 faction=player name="Patient"
+spawn Pawn:Colonist at -4,0 name="Mechanitor"
+give "Mechanitor" need=Food value=1
+overseer "Tinker" by="Mechanitor" now=true
+overseer "Patient" by="Mechanitor" now=true
+comp "Patient" type=CompMechRepairable autoRepair=false
+damage "Patient" amount=10 def=Blunt
+assert pawn "Patient" hediff=Crack expect=present
+
+tick 2500 reason="the pick-up budget of the positive file, spent with auto repair off"
+assert jobhistory "Tinker" job=APM_RepairMech expect=absent
+assert pawn "Patient" hediff=Crack expect=present
+
+# The control: the same scene, the toggle on.
+comp "Patient" type=CompMechRepairable autoRepair=true
+waitfor jobhistory "Tinker" job=APM_RepairMech ticks=2500
+waitfor pawn "Patient" hediff=Crack expect=absent ticks=2500
+assert log clean

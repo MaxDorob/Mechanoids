@@ -1,0 +1,53 @@
+rwtest 1
+test "Tinker repairs a damaged mech" project="Apex Mechanoids" group="Work" created=2026-09-26T00:00:00
+
+# The Tinker is a repair mech: work type APM_TinkerRepair, emergency giver
+# APM_TinkerRepairMech, job APM_RepairMech (JobDriver_ApexRepairMech). One
+# RepairTick every round(120 / MechRepairSpeed 13.2) = 9 ticks until
+# MechRepairUtility.CanRepair turns false.
+#
+# TinkerRepairUtility.HasRepairControl lets a colony Tinker work only while it
+# is IsColonyMechPlayerControlled - it needs an overseer, even when the giver is
+# asked directly. So the first half of this file pins exactly that: without an
+# overseer the giver hands out nothing. The second half links both mechs to a
+# mechanitor with "overseer", the player's way (right-click, walk, connect).
+#
+# The damage: Blunt on the core part of a mech lands as Crack (the solid-part
+# hediff of Blunt). 10 points is far from lethal and well inside what one
+# repair job restores.
+#
+# This file is the ordered repair: the player right-clicks the patient, which
+# asks the giver forced, and the JobDriver then runs for real ("job ... until=
+# done" is green only when JobDriver_ApexRepairMech ends Succeeded, i.e.
+# MechRepairUtility.CanRepair turned false). "work" and "job" ask unforced
+# unless the line says forced=true - the earlier comment here claimed the
+# opposite. Unforced, CanRepairMechNow wants CompMechRepairable.autoRepair on
+# the patient, which vanilla leaves false, so the two lines carry forced=true.
+#
+# Whether the Tinker takes the job on its own - think tree, JobGiver_Work,
+# emergency giver, unforced - is not asked here. That is "Tinker repairs a mech
+# on its own" and "Tinker leaves a mech alone without auto repair".
+
+requires dlc=Biotech
+requires mod=Mortis.ApexMechanoids
+spawn Pawn:APM_Mech_Tinker faction=player name="Tinker"
+spawn Pawn:Mech_Lifter faction=player name="Patient"
+damage "Patient" amount=10 def=Blunt
+assert pawn "Patient" hediff=Crack expect=present
+
+work "Tinker" giver=APM_TinkerRepairMech on="Patient" expect=absent
+
+spawn Pawn:Colonist name="Mechanitor"
+overseer "Tinker" by="Mechanitor"
+overseer "Patient" by="Mechanitor"
+# Probe (2026-09-30): with both overseers in place the giver still answers
+# ShouldSkip, so CanDoTinkerRepair is false. Bandwidth is not it (2 + 1 of 6).
+# The left suspect is the awake gate: an idle colony mech lies down in
+# SelfShutdown, and Utils.IsAwakeOrInterruptibleSelfShutdown accepts that only
+# with an expiring, overridable job. A red line here names the job it has.
+assert pawn "Tinker" downed expect=absent
+assert pawn "Tinker" job=SelfShutdown expect=absent
+work "Tinker" giver=APM_TinkerRepairMech on="Patient" forced=true
+job "Tinker" giver=APM_TinkerRepairMech on="Patient" forced=true until=done ticks=2500
+assert pawn "Patient" hediff=Crack expect=absent
+assert log clean

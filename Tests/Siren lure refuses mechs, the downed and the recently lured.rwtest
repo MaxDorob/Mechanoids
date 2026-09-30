@@ -1,0 +1,88 @@
+rwtest 1
+test "Siren lure refuses mechs, the downed and the recently lured" project="Apex Mechanoids" group="Ability" created=2026-09-26T00:00:00
+
+# APM_Ability_SirenLure. CompAbilityEffect_SirenLureChannel.CanApplyOn asks
+# SirenLureUtility.CanStartLureOnTarget, which is SirenLureTargetRules.CanStartLure
+# over:
+#   CanAffectTarget - caster alive/spawned/not downed; target not the caster, not
+#     dead, not downed, spawned on the caster's map, flesh and not a mechanoid,
+#     PsychicSensitivity > 0, capable of Hearing
+#   alreadyBeingLured - target's CurJobDef is GotoMindControlled
+#   recentlyLured - target carries APM_Hediff_SirenLureCooldown
+#   then no other pawn's job is this ability or APM_SirenLureChannel on the target.
+# The comp's Valid asks the same rule, and the targeter runs it on the click:
+# a refused target keeps the targeter open. No reason text exists to pin, so
+# the refusals are "target ... expect=refused" after the gizmo "Aluring Song"
+# (label from Races_Mechanoids_Siren.xml).
+#
+# On a valid target Apply runs in comp order: CompAbilityEffect_ForceJob starts
+# GotoMindControlled towards the caster (expiry Ability_Duration 10 s = 600
+# ticks), then the channel comp marks the target and puts the caster on
+# APM_SirenLureChannel. The mark lasts MarkTicks(600, targetQuietTicks 2500) =
+# 3100 ticks. The channel fails as soon as the target is off GotoMindControlled,
+# so after 700 ticks both jobs are over and 2400 ticks of mark are left.
+#
+# The mark is made by a real lure, not by give: HediffCompProperties_Disappears
+# without disappearsAfterTicks starts at 0 and would drop a given mark on the
+# next tick. The deaf-to-the-song refusal is asked of a second Siren, because the
+# first one is on its own 1000 tick cooldown and would be refused for that. The
+# second Siren's accepted cast on "Fresh" is what shows its refusal on "Lured"
+# was the mark and not the draft or the cooldown; the first Siren's accepted cast
+# does the same for the mech and downed refusals above it.
+#
+# Timing: the lure's 0.5 s warmup is 30 ticks, so each accepted click is
+# followed by a waitfor on the mark with a budget of 150; the job lines behind
+# it read the same Apply.
+#
+# Both Sirens are player mechs (a mech without faction= is hostile and casts on
+# its own), overseen and drafted: a colony mech shows ability gizmos only under
+# an overseer, and the lure leaves displayGizmoWhileUndrafted off. 2 x
+# BandwidthCost 3 = 6, a mechlink's bandwidth.
+#
+# Not covered: that "Lured" actually ends up beside the caster. No assert reads
+# the distance between two pawns; the job lines stand in for the walk.
+
+requires dlc=Biotech
+requires mod=Mortis.ApexMechanoids
+spawn Pawn:APM_Mech_Siren at 0,0 faction=player name="Lure"
+spawn Pawn:APM_Mech_Siren at 0,4 faction=player name="Second"
+spawn Pawn:Colonist at -2,0 name="Mechanitor"
+spawn Pawn:Colonist at 8,0 name="Lured"
+spawn Pawn:Colonist at -8,0 name="Fresh"
+spawn Pawn:Colonist at 6,6 name="Fallen"
+spawn Pawn:APM_Mech_Tinker at 0,-6 faction=player name="Tin"
+overseer "Lure" by="Mechanitor" now=true
+overseer "Second" by="Mechanitor" now=true
+draft "Lure"
+draft "Second"
+down "Fallen"
+assert pawn "Fallen" downed
+
+select "Lure"
+gizmo "Aluring Song"
+target "Tin" expect=refused
+gizmo "Aluring Song"
+target "Fallen" expect=refused
+assert pawn "Lured" hediff=APM_Hediff_SirenLureCooldown expect=absent
+
+gizmo "Aluring Song"
+target "Lured"
+deselect
+waitfor pawn "Lured" hediff=APM_Hediff_SirenLureCooldown ticks=150
+assert pawn "Lured" job=GotoMindControlled
+assert pawn "Lure" job=APM_SirenLureChannel
+
+tick 700 reason="song 600 ticks, then 100 spare; the mark (3100) keeps 2400"
+assert pawn "Lured" job=GotoMindControlled expect=absent
+assert pawn "Lured" hediff=APM_Hediff_SirenLureCooldown expect=present
+
+select "Second"
+gizmo "Aluring Song"
+target "Lured" expect=refused
+gizmo "Aluring Song"
+target "Fresh"
+deselect
+waitfor pawn "Fresh" hediff=APM_Hediff_SirenLureCooldown ticks=150
+assert pawn "Tin" hediff=APM_Hediff_SirenLureCooldown expect=absent
+assert pawn "Fallen" hediff=APM_Hediff_SirenLureCooldown expect=absent
+assert log clean

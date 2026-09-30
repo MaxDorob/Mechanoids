@@ -1,0 +1,69 @@
+rwtest 1
+test "Mech whip lashes every foe in its arc" project="Apex Mechanoids" group="Weapon" created=2026-09-26T00:00:00
+
+# Verb_Whip.TryCastShot (Verbs/Verb_Whip.cs:136) does no pull and no knockback.
+# What it does beyond one hit is a sweep: Cast() hits the aimed-at thing with
+# the full tool damage, then walks AffectedCells - a wedge WhipWidth 3.6 wide at
+# its end, from the Lasher out to (distance to target + 0.5), with line of
+# sight - and hits every thing in it whose faction is null or hostile to the
+# caster, at damageFactor 0.5 (0.1 on a corpse or downed pawn). Same-faction
+# and non-hostile pawns in the wedge are skipped.
+#
+# Numbers: tool "edge" power 14, APM_Whip (CutBase) -> Cut. Full hit 14, swept
+# hit 7. Cut painPerSeverity 0.0125, so pain 0.175 on the target and 0.0875 on
+# a swept foe (unarmoured spawned colonists, no traits). The 30% EMP extra
+# damage does nothing to flesh (EMP harmsHealth false).
+#
+# Geometry, Lasher at 0,0 facing the target at 4,0: reach 4.5, wedge half-angle
+# asin(1.8 / sqrt(16 + 1.8^2)) = 24.2 deg.
+#   Target     4,0   aimed at                       -> full hit
+#   Flank      4,1   14.0 deg, 4.12 cells, hostile  -> half hit
+#   Ally       4,-1  in the wedge, player faction   -> spared
+#   Far        6,0   inside verb range 6.9 but past the 4.5 reach -> spared
+#   Behind    -4,0   outside the wedge              -> spared
+# Pain bounds: Target min=0.05 (a 14 point cut on a small part can take the
+# part off instead); Flank min=0.04 max=0.12 - half of 0.175 is 0.0875 and a
+# full hit (0.175) would break the upper bound; the spared three read 0.
+#
+# Warmup 0, so the lash lands a tick or two after the order; 60 ticks is
+# generous and waitfor stops the moment the target reads pain, before any
+# hostile has walked. The scene is paused while it is built for the same reason.
+# The Lasher needs an overseer to be drafted (bandwidth 2).
+
+# Target, Flank, Far and Behind have no faction: as enemies they fought the
+# drafted Ally and the Lasher from the first tick, and every pain line measured
+# that fight. Verb_Whip hits "t.Faction == null || t.HostileTo(caster)" (:180),
+# so factionless pawns are hit exactly like foes and start no fight. "speed x1"
+# after the attack: waitfor does not advance a paused clock.
+
+requires dlc=Biotech
+requires mod=Mortis.ApexMechanoids
+speed paused
+spawn Pawn:APM_Mech_Lasher at 0,0 faction=player facing=east name="Lasher"
+spawn Pawn:Colonist at -2,-3 name="Mechanitor"
+give "Mechanitor" need=Food value=1
+overseer "Lasher" by="Mechanitor" now=true
+equip "Lasher" thing=APM_Weapon_MechWhip now=true
+assert pawn "Lasher" equipment=APM_Weapon_MechWhip
+
+spawn Pawn:Colonist at 4,0 faction=none name="Target"
+spawn Pawn:Colonist at 4,1 faction=none name="Flank"
+spawn Pawn:Colonist at 4,-1 name="Ally"
+draft "Ally"
+spawn Pawn:Colonist at 6,0 faction=none name="Far"
+spawn Pawn:Colonist at -4,0 faction=none name="Behind"
+assert pawn "Target" pain max=0
+assert pawn "Flank" pain max=0
+
+draft "Lasher"
+attack "Lasher" target="Target"
+speed x1
+waitfor pawn "Target" pain min=0.05 ticks=60
+assert pawn "Flank" pain min=0.04 max=0.12
+assert pawn "Flank" hediff=Cut expect=present
+assert pawn "Ally" pain max=0
+assert pawn "Ally" hediff=Cut expect=absent
+assert pawn "Far" pain max=0
+assert pawn "Behind" pain max=0
+undraft "Lasher"
+assert log clean

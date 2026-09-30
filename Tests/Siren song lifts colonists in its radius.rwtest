@@ -1,0 +1,67 @@
+rwtest 1
+test "Siren song lifts colonists in its radius" project="Apex Mechanoids" group="Ability" created=2026-09-26T00:00:00
+
+# The promise: "a pleasant tune that lifts the spirits of nearby organic allies
+# and briefly helps them recover recreation".
+#
+# APM_Ability_SirenSong has Ability_EffectRadius 12 and canUseAoeToGetTargets,
+# so vanilla Ability.GetAffectedTargets takes every thing within 12 cells of the
+# target cell (the Siren itself) that verb.targetParams.CanTarget accepts. The
+# targetParams are the defaults plus canTargetSelf - humans, animals AND mechs,
+# any faction. On each of them:
+#   - CompAbilityEffect_GiveHediff hangs APM_Hediff_SirenSong (ignoreSelf: never
+#     on the Siren), 480 s via Ability_Duration. Its only stage carries capMods
+#     Consciousness +0.05 and Moving +0.10, so a colonist at 1.00 reads 1.05 and
+#     1.10.
+#   - ApexMechanoids.CompAbilityEffect_NeedOffset adds 0.2 to Joy where the pawn
+#     has a Joy need: 0.30 -> 0.50.
+#   - APM_Thought_SirenSong (ThoughtWorker_Hediff) gives +6 mood while the hediff
+#     is on; a spawned pawn has no traits to scale it, so 5.5 .. 6.5.
+# Nothing in the code filters flesh or faction: a mech (or a hostile pawn) in the
+# radius gets the hediff too. The description promises "organic allies"; that is
+# a finding for the mod, not asserted here in either direction.
+#
+# Setup: the song is used the way a player uses it - select the Siren, press
+# the gizmo "Siren's song" (label "siren's song" in Races_Mechanoids_Siren.xml).
+# targetRequired is false, so the gizmo opens no targeter and queues the cast
+# on the Siren itself. A colony mech shows ability gizmos only under an
+# overseer, and the song leaves displayGizmoWhileUndrafted off, so the Siren is
+# a player mech with an overseer and is drafted. faction=player also keeps it
+# from casting the song itself as a hostile mech right after spawning. The 1 s
+# warmup is 60 ticks; the first read after it is a waitfor with a budget of 180.
+#
+# "Far" stands 15 cells out, past the radius of 12; its Joy stays at 0.30 (it
+# can only fall), so max 0.32. The thought is situational and recalculated on
+# the mood handler's interval, hence waitfor with 300 ticks.
+
+requires dlc=Biotech
+requires mod=Mortis.ApexMechanoids
+spawn Pawn:APM_Mech_Siren at 0,0 faction=player name="Siren"
+spawn Pawn:Colonist at 0,-2 name="Mechanitor"
+spawn Pawn:Colonist at 4,0 name="Near"
+spawn Pawn:Colonist at 15,0 name="Far"
+overseer "Siren" by="Mechanitor" now=true
+draft "Siren"
+give "Near" need=Joy value=0.3
+give "Far" need=Joy value=0.3
+
+assert pawn "Near" capacity=Moving min=0.95 max=1.02
+assert pawn "Near" capacity=Consciousness min=0.95 max=1.02
+
+select "Siren"
+gizmo "Siren's song"
+deselect
+
+waitfor pawn "Near" hediff=APM_Hediff_SirenSong ticks=180
+assert pawn "Near" need=Joy min=0.48 max=0.52
+assert pawn "Near" capacity=Moving min=1.07 max=1.13
+assert pawn "Near" capacity=Consciousness min=1.02 max=1.08
+waitfor pawn "Near" thought=APM_Thought_SirenSong ticks=300
+assert pawn "Near" thought=APM_Thought_SirenSong mood min=5.5 max=6.5
+
+assert pawn "Far" hediff=APM_Hediff_SirenSong expect=absent
+assert pawn "Far" need=Joy max=0.32
+assert pawn "Far" capacity=Moving max=1.02
+assert pawn "Far" thought=APM_Thought_SirenSong expect=absent
+assert pawn "Siren" hediff=APM_Hediff_SirenSong expect=absent
+assert log clean

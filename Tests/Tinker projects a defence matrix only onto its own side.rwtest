@@ -1,0 +1,56 @@
+rwtest 1
+test "Tinker projects a defence matrix only onto its own side" project="Apex Mechanoids" group="Ability" created=2026-09-26T00:00:00
+
+# APM_DefenceMatrix has no effect comp that does anything on Activate - the
+# shield lives in its job. jobDef APM_ProjectDefenceMatrix runs
+# JobDriver_ProjectShield: the vanilla CastAbility toils (warmup 0.3 s = 18
+# ticks), then a toil that spawns a MechShield on the target's cell, ties it to
+# the target (SetTarget) and sets its interceptor to the Tinker's
+# MechRemoteShieldEnergy 200. The toil never completes on its own; the shield
+# goes when the job ends. So the matrix is used the way a player uses it:
+# select the Tinker, press the gizmo "Defence Matrix", click the pawn.
+#
+# Who may be targeted is decided three times, and all three read the same
+# rule: same faction and not hostile (Verb_CastSameFactionAbility.CanHitTarget,
+# .ValidateTarget, .TryStartCastOn; CompAbilityEffect_SameFactionTarget
+# .CanApplyOn). Range is MechRemoteShieldDistance 9.9, line of sight required.
+# The click on the foe is turned down by ValidateTarget in the targeter; the
+# click on the ally with the same gizmo is its control.
+#
+# Scene: Tinker at 0,0; "Ally", a drafted colonist, at 5,0; "Foe", a hostile
+# colonist, at 0,5. Both are 5 cells out, inside 9.9 and in sight, so the only
+# difference between them is the faction. The foe is asked first and then put
+# down: a standing foe within 2.9 cells would be a melee threat and refuse the
+# ally cast for a different reason (CasterHasCloseMeleeThreat), and a downed
+# pawn is no threat.
+#
+# Budget: 18 ticks of warmup plus the toil's init; 120 ticks is generous and
+# waitfor reports the margin. The shield is read on the ally's cell, which it
+# holds because the ally is drafted.
+
+requires dlc=Biotech
+requires mod=Mortis.ApexMechanoids
+speed paused
+spawn Pawn:APM_Mech_Tinker at 0,0 faction=player name="Tinker"
+spawn Pawn:Colonist at -3,-2 name="Mechanitor"
+give "Mechanitor" need=Food value=1
+overseer "Tinker" by="Mechanitor" now=true
+draft "Tinker"
+spawn Pawn:Colonist at 5,0 name="Ally"
+draft "Ally"
+spawn Pawn:Colonist at 0,5 faction=enemy name="Foe"
+
+select "Tinker"
+gizmo "Defence Matrix"
+target "Foe" expect=refused
+assert thing MechShield expect=absent
+down "Foe"
+
+gizmo "Defence Matrix"
+target "Ally"
+deselect
+speed x1
+waitfor thing MechShield at 5,0 ticks=120
+assert thing MechShield at 0,5 expect=absent
+undraft "Tinker"
+assert log clean

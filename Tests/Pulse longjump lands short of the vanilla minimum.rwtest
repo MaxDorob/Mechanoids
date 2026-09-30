@@ -1,0 +1,47 @@
+rwtest 1
+test "Pulse longjump lands short of the vanilla minimum" project="Apex Mechanoids" group="Ability" created=2026-09-26T00:00:00
+
+# APM_PulseLongjump inherits Biotech's LongJumpMech (range 9.9, warmup 0.5 s =
+# 30 ticks, line of sight) and changes two things: minRange 0 instead of 5.9,
+# and its own job APM_CastPulseJump (JobDriver_CastJump, but not interruptible
+# by the player, by damage or casually - the "protected" jump). The verb is
+# Verb_CastPulseLongjump : Verb_CastAbilityJump, so the landing is the vanilla
+# PawnFlyer. The jump is used the way a player uses it: select the Pulse,
+# press the gizmo "Mech longjump" (label from DefInjected), click the cell.
+#
+# Claim 1: the Pulse jumps to a cell 4 away and stands there afterwards. 4 is
+# below vanilla's 5.9, so this also pins the minRange override - with the parent
+# value the click itself would be refused.
+# Claim 2 (refused): 14 cells is beyond 9.9. Verb_CastAbilityJump.ValidateTarget
+# asks CanHitTarget first, so the targeter turns the click down and stays open -
+# a targeter refusal, not a greyed gizmo - and the Pulse stays where it is.
+#
+# Budget: 30 ticks of warmup plus a 4 cell flight (the vanilla flyer takes well
+# under a second for that), 300 ticks for both. waitfor stops at the landing.
+#
+# Verb_CastPulseLongjump.OrderForceTarget, which the targeter's click calls,
+# snaps the order to the best free cell near the click
+# (RCellFinder.BestOrderedGotoDestNear), so the target cell is left empty and
+# walkable here and the snap keeps it.
+
+requires dlc=Biotech
+requires mod=Mortis.ApexMechanoids
+spawn Pawn:APM_Mech_Pulse at 0,0 faction=player name="Pulse"
+spawn Pawn:Colonist at -3,-2 name="Mechanitor"
+give "Mechanitor" need=Food value=1
+overseer "Pulse" by="Mechanitor" now=true
+draft "Pulse"
+
+select "Pulse"
+gizmo "Mech longjump"
+target cell=14,0 expect=refused
+assert thing "Pulse" at 0,0
+
+assert thing "Pulse" at 4,0 expect=absent
+gizmo "Mech longjump"
+target cell=4,0
+deselect
+waitfor thing "Pulse" at 4,0 ticks=300
+assert thing "Pulse" at 0,0 expect=absent
+undraft "Pulse"
+assert log clean

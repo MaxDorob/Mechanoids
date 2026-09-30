@@ -1,0 +1,46 @@
+rwtest 1
+test "Pulse wave blinds flesh in its radius" project="Apex Mechanoids" group="Ability" created=2026-09-26T00:00:00
+
+# The promise: "stunning and flash-blinding living pawns caught in the wave".
+# CompAbilityEffect_PulseWave takes every flesh pawn outside the Mechanoid
+# faction within 6.9 cells - friend or foe - and hangs APM_PulseWaveBlind on it
+# (Sight setMax 0.2, 1920 ticks) next to a stun.
+#
+# The Pulse is used the way a player uses it: a colony Pulse with a mechanitor
+# overseer (without one vanilla shows a colony mech no ability gizmo), selected
+# and its gizmo "Pulse wave" pressed. targetRequired is false, so the gizmo
+# opens no targeter and queues the cast on the Pulse itself. The mechanitor
+# stands drafted 11.7 cells out, past the wave, since friend or foe counts.
+#
+# The wave expands, so the hediff is waited for rather than read at once; the
+# 300 tick budget holds the 1.2 s warmup (72 ticks) and is still generous for a
+# wave that reaches 6.9 cells, and waitfor reports how much of it was used.
+# "Far" at 10 cells and the player mech "Tin" at 3 cells are the two pawns it
+# must skip: one out of range, one not flesh. They are read after "Near" went
+# blind and after another 120 ticks, so the wave had every chance to reach them.
+#
+# Sight is the effect behind the marker: the bare read pins full sight first.
+
+requires dlc=Biotech
+requires mod=Mortis.ApexMechanoids
+spawn Pawn:APM_Mech_Pulse at 0,0 faction=player name="Pulse"
+spawn Pawn:Colonist at 3,0 name="Near"
+spawn Pawn:Colonist at 10,0 name="Far"
+spawn Pawn:APM_Mech_Tinker at 0,3 faction=player name="Tin"
+spawn Pawn:Colonist at -10,-6 name="Mechanitor"
+draft "Mechanitor"
+overseer "Pulse" by="Mechanitor" now=true
+
+assert pawn "Near" capacity=Sight min=0.95
+
+select "Pulse"
+gizmo "Pulse wave"
+deselect
+waitfor pawn "Near" hediff=APM_PulseWaveBlind ticks=300
+assert pawn "Near" capacity=Sight max=0.21
+tick 120 reason="let the wave finish past its 6.9 cell radius"
+
+assert pawn "Far" hediff=APM_PulseWaveBlind expect=absent
+assert pawn "Far" capacity=Sight min=0.95
+assert pawn "Tin" hediff=APM_PulseWaveBlind expect=absent
+assert log clean

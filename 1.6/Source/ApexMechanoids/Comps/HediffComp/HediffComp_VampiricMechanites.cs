@@ -185,8 +185,16 @@ namespace ApexMechanoids
 			base.CompExposeData();
 			Scribe_Values.Look(ref charges, "vampiricCharges", 0);
 			Scribe_Values.Look(ref healTimer, "vampiricHealTimer", 0);
-			// Derive from current state rather than persisting it.
-			cachedDamaged = IsDamaged();
+			// HediffSet only assigns hediff.pawn during ResolvingCrossRefs, after this
+			// comp's own ExposeData ran, so Pawn is null before PostLoadInit. CompPostMake
+			// does not run on load, so the lookup table is refilled here as well.
+			if (Scribe.mode == LoadSaveMode.PostLoadInit && Pawn != null)
+			{
+				pawnsWithVampiric.Remove(Pawn);
+				pawnsWithVampiric.Add(Pawn, this);
+				// Derive from current state rather than persisting it.
+				cachedDamaged = IsDamaged();
+			}
 		}
 
 		public override string CompTipStringExtra => "APM_VampiricCharges".Translate(charges, Props.maxCharges, charges * Props.healTicksPerCharge * Props.healAmountPerTick);

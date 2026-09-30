@@ -1,0 +1,56 @@
+rwtest 1
+test "Crypto swallow takes a downed pawn" project="Apex Mechanoids" group="Ability" created=2026-09-26T00:00:00
+
+# The promise: "Engulfs a humanlike pawn or corpse, sealing it within an
+# internal cryo-chamber. Preserves the target in suspended animation until
+# released." The refusal text says who may be taken alive: "Frostivus can
+# swallow any humanlike corpse or downed pawn, but only colonists, prisoners, or
+# slaves while alive."
+#
+# CompAbilityEffect_CryptoSwallow.CanSwallowTarget, in order: a humanlike pawn
+# or corpse, not the caster, a caster that may use its map commands, spawned on
+# the same map, not already inside, then the faction rule above, then weight.
+# The Frostivus is used the way a player uses it: a colony Frostivus with a
+# mechanitor overseer (the control gate, and the only way a colony mech shows
+# its ability gizmo at all - that half is its own file, "Crypto swallow needs an
+# overseer"), selected, its gizmo "Crypto Swallow" pressed and the raider
+# clicked. The click runs the comp's Valid, which is CanSwallowTarget.
+#
+# So the standing raider must be refused and the downed raider taken; the
+# second click is also the control that the targeter opened at all. The taken
+# pawn moves into the Frostivus inventory and carries APM_Hediff_Devoured, which
+# FrostivusCryoStasis_Patch reads as suspended. The inventory line is the effect
+# a player can see (the gear tab); the hediff is the marker the patches key on.
+# "reload" because both the inventory and the hediff are saved state.
+#
+# Timing: Verb_CastAbilityTouch walks the Frostivus to the raider, then the 1 s
+# warmup (60 ticks) and the APM_CryptoSwallow job run; the waitfor budget of 600
+# is that walk plus the warmup, with slack.
+
+requires dlc=Biotech
+requires mod=Mortis.ApexMechanoids
+spawn Pawn:APM_Mech_Frostivus faction=player name="Frost"
+spawn Pawn:Colonist faction=enemy name="Raider"
+spawn Pawn:Colonist name="Mechanitor"
+draft "Mechanitor"
+overseer "Frost" by="Mechanitor" now=true
+
+select "Frost"
+gizmo "Crypto Swallow"
+target "Raider" expect=refused
+deselect
+assert pawn "Raider" hediff=APM_Hediff_Devoured expect=absent
+
+down "Raider"
+assert pawn "Raider" downed
+select "Frost"
+gizmo "Crypto Swallow"
+target "Raider"
+deselect
+waitfor pawn "Raider" hediff=APM_Hediff_Devoured ticks=600
+assert pawn "Frost" inventory=Human
+
+reload reason="the swallowed pawn lives in a saved inventory with a saved hediff"
+assert pawn "Frost" inventory=Human
+assert pawn "Raider" hediff=APM_Hediff_Devoured expect=present
+assert log clean

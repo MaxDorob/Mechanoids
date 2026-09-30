@@ -1,0 +1,52 @@
+rwtest 1
+test "Press the attack drives nearby apex mechs" project="Apex Mechanoids" group="Ability" created=2026-09-26T00:00:00
+
+# The promise: "The Dominus emits a psychic pulse that influences nearby allies
+# to ignore pain, move faster and stay in high spirits."
+#
+# APM_PressTheAttack reuses the SteelDiscipline comp: radius 14.9, hediff
+# APM_Hediff_PressTheAttack for 48000 ticks, and apexMechsOnly left at its
+# default true - only kinds whose defName starts with APM_Mech_ are touched.
+# The stage: MoveSpeed +0.40, Consciousness +0.10, painFactor 0.7, and x0.85 on
+# melee, aiming and ranged cooldown.
+#
+# The Pulse writes MoveSpeed 4.3, so it reads 4.7 afterwards; Consciousness goes
+# from 1.0 to 1.1.
+#
+# The Dominus is used the way a player uses it: a colony Dominus with a
+# mechanitor overseer (without one vanilla shows a colony mech no ability
+# gizmo), drafted because the def leaves displayGizmoWhileUndrafted off, then
+# its gizmo "Press The Attack" pressed. targetRequired is false, so the gizmo
+# opens no targeter and queues the cast on the Dominus itself. The comp buffs
+# the caster's own faction, so every mech here is a colony mech. The 1 s warmup
+# is 60 ticks; the waitfor budget of 180 is that plus slack.
+#
+# Two pawns it must skip: "Far", an apex mech 20 cells out, and "Scyther", a
+# vanilla ally in range - the apexMechsOnly half. Whether colonists next to a
+# colony Dominus count as "nearby allies" is NOT asserted: the code says no, the
+# description reads like yes, and that is a decision for the maintainers, not
+# something a test should pick.
+
+requires dlc=Biotech
+requires mod=Mortis.ApexMechanoids
+spawn Pawn:APM_Mech_Dominus at 0,0 faction=player name="Dominus"
+spawn Pawn:APM_Mech_Pulse at 5,0 faction=player name="Pulse"
+spawn Pawn:APM_Mech_Pulse at 20,0 faction=player name="Far"
+spawn Pawn:Mech_Scyther at 0,5 faction=player name="Scyther"
+spawn Pawn:Colonist at -6,-6 name="Mechanitor"
+draft "Mechanitor"
+overseer "Dominus" by="Mechanitor" now=true
+draft "Dominus"
+
+assert pawn "Pulse" stat=MoveSpeed min=4.2 max=4.4
+select "Dominus"
+gizmo "Press The Attack"
+deselect
+
+waitfor pawn "Pulse" hediff=APM_Hediff_PressTheAttack ticks=180
+assert pawn "Pulse" stat=MoveSpeed min=4.6 max=4.8
+assert pawn "Pulse" capacity=Consciousness min=1.05 max=1.15
+
+assert pawn "Far" hediff=APM_Hediff_PressTheAttack expect=absent
+assert pawn "Scyther" hediff=APM_Hediff_PressTheAttack expect=absent
+assert log clean

@@ -1,0 +1,45 @@
+rwtest 1
+test "Weapons grant and take their abilities" project="Apex Mechanoids" group="Weapon" created=2026-09-26T00:00:00
+
+# CompAbilityGranter adds an ability on Notify_Equipped and removes it on
+# Notify_Unequipped. Three weapons carry one:
+#   APM_Weapon_SeveringBlade    -> APM_SeveringEdge   ("Severing edge", reach 4.9)
+#   APM_Weapon_Skipblade        -> APM_SkipbladeBlink ("Skip", reach 17.9)
+#   APM_Weapon_DuelistsPsySpear -> APM_Mech_Duel      (owned by the duel files)
+#
+# The gizmo is what a player sees, and pressing it is what proves the label: a
+# "gizmo X expect=absent" line is only worth something next to a line that
+# presses X. So each ability is pressed once and aimed at a cell in reach, and
+# "assert ability ... range" reads the reach the def promises.
+#
+# Swapping the blade for the skipblade drops the blade, which is the removal
+# half - a weapon that left its ability behind would keep "Severing edge" on the
+# bar. The known sharp edge: Notify_Unequipped also removes an ability the pawn
+# had before the weapon came. No pawn here has one, so that stays out.
+#
+# The cells are the claim: 3 cells is inside 4.9, 8 cells inside 17.9.
+
+requires dlc=Biotech
+requires mod=Mortis.ApexMechanoids
+spawn Pawn:Colonist at 0,0 name="Wielder"
+draft "Wielder"
+select "Wielder"
+gizmo "Severing edge" expect=absent
+
+equip "Wielder" thing=APM_Weapon_SeveringBlade now=true
+assert pawn "Wielder" equipment=APM_Weapon_SeveringBlade
+assert ability APM_SeveringEdge on "Wielder" range min=4.4 max=5.4
+gizmo "Severing edge"
+target cell=3,0
+tick 60 reason="0.3 s warmup of the severing edge"
+gizmo "Skip" expect=absent
+
+equip "Wielder" thing=APM_Weapon_Skipblade now=true
+assert pawn "Wielder" equipment=APM_Weapon_Skipblade
+assert ability APM_SkipbladeBlink on "Wielder" range min=17.4 max=18.4
+gizmo "Severing edge" expect=absent
+gizmo "Skip"
+target cell=8,0
+tick 60 reason="the skip resolves after its short warmup"
+assert text contains "APM" expect=absent
+assert log clean

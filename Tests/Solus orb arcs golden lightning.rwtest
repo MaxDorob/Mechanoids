@@ -1,0 +1,29 @@
+rwtest 1
+test "Solus orb arcs golden lightning" project="Apex Mechanoids" group="Art" created=2026-09-26T00:00:00
+
+# APM_Solus fires APM_SolusOrb (Burn 30), which arcs Burn 8 lightning out to 4.9
+# cells, up to three targets, drawn with the motes APM_Mote_SolusLightning_A..C
+# in gold (1.0, 0.85, 0.35). Range 19.9, minimum 3.9, warmup 5.2 s = 312 ticks.
+#
+# Three raiders stand close together at 12 cells, so the arc has somewhere to
+# jump. The colonist is drafted and ordered to attack the middle one, the same
+# forced order a right-click gives.
+#
+# "ask": a colour and a jump are no state. Headless, the line is a skip. The
+# damage half would be "the middle raider carries a Burn" - left out, because
+# a warmup of 312 ticks plus a miss chance is a roll, and this file is about
+# the picture.
+
+requires dlc=Biotech
+requires mod=Mortis.ApexMechanoids
+spawn Pawn:Colonist at 0,0 name="Gunner"
+spawn Pawn:Colonist at 12,1 faction=enemy name="Raider A"
+spawn Pawn:Colonist at 12,0 faction=enemy name="Raider B"
+spawn Pawn:Colonist at 12,-1 faction=enemy name="Raider C"
+equip "Gunner" thing=APM_Solus now=true
+assert pawn "Gunner" equipment=APM_Solus
+draft "Gunner"
+attack "Gunner" target="Raider B"
+ask "solus-orb" ticks=480 claim="after a long charge the gunner fires a glowing orb at the middle raider; when it hits, golden lightning jumps from it to the raiders next to it; the lightning is gold, not white or pink"
+undraft "Gunner"
+assert log clean

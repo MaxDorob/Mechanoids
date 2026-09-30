@@ -1,0 +1,69 @@
+rwtest 1
+test "Starfall shreds its target and spares the bystander" project="Apex Mechanoids" group="Ability" created=2026-09-26T00:00:00
+
+# The promise: "launches a single heavy shell that splits into three energy
+# blasts while still in flight."
+#
+# The Ravager uses it the way a player does: select, gizmo "Starfall", click the
+# cell. Ability_Starfall.CanApplyOn freezes the target to a cell and asks
+# RavagerArtilleryUtility.CanFireAtCell (awake, unroofed caster, no thick roof
+# over the cell, Verb_CastStarfall.CanHitTarget - range 140, no line of sight
+# needed). After the 4.8 s warmup (288 ticks) the cell goes to
+# CompAbilityEffect_Starfall.Apply, which spawns APM_StarfallCarrier at the
+# caster and launches it.
+#
+# Timing, from 20 cells (-10,0 to 10,0): carrier speed 32 = 0.32 tiles/tick,
+# about 63 ticks to the cell. Projectile_StarfallCarrier.Tick splits at
+# round(63 * 0.72) = 45 ticks, about 5.6 cells short, into three
+# APM_StarfallSplitProjectile (speed 64 = 0.64 tiles/tick, 9 to 12 ticks more),
+# each a Bomb explosion of radius 2.85 with no delay. Impact is near tick 57
+# after the warmup, so near 345 after the click; the budget of 600 covers the
+# 288 warmup ticks plus five times the flight.
+#
+# Where they land: the centre fragment aims at the target cell plus a forward
+# jitter of +-1.5 and a cell jitter of +-0.95, floored to a cell - at most 2 cells
+# along the flight and 1 across, 2.24 cells off, inside the 2.85 radius. So the
+# target is inside at least one blast every time. Bomb on flesh leaves Shredded.
+# The side fragments land 2.8 +- 1.25 across (plus 0.95 jitter), so no blast
+# reaches past about 8.4 cells from the target; "Far" stands 12 cells across
+# the flight line, off the shell's path.
+#
+# Pawns are drafted so nobody walks in or out. The Ravager is a player mech (a
+# hostile one fires its own Starfall at spawn and the test's use finds a
+# cooldown) with a mechanitor overseer standing far behind it. The last line
+# reads the cooldown as the same gizmo greyed out.
+#
+# DRAFT: three Bomb blasts of 50 can kill the target. The hediff line is chosen
+# because it reads the same on a corpse; if "assert pawn" does not find a dead
+# pawn by its handle, the report of the first run says so.
+
+requires dlc=Biotech
+requires mod=Mortis.ApexMechanoids
+spawn Pawn:APM_Mech_Ravager at -10,0 faction=player name="Ravager"
+spawn Pawn:Colonist at 10,0 name="Target"
+spawn Pawn:Colonist at 10,12 name="Far"
+spawn Pawn:Colonist at -16,-10 name="Mechanitor"
+give "Target" need=Food value=1
+give "Far" need=Food value=1
+give "Mechanitor" need=Food value=1
+draft "Target"
+draft "Far"
+draft "Mechanitor"
+overseer "Ravager" by="Mechanitor" now=true
+draft "Ravager"
+
+assert pawn "Target" hediff=Shredded expect=absent
+assert pawn "Far" hediff=Shredded expect=absent
+
+select "Ravager"
+gizmo "Starfall"
+target cell=10,0
+waitfor pawn "Target" hediff=Shredded ticks=600
+tick 120 reason="let every fragment land and every explosion finish"
+
+assert pawn "Far" hediff=Shredded expect=absent
+assert pawn "Far" dead expect=absent
+assert pawn "Mechanitor" hediff=Shredded expect=absent
+gizmo "Starfall" expect=disabled
+deselect
+assert log clean

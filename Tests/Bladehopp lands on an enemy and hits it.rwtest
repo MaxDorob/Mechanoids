@@ -1,0 +1,68 @@
+rwtest 1
+test "Bladehopp lands on an enemy and hits it" project="Apex Mechanoids" group="Ability" created=2026-09-26T00:00:00
+
+# APM_Bladehopp (Mantis) carries CompProperties_AbilityBash: job=APM_BashDamage,
+# jobFactor=30, moveSpeed=0.3. The Mantis uses it the way a player does: select,
+# gizmo "Bladehopp", click the Raider. The targeter runs ValidateTarget, the cast
+# job runs the 0.4 s warmup (24 ticks), and then CompAbilityEffect_Bash.Apply
+# starts the bash job itself (StartJob): TargetA = the target's cell, TargetB =
+# the target pawn, maxNumMeleeAttacks = 30.
+#
+# JobDriver_Bash moves exactPos 0.3 cells per tick toward the target. Each time
+# it crosses into a new cell it sets Position to that cell - unless the target
+# cell is within 1.1 of the current Position, then Position = the target cell
+# and the bash toil runs. From 0,0 to 5,0 (centre 0.5): cell 4 is entered at
+# tick 12, the crossing into 5 at tick 15 finds cell 4 within 1.1 and puts the
+# Mantis ON 5,0 - the Raider's own cell. Budget 120 = the 24 warmup ticks plus
+# the 15 of the dash, three times over.
+#
+# JobDriver_BashDamage then deals Blunt 30 (the jobFactor) to the things in the
+# 3x3 around the Mantis; TargetB, the Raider, is always hit.
+#
+# One enemy, nobody else near it: the Mechanitor stands at -4,0, far outside
+# the Raider's reach and the 3x3. "speed paused" from the Raider's spawn to the
+# click, so it cannot walk at the Mantis or the Mechanitor and start a fight
+# whose injuries the pain line would read as the Bladehopp's. The Raider is
+# spawned after the overseer walk for the same reason.
+#
+# Bounds: pawns spawn without gear, so all 30 land. Injury pain is 0.0125 per
+# point: 30 on one part is 0.375; the smallest outer part a hit can pick
+# (~7-10 HP, destroyed) still leaves >= 0.08; a bone crack under the blunt hit
+# can add to it. min=0.05 max=0.8. The read follows the landing at once - the
+# drafted Mantis is adjacent to the Raider afterwards and its own melee would
+# raise the number.
+#
+# Draft and overseer: Bladehopp has the default displayGizmoWhileUndrafted off,
+# so the gizmo shows only on a drafted mech, and a colony mech shows ability
+# gizmos and is draftable only under a mechanitor. The Mantis is the player's
+# so its own AI does not cast Bladehopp first and leave a cooldown.
+#
+# DRAFT: a 30 blunt hit on a bare head can kill. A dead Raider still reads its
+# injuries, but if the first run is red on that, the report says it.
+
+requires dlc=Biotech
+requires mod=Mortis.ApexMechanoids
+spawn Pawn:APM_Mech_Mantis at 0,0 faction=player name="Mantis"
+spawn Pawn:Colonist at -4,0 name="Mechanitor"
+give "Mechanitor" need=Food value=1
+overseer "Mantis" by="Mechanitor"
+draft "Mantis"
+
+speed paused
+spawn Pawn:Colonist at 5,0 faction=enemy name="Raider"
+assert pawn "Raider" pain max=0
+
+select "Mantis"
+gizmo "Bladehopp"
+target "Raider"
+speed x1
+waitfor pawn "Raider" pain min=0.05 max=0.8 ticks=120
+# Probe (2026-09-30): the hit landed, but "Mantis" was not on 5,0 - "the cell
+# is empty", so the Raider was gone from it too. This reads how far apart the
+# two ended up, which "assert thing ... at" does not say.
+assert pawn "Mantis" near="Raider" max=1.5
+assert thing "Mantis" at 5,0
+assert pawn "Mechanitor" pain max=0
+gizmo "Bladehopp" expect=disabled
+deselect
+assert log clean

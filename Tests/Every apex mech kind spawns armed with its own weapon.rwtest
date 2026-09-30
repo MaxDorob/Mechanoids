@@ -1,0 +1,92 @@
+rwtest 1
+test "Every apex mech kind spawns armed with its own weapon" project="Apex Mechanoids" group="Wiring" created=2026-09-26T00:00:00
+
+# A mech gets its gun from the pawn generator, not from any C# of the mod:
+# PawnWeaponGenerator picks a ThingDef whose weaponTags share a tag with the
+# PawnKindDef's weaponTags and whose price fits weaponMoney. Every weapon
+# ThingDef here carries exactly one APM_* tag, and every armed kind writes
+# weaponTags Inherit="False" with exactly one tag, so each kind has exactly
+# one legal weapon. A renamed tag on either side leaves the mech unarmed with no
+# error in the log - that is what this test catches. No C# comp or
+# DefModExtension hands out equipment (no AddEquipment / PawnWeaponGenerator
+# call in Source), so the tags are the whole wiring.
+#
+# kind (tag)                                       -> weapon
+#   Celerus  (APM_WeaponCelerusVoltana)            -> APM_Weapon_CelerusVoltana
+#   Celerus_Boss  (APM_WeaponCelerusApexVoltana)   -> APM_Weapon_CelerusApexVoltana
+#   Dominus  (APM_WeaponDominusMechlance)          -> APM_Weapon_DominusMechlance
+#   Dominus_Boss  (APM_WeaponDominusApexMechlance) -> APM_Weapon_DominusApexMechlance
+#   Terminus (APM_WeaponTerminusExoblade)          -> APM_Weapon_TerminusExoblade
+#   Terminus_Boss (APM_WeaponTerminusApexExoblade) -> APM_Weapon_TerminusApexExoblade
+#   Conqueror_AR/DMR/SMG (APM_WeaponConqueror*)    -> APM_Gun_Conqueror_AR/DMR/SMG
+#   Dynamo   (APM_WeaponEMPImpactor)               -> APM_Gun_EMP_Impactor
+#   Gazer    (APM_WeaponGazerLaser)                -> APM_Gazer_Laser
+#   Haze     (APM_HazeGraserTag)                   -> APM_Haze_BeamGun
+#   Javelin  (APM_WeaponJavelinRocketLauncher)     -> APM_Gun_JavelinRocketLauncher
+#   Lasher   (APM_MechanoidWhip)                   -> APM_Weapon_MechWhip
+#   Maul     (APM_WeaponMaul)                      -> APM_Gun_Maul
+#   Pulse    (APM_WeaponPulseShotgun)              -> APM_Gun_Pulse_Shotgun
+#   Ravager  (APM_WeaponRavagerArtillery)          -> APM_Ravager_Artillery
+#   Satellite (APM_WeaponSatellite)                -> APM_Gun_Satellite
+#   Siren    (APM_WeaponSirenChargeEmitter)        -> APM_Siren_ChargeEmitter
+#   Vassal   (APM_WeaponVassalSwordRifle)          -> APM_Gun_Vassal_SwordRifle
+# The boss kinds (races DominusB/TerminusB/CelerusB) get the Apex variant, and
+# asserting both kinds pins that the boss does not fall back to the regular one.
+#
+# Left out: Aegis, Frostivus, Ingestor, Mantis, Tinker. Their kinds write no
+# weaponTags (Aegis an empty Inherit="False" list) and their races fight with
+# body tools only (shields, legs, fists, head), so they carry no equipment by
+# design. The language has no "holds nothing" form, and "equipment=<some def>
+# expect=absent" would be green for any unrelated def - a line that cannot go
+# red. There is no APM_Mech_Duel kind: Duel is an ability (APM_Mech_Duel).
+#
+# rolled=true is the whole point: without it "spawn" strips the weapon the
+# generator rolled (GeneratedGear.StripFrom). No faction= means
+# kind.defaultFactionDef, i.e. hostile mechanoids; they would start shooting at
+# once, so the scene is paused before the first spawn and nothing ticks.
+
+requires dlc=Biotech
+requires mod=Mortis.ApexMechanoids
+speed paused
+spawn Pawn:APM_Mech_Celerus name="Celerus" rolled=true
+spawn Pawn:APM_Mech_Celerus_Boss name="CelerusBoss" rolled=true
+spawn Pawn:APM_Mech_Dominus name="Dominus" rolled=true
+spawn Pawn:APM_Mech_Dominus_Boss name="DominusBoss" rolled=true
+spawn Pawn:APM_Mech_Terminus name="Terminus" rolled=true
+spawn Pawn:APM_Mech_Terminus_Boss name="TerminusBoss" rolled=true
+spawn Pawn:APM_Mech_Conqueror_AR name="ConquerorAR" rolled=true
+spawn Pawn:APM_Mech_Conqueror_DMR name="ConquerorDMR" rolled=true
+spawn Pawn:APM_Mech_Conqueror_SMG name="ConquerorSMG" rolled=true
+spawn Pawn:APM_Mech_Dynamo name="Dynamo" rolled=true
+spawn Pawn:APM_Mech_Gazer name="Gazer" rolled=true
+spawn Pawn:APM_Mech_Haze name="Haze" rolled=true
+spawn Pawn:APM_Mech_Javelin name="Javelin" rolled=true
+spawn Pawn:APM_Mech_Lasher name="Lasher" rolled=true
+spawn Pawn:APM_Mech_Maul name="Maul" rolled=true
+spawn Pawn:APM_Mech_Pulse name="Pulse" rolled=true
+spawn Pawn:APM_Mech_Ravager name="Ravager" rolled=true
+spawn Pawn:APM_Mech_Satellite name="Satellite" rolled=true
+spawn Pawn:APM_Mech_Siren name="Siren" rolled=true
+spawn Pawn:APM_Mech_Vassal name="Vassal" rolled=true
+
+assert pawn "Celerus" equipment=APM_Weapon_CelerusVoltana
+assert pawn "CelerusBoss" equipment=APM_Weapon_CelerusApexVoltana
+assert pawn "Dominus" equipment=APM_Weapon_DominusMechlance
+assert pawn "DominusBoss" equipment=APM_Weapon_DominusApexMechlance
+assert pawn "Terminus" equipment=APM_Weapon_TerminusExoblade
+assert pawn "TerminusBoss" equipment=APM_Weapon_TerminusApexExoblade
+assert pawn "ConquerorAR" equipment=APM_Gun_Conqueror_AR
+assert pawn "ConquerorDMR" equipment=APM_Gun_Conqueror_DMR
+assert pawn "ConquerorSMG" equipment=APM_Gun_Conqueror_SMG
+assert pawn "Dynamo" equipment=APM_Gun_EMP_Impactor
+assert pawn "Gazer" equipment=APM_Gazer_Laser
+assert pawn "Haze" equipment=APM_Haze_BeamGun
+assert pawn "Javelin" equipment=APM_Gun_JavelinRocketLauncher
+assert pawn "Lasher" equipment=APM_Weapon_MechWhip
+assert pawn "Maul" equipment=APM_Gun_Maul
+assert pawn "Pulse" equipment=APM_Gun_Pulse_Shotgun
+assert pawn "Ravager" equipment=APM_Ravager_Artillery
+assert pawn "Satellite" equipment=APM_Gun_Satellite
+assert pawn "Siren" equipment=APM_Siren_ChargeEmitter
+assert pawn "Vassal" equipment=APM_Gun_Vassal_SwordRifle
+assert log clean

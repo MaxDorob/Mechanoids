@@ -1,0 +1,45 @@
+rwtest 1
+test "Command casket admits only a mechanitor" project="Apex Mechanoids" group="Building" created=2026-09-26T00:00:00
+
+# The command casket is entered only through the right-click menu of a colonist
+# on the casket (Building_MechCommandCasket.GetFloatMenuOptions): "Enter command
+# casket" when accepted, "Cannot enter command casket: <reason>" greyed when
+# not - "Occupied", "No power", "Waiting for X.", "X is suffering from
+# biostarvation.", "Not mechanitor". There is no gizmo for it. "ordermenu"
+# opens that menu the way a right-click does, and "menu" reads its options.
+#
+# The plain colonist is the other direction and is asked first on the same,
+# powered casket, so the refusal cannot be the power talking.
+#
+# The mechanitor is made by "overseer ... now=true" on a Lifter, which puts a
+# mechlink in directly. In Biotech the mechlink is no surgery: InstallMechlink
+# is a JobDef, run when a colonist uses the mechlink item, and no RecipeDef of
+# that name exists ("surgery ... recipe=InstallMechlink" was red on 2026-09-30
+# with "expected a known RecipeDef"). Using an item is not a verb yet; the
+# precondition here is the mechlink, not how it got there.
+
+requires dlc=Biotech
+requires mod=Mortis.ApexMechanoids
+sky glow=1
+room size=15,11 roof=false name="yard"
+spawn Thing:SolarGenerator in="yard" faction=player
+spawn Thing:APM_MechCommandCasket in="yard" faction=player name="casket"
+spawn Pawn:Colonist in="yard" name="Mechanitor"
+spawn Pawn:Colonist in="yard" name="Plain"
+spawn Pawn:Mech_Lifter in="yard" faction=player name="Lifter"
+waitfor power "casket" ticks=250
+
+ordermenu "Plain" on="casket"
+menu "Cannot enter command casket: Not mechanitor" expect=disabled
+menu "Enter command casket" expect=absent
+
+overseer "Lifter" by="Mechanitor" now=true
+assert pawn "Mechanitor" hediff=MechlinkImplant expect=present
+
+ordermenu "Mechanitor" on="casket"
+menu "Enter command casket"
+waitfor inspect "casket" contains "Contains:" ticks=2500
+assert text contains "APM." expect=absent
+reload reason="the casket user and its nutrition are saved"
+assert inspect "casket" contains "Contains:"
+assert log clean

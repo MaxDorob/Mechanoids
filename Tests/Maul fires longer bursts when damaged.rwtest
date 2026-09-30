@@ -1,0 +1,65 @@
+rwtest 1
+test "Maul fires longer bursts when damaged" project="Apex Mechanoids" group="Weapon" created=2026-09-26T00:00:00
+
+# Verb_ShootMultiple (Verbs/Verb_ShootMultiple.cs) is the Maul blaster's
+# overclock: with k = (int)((1 - SummaryHealthPercent) * 10),
+#   ShotsPerBurst = burstShotCount 8 + k, read once when the warmup completes;
+#   every TryCastShot then launches up to k extra projectiles at random cells
+#   within 3 of the target, breaking out of that loop on a 50% roll before each.
+# So one burst launches between 8 + k and (8 + k) * (1 + k) projectiles.
+#
+# Two Mauls in two lanes 10 cells apart, each forced onto its own wall 12 cells
+# out (the wall stands still and survives the burst: at most 12 aimed bullets
+# of 12 damage). Each Maul has its own mechanitor - bandwidth 4 each, a
+# mechlink gives 6.
+#   "Fresh": untouched, SummaryHealthPercent 1, k = 0 -> exactly 8.
+#   "Worn":  129 Blunt on its core part (MechanicalThorax 40 HP x healthScale
+#            3.82 = 152.8, so the part holds). Vanilla takes an injury's
+#            Severity / (75 x HealthScale) = 129 / 286.5 = 0.450 off summary
+#            health -> H = 0.550, k = 4 -> 12 shots, 12..60 projectiles.
+#            129 sits in the middle of the k = 4 band (114.6..143.2), so a
+#            rounding in the health sum cannot move k. The Crack line pins
+#            that the damage landed as an injury.
+# The damage uses the kit's full penetration, so the Maul's own armour
+# (Blunt 0.30) does not shave it.
+#
+# Budget: warmup 1.2 s = 72 ticks, plus (shots - 1) x 4 ticks between shots:
+# 28 for 8, 44 for 12 -> the burst ends by tick 116. RangedWeapon_Cooldown
+# 5.8 s = 348 ticks, so the next burst cannot start before 464. tick 250 sees
+# exactly one burst in either lane.
+#
+# No verb counts projectiles today. The line is written against the assert
+# the kit would need - "assert shots <pawn>", projectiles launched by that pawn
+# since its last "attack" step - and the whole test reports skip until it lands.
+
+requires dlc=Biotech
+requires mod=Mortis.ApexMechanoids
+requires assert=shots
+spawn Pawn:APM_Mech_Maul at 0,0 faction=player name="Fresh"
+spawn Pawn:Colonist at -3,-2 name="Mechanitor A"
+give "Mechanitor A" need=Food value=1
+overseer "Fresh" by="Mechanitor A" now=true
+equip "Fresh" thing=APM_Gun_Maul now=true
+spawn Thing:Wall at 12,0 name="Wall A"
+
+spawn Pawn:APM_Mech_Maul at 0,10 faction=player name="Worn"
+spawn Pawn:Colonist at -3,8 name="Mechanitor B"
+give "Mechanitor B" need=Food value=1
+overseer "Worn" by="Mechanitor B" now=true
+equip "Worn" thing=APM_Gun_Maul now=true
+spawn Thing:Wall at 12,10 name="Wall B"
+
+damage "Worn" amount=129 def=Blunt
+assert pawn "Worn" hediff=Crack expect=present
+assert pawn "Fresh" hediff=Crack expect=absent
+
+draft "Fresh"
+draft "Worn"
+attack "Fresh" target="Wall A"
+attack "Worn" target="Wall B"
+tick 250 reason="warmup 72 + burst up to 44 = 116; the next burst no earlier than 116 + 348"
+assert shots "Fresh" min=8 max=8
+assert shots "Worn" min=12 max=60
+undraft "Fresh"
+undraft "Worn"
+assert log clean

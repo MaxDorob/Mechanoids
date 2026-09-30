@@ -1,0 +1,70 @@
+rwtest 1
+test "Shield charge stuns foes where it lands" project="Apex Mechanoids" group="Ability" created=2026-09-26T00:00:00
+
+# APM_ShieldCharge (Aegis) carries CompProperties_AbilityBash: job=APM_BashStun,
+# jobFactor=10 ("Stun damage amount"), moveSpeed=0.3. Same driver as Bladehopp:
+# after the 0.4 s warmup (24 ticks) Apply starts the job, the Aegis covers 0.3
+# cells per tick and, once the target cell is within 1.1 of it, is put ON the
+# target cell (5 cells: 15 ticks, budget 120 for warmup and dash).
+#
+# JobDriver_BashStun deals DamageDefOf.Stun 10 to every thing in the 3x3 around
+# the landing cell, skipping itself and non-hostile factioned things except the
+# target. Vanilla StunHandler turns Stun damage into amount x 30 ticks: 300.
+# Read right after the landing: min=280 max=300. The player colonist beside
+# the Raider must not be stunned.
+#
+# The description says "stunning everything hit on the way"; the code stuns
+# only at the landing cell. The test pins the code; the wording is a finding.
+#
+# Refused target: CompAbilityEffect_Bash.Valid refuses a cell the Aegis cannot
+# stand on. Sandbags are the one cell only that gate refuses: they do not block
+# sight, they are in reach (4.2 against 6.9), canTargetBuildings=false makes
+# the targeter aim at the location, and Sandbags are PassThroughOnly, so
+# Standable is false. A wall cell would also be turned down by the line of
+# sight. The targeter asks Valid, so this is a targeter refusal. Both uses go
+# through the gizmo "Shield Charge"; the accepted click on the Raider is the
+# control, and the last line reads the cooldown as the same gizmo greyed out.
+#
+# No verb reads a stun: the stun half is written against "assert stun" and is
+# held back by "requires assert=stun" until the kit has it. Today the file
+# asserts the refusal and the landing.
+
+# The Raider has no faction: as an enemy it fought the Ally beside it from the
+# first tick, so the Ally's pain line measured that fight. JobDriver_BashStun
+# (JobDrivers_Bash.cs:137) skips only things with a faction that is not hostile,
+# so a factionless pawn is stunned like a foe. Paused from its spawn to the
+# click so it cannot wander off 5,0.
+
+requires dlc=Biotech
+requires mod=Mortis.ApexMechanoids
+spawn Pawn:APM_Mech_Aegis at 0,0 faction=player name="Aegis"
+spawn Pawn:Colonist at -4,0 name="Mechanitor"
+give "Mechanitor" need=Food value=1
+overseer "Aegis" by="Mechanitor"
+draft "Aegis"
+spawn Thing:Sandbags at 3,3 name="sandbags"
+
+select "Aegis"
+gizmo "Shield Charge"
+target cell=3,3 expect=refused
+
+speed paused
+spawn Pawn:Colonist at 5,0 faction=none name="Raider"
+spawn Pawn:Colonist at 5,-1 faction=player name="Ally"
+draft "Ally"
+gizmo "Shield Charge"
+target "Raider"
+speed x1
+waitfor thing "Aegis" at 5,0 ticks=120
+# Probe (2026-09-30): the bound below read "not stunned; the last stun came
+# from Aegis" - a stun happened and was over by then. Read at the landing tick,
+# this line's actual names the ticks left, so it says whether 300 were ever set.
+assert stun "Raider"
+assert pawn "Ally" pain max=0
+gizmo "Shield Charge" expect=disabled
+deselect
+assert log clean
+
+requires assert=stun
+assert stun "Raider" ticks min=280 max=300
+assert stun "Ally" expect=absent
