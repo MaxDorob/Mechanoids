@@ -3,6 +3,7 @@ test "Regular and boss effects keep their colours" project="Apex Mechanoids" gro
 
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
+speed paused
 spawn Pawn:APM_Mech_Dominus at -12,0 faction=player name="Dominus regular" facing=south rolled=true
 spawn Pawn:APM_Mech_Dominus_Boss at 12,0 faction=player name="Dominus boss" facing=south rolled=true
 spawn Pawn:APM_Mech_Pulse at -9,0 faction=player name="Pulse near regular Dominus" facing=south
@@ -15,6 +16,7 @@ overseer "Dominus regular" by="Dominus regular mechanitor" now=true
 overseer "Dominus boss" by="Dominus boss mechanitor" now=true
 draft "Dominus regular"
 draft "Dominus boss"
+speed x1
 select "Dominus regular"
 gizmo "Press The Attack"
 select "Dominus boss"
@@ -26,6 +28,7 @@ assert pawn "Dominus regular" hediff=APM_Hediff_PressTheAttack
 assert pawn "Dominus boss" hediff=APM_Hediff_PressTheAttack_Boss
 ask "press-attack-halo" ticks=120 claim="each Dominus and the Pulse next to it wear a halo and animated wings from Press the Attack; the left pair is a pale steel blue-grey, the right pair is orange; the wings move; none is pink, white-boxed or missing"
 
+speed paused
 spawn Pawn:APM_Mech_Terminus at -3,-6 faction=player name="Terminus regular" facing=north
 spawn Pawn:APM_Mech_Terminus_Boss at 3,-6 faction=player name="Terminus boss" facing=north rolled=true
 spawn Pawn:Colonist at -6,-12 name="Terminus regular mechanitor"
@@ -36,6 +39,7 @@ overseer "Terminus regular" by="Terminus regular mechanitor" now=true
 overseer "Terminus boss" by="Terminus boss mechanitor" now=true
 draft "Terminus regular"
 draft "Terminus boss"
+speed x1
 select "Terminus regular"
 gizmo "Severing edge"
 target cell=-3,-3

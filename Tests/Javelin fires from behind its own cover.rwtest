@@ -32,6 +32,7 @@ assert pawn "Dummy A" pain max=0
 
 draft "Javelin"
 attack "Javelin" target="Dummy A"
+waitfor jobhistory "Javelin" job=AttackStatic ticks=60
 waitfor shots "Javelin" min=1 ticks=600
 waitfor pawn "Dummy A" hediff=APM_Hediff_JavelinMissileLock ticks=600
 assert pawn "Dummy A" pain min=0.1
@@ -39,6 +40,10 @@ undraft "Javelin"
 
 tick 450 reason="cooldown 7.4 s = 444 ticks from the east shot runs out before the north order"
 draft "Javelin"
+select "Javelin"
+gizmo "Javelin rocket launcher"
+target "Dummy B" expect=refused reason="Cannot hit target"
+deselect
 attack "Javelin" target="Dummy B"
 tick 600 reason="the same 244 tick warmup-plus-flight the east shot needed, with the same margin"
 assert shots "Javelin" min=0 max=0
