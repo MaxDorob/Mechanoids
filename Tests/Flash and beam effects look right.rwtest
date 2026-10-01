@@ -1,37 +1,6 @@
 rwtest 1
 test "Flash and beam effects look right" project="Apex Mechanoids" group="Art" created=2026-09-26T00:00:00
 
-# The rest of the ability pictures that no state can carry:
-#   APM_PulseWave     - the flash APM_PulseWaveBlindFlash, warm white
-#                       (255, 252, 240), and an expanding wave from the Pulse
-#   APM_BlindingLaser - the beam mote APM_Mote_BlindingLaser from Tinker to target
-#   APM_Shockwave     - the Gazer's charge mote, then APM_ShockwaveFlash
-#                       (255, 245, 220) and the travelling blast wave; pawns in
-#                       it are thrown by APM_PawnFlyer_ShockwaveThrown
-#   APM_Absorb        - owned by the Ingestor work test, not drawn here
-#
-# The state half of the first two (blindness) is owned by "Pulse wave blinds
-# flesh in its radius" and "Blinding laser blinds eyes, not mechs"; this file
-# only asks for the picture.
-#
-# Every ability is used the way a player uses it: select the mech, press its
-# gizmo. The three mechs are colony mechs with a mechanitor overseer - without
-# one vanilla shows a colony mech no ability gizmo. "Mechanitor" oversees Pulse
-# and Tinker (2 + 2 of a mechlink's 6 bandwidth), "Gazer mechanitor" the Gazer
-# (6). Both stand outside the pulse wave's 6.9 and the shockwave's 8.9 cells;
-# the shockwave throws every non-mech pawn in reach whoever owns the Gazer.
-# "pulse wave" and "Shockwave" have targetRequired false, so their gizmo opens
-# no targeter and casts on the mech itself; "Blinding Laser" opens one and the
-# colonist is clicked.
-#
-# Timing: the gizmo route runs the warmup, so each ask plays the warmup ticks on
-# top of the ticks it played after the old instant cast - pulse wave 1.2 s (72)
-# + 60 = 132, blinding laser 0.6 s (36) + 30 = 66, shockwave 3 s (180) + 180 =
-# 360. The shockwave's charge mote is part of its warmup, so its claim now shows
-# on screen as written.
-#
-# "ask". Headless, every line is a skip.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 spawn Pawn:Colonist at -4,-8 name="Mechanitor"

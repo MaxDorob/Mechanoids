@@ -1,26 +1,6 @@
 rwtest 1
 test "Mechamancer pack deploys satellites" project="Apex Mechanoids" group="Apparel" created=2026-09-26T00:00:00
 
-# The promise: "When fueled with steel, it can construct small mechanoids that
-# operate independently without consuming bandwidth. Each mechanitor can deploy
-# up to two satellite mechanoids simultaneously." (The def actually loads
-# Plasteel, 30 per charge, 2 charges - the description says steel. That is a
-# text finding, not something this file pins.)
-#
-# Verb_SpawnMech (Verbs/Verb_SpawnMech.cs): a self-cast, non-targetable verb on
-# a CompApparelReloadable with 2 charges. Each use spends a charge and spawns
-# APM_Mech_Satellite of the wearer's faction near the wearer. A new pack starts
-# full.
-#
-# The gizmo label is the verb label "summon satellite" as written in the def -
-# a reloadable's command carries the verb's label, not a capitalised one.
-# If the first run reports the gizmo as not offered, the label is the first
-# suspect, and the report lists the gizmos that were there.
-#
-# After two uses the charges are gone, so the third press must be refused - the
-# other direction, in the same test, after the positive half proved the label.
-# Warmup 1 s = 60 ticks; 120 ticks per use leaves room for the cast job.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 despawn Thing:APM_Mech_Satellite

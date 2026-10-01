@@ -1,50 +1,30 @@
 rwtest 1
 test "Regular and boss effects keep their colours" project="Apex Mechanoids" group="Art" created=2026-09-26T00:00:00
 
-# The mod has one colour rule for its three lords, and it is written into the
-# defs rather than into code: every regular effect is tinted steel blue-grey
-# (163, 180, 187), and the boss effects of the same ability are tinted
-#   Dominus boss  orange (230, 130, 40)  - press the attack halo and wings
-#   Terminus boss gold   (229, 211, 127) - severing edge, overdrive wave
-#   Celerus boss  purple (0.40, 0.17, 0.58) smoke, grenade (160, 60, 230)
-# The regular Celerus smoke is (0.63, 0.71, 0.75), the same blue-grey.
-#
-# Nothing in the game state carries a colour, so every line below is an "ask":
-# a person looks and answers. Headless, each one reports skip, never pass.
-# Each pair stands side by side, regular on the left, boss on the right, so the
-# question is always "do the two differ the way the rule says".
-#
-# Every ability is used the way a player uses it: select the mech, press its
-# gizmo, click the cell where the ability wants one. Each Terminus and each
-# Celerus is a colony mech with its own mechanitor overseer (5 and 4 of a
-# mechlink's 6 bandwidth) - without one vanilla shows a colony mech no ability
-# gizmo. The two Terminus are drafted because severing edge and overdrive leave
-# displayGizmoWhileUndrafted off. "Severing edge" and "Smokescreen" open the
-# targeter and the cell is clicked (target cell=, relative to the map centre
-# like every coordinate here); "Overdrive" has targetRequired false and casts on
-# the Terminus itself.
-#
-# The gizmo route runs the warmup, so the warmup motes (the severing edge intro,
-# the overdrive pillar) are on screen now as well, and each ask plays the
-# warmup ticks on top of what it played after the old instant cast: severing
-# edge 0.3 s (18) + 45 = 63, overdrive 1.1 s (66) + 90 = 156, smokescreen 1 s
-# (60) + 240 = 300. The hediff render nodes are hung with "give", which is the
-# state the ability would leave.
-#
-# Both Celerus stand drafted, like the two Terminus. In the run of 2026-10-01
-# 02:47 the boss's smokescreen click on 8,10 was refused as out of range - 4
-# cells from where the boss was spawned, against a range of 20 - and the report
-# found "Celerus regular mechanitor" under the mouse there. Undrafted, either
-# pawn can have moved. The two cell asserts before the second click say which
-# one did if it is red again.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
-spawn Pawn:APM_Mech_Pulse at -3,0 faction=player name="Pulse regular" facing=south
-spawn Pawn:APM_Mech_Pulse at 3,0 faction=player name="Pulse boss" facing=south
-give "Pulse regular" hediff=APM_Hediff_PressTheAttack
-give "Pulse boss" hediff=APM_Hediff_PressTheAttack_Boss
-ask "press-attack-halo" ticks=120 claim="both mechs wear a halo and animated wings from Press the Attack; the left set is a pale steel blue-grey, the right set is orange; the wings move; neither is pink, white-boxed or missing"
+spawn Pawn:APM_Mech_Dominus at -12,0 faction=player name="Dominus regular" facing=south rolled=true
+spawn Pawn:APM_Mech_Dominus_Boss at 12,0 faction=player name="Dominus boss" facing=south rolled=true
+spawn Pawn:APM_Mech_Pulse at -9,0 faction=player name="Pulse near regular Dominus" facing=south
+spawn Pawn:APM_Mech_Pulse at 9,0 faction=player name="Pulse near boss Dominus" facing=south
+spawn Pawn:Colonist at -16,-4 name="Dominus regular mechanitor"
+spawn Pawn:Colonist at 16,-4 name="Dominus boss mechanitor"
+draft "Dominus regular mechanitor"
+draft "Dominus boss mechanitor"
+overseer "Dominus regular" by="Dominus regular mechanitor" now=true
+overseer "Dominus boss" by="Dominus boss mechanitor" now=true
+draft "Dominus regular"
+draft "Dominus boss"
+select "Dominus regular"
+gizmo "Press The Attack"
+select "Dominus boss"
+gizmo "Press The Attack"
+deselect
+waitfor pawn "Pulse near regular Dominus" hediff=APM_Hediff_PressTheAttack ticks=180
+waitfor pawn "Pulse near boss Dominus" hediff=APM_Hediff_PressTheAttack_Boss ticks=180
+assert pawn "Dominus regular" hediff=APM_Hediff_PressTheAttack
+assert pawn "Dominus boss" hediff=APM_Hediff_PressTheAttack_Boss
+ask "press-attack-halo" ticks=120 claim="each Dominus and the Pulse next to it wear a halo and animated wings from Press the Attack; the left pair is a pale steel blue-grey, the right pair is orange; the wings move; none is pink, white-boxed or missing"
 
 spawn Pawn:APM_Mech_Terminus at -3,-6 faction=player name="Terminus regular" facing=north
 spawn Pawn:APM_Mech_Terminus_Boss at 3,-6 faction=player name="Terminus boss" facing=north rolled=true
@@ -72,6 +52,7 @@ gizmo "Overdrive"
 deselect
 ask "overdrive-wave" ticks=156 claim="both Terminus units throw off their cape, which flies away and fades; a wave rises around each; the left wave is pale steel blue-grey, the right wave is gold"
 
+speed paused
 spawn Pawn:APM_Mech_Celerus at -8,6 faction=player name="Celerus regular"
 spawn Pawn:APM_Mech_Celerus_Boss at 8,6 faction=player name="Celerus boss" rolled=true
 spawn Pawn:Colonist at -14,2 name="Celerus regular mechanitor"
@@ -82,6 +63,7 @@ overseer "Celerus regular" by="Celerus regular mechanitor" now=true
 overseer "Celerus boss" by="Celerus boss mechanitor" now=true
 draft "Celerus regular"
 draft "Celerus boss"
+speed x1
 select "Celerus regular"
 gizmo "Smokescreen"
 target cell=-8,10

@@ -1,28 +1,6 @@
 rwtest 1
 test "Duel winner takes the reward" project="Apex Mechanoids" group="Duel" created=2026-09-26T00:00:00
 
-# MentalState_Duel.PostEnd, for a duel between hostiles: an opponent that is
-# dead or downed gives the survivor APM_DuelWinner +0.125 (one win is 1/8), and
-# APM_InDuel comes off both sides, and the spot is destroyed.
-#
-# DuelPresenceRules ends the duel the moment a duelist stops counting as
-# present - downed is one of the ways out. The check runs in MentalStateTick,
-# so one short tick after the "down" is what lets the state notice.
-#
-# Effect: APM_DuelWinner at 0.125 sits on its first stage (0 to 0.135) -
-# MoveSpeed +0.10. A trait-free human reads 4.6 bare, 4.7 after.
-#
-# The duel is started the way a player starts it: select the duelist, press the
-# psyspear's gizmo "The duel trial", click the raider. The 1 s warmup (60 ticks)
-# runs, so the start is waited for with a budget of 240; waitfor stops the tick
-# the duel began, which keeps the fight before the "down" as short as the game
-# allows. "speed paused" keeps the clock still between the steps.
-#
-# The other two endings - a timeout draw after 1200 ticks and a friendly duel
-# that rewards nothing - are not in this file: a draw needs two hostiles who
-# cannot reach each other while staying in each other's line of sight, which no
-# scene verb builds today.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 speed paused

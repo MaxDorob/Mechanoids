@@ -1,26 +1,6 @@
 rwtest 1
 test "Repair station takes in and heals a mech" project="Apex Mechanoids" group="Building" created=2026-09-26T00:00:00
 
-# Building_RepairStation: the gizmo "Insert mech..." opens a float menu of every
-# colony mech the station accepts (CanAcceptPawn: a mechanoid, not a Satellite,
-# friendly, body size 0-2 for the small station, not occupied, powered, not at
-# full health), or the single dead entry "No mechs available.". Picking a mech
-# sends it in; the station repairs 1.5 HP per second (small station) and ejects
-# it when done. While it works, the inspect string reads "Repairing <mech>".
-#
-# Power comes from a solar generator in an unroofed yard under "sky glow=1": at
-# full glow it gives 1700 W, far over the 500 W the station draws while
-# repairing. "waitfor power" on the station is the precondition: it waits
-# until CompPowerTrader.PowerOn, and a station that never gets power makes the
-# file red on that line, with the net's balance, not further down.
-#
-# The damage: Blunt on a Lifter's core part lands as Crack. 10 points at 1.5 HP/s
-# is about 400 ticks of repair; the budget adds the walk in and leaves a wide
-# margin, and waitfor reports how much it used.
-#
-# The other direction closes the file: the same mech, now at full health, is no
-# longer offered, and the menu says so with its dead entry.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 sky glow=1

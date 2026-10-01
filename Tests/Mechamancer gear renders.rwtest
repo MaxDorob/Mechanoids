@@ -1,24 +1,6 @@
 rwtest 1
 test "Mechamancer gear renders" project="Apex Mechanoids" group="Art" created=2026-09-26T00:00:00
 
-# Commit e6006fe renamed every Mechamancer texture (MechJuggernaut* ->
-# Mechamancer*) and added masks. All three pieces draw with shaderType
-# CutoutComplex and useWornGraphicMask, so the "_m" texture decides which part
-# of the piece takes the apparel colour; the colorGenerator picks one of four
-# greys. A texture or mask that the rename missed shows as a pink square, an
-# invisible piece, or a piece tinted over its whole surface.
-#
-# The suit ships Fat, Female, Hulk, Male and Thin bodies in north, south and
-# east (west mirrors east). The helmet and the pack have one set. The pack is
-# drawn as a utility pack with its own per-body offsets in east and west.
-#
-# Four pawns, one per facing, all in the full set. "speed paused" before the
-# first spawn keeps them from walking or turning before the asks; paused after
-# the spawns, they had already moved. "wear ... now=true" puts the pieces on without
-# walking, so the facing given at the spawn survives.
-#
-# "ask": nothing here is state. Headless, every line is a skip.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 speed paused

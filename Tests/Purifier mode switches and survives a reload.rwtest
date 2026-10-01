@@ -1,21 +1,6 @@
 rwtest 1
 test "Purifier mode switches and survives a reload" project="Apex Mechanoids" group="Building" created=2026-09-26T00:00:00
 
-# CompToxicPurifier offers one gizmo, "Mode: <mode>", that opens a float menu of
-# the four modes: "Wastepacks over ground", "Ground over wastepacks" (the
-# default), "Wastepacks only", "Ground only". The inspect line reads the
-# wastepack store against its capacity of 15. Both "mode" and
-# "wastepacksCount" are saved in PostExposeData.
-#
-# The gizmo label carries the mode, so it is also the read-back: after picking
-# "Wastepacks only" the old label must be gone and the new one pressable, and
-# both must hold after a reload. Pressing the new label opens the menu again;
-# picking the same mode closes it without changing anything.
-#
-# The mode's effect on hauling (WorkGiver_HaulToToxicPurifier refuses ground-
-# first modes while cells are polluted) needs polluted ground and wastepacks on
-# the map, and is not in this file.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 spawn Thing:APM_Building_ToxicPurifier faction=player name="purifier"

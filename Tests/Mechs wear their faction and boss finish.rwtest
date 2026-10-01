@@ -1,22 +1,6 @@
 rwtest 1
 test "Mechs wear their faction and boss finish" project="Apex Mechanoids" group="Art" created=2026-09-26T00:00:00
 
-# Every Apex mech body is drawn with shaderType CutoutWithOverlay: a base
-# texture plus a mask the game tints - for a colony mech with the colony's mech
-# colour, for a hostile one with the default. A mask that is missing, renamed
-# or saved in the wrong channel shows as a pink or magenta patch, or as a mech
-# that is tinted all over. The three lords also ship boss races
-# (APM_Mech_DominusB, _TerminusB, _CelerusB) with their own textures.
-#
-# rolled=true keeps what the generator gave each mech - including the built-in
-# weapon, which "spawn" otherwise strips, and which is part of the silhouette.
-#
-# Row 1 (z=4): the same kinds as colony mechs; row 2 (z=-4): hostile. The
-# three lords get a third row with their boss kinds. Every mech faces south, the
-# view the colony bar and most screenshots show.
-#
-# "ask": the tint is no state. Headless, every line is a skip.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 speed paused

@@ -1,26 +1,6 @@
 rwtest 1
 test "Duel effects keep their colours" project="Apex Mechanoids" group="Art" created=2026-09-26T00:00:00
 
-# A duel starts with the effecter APM_DuelStart (or APM_DuelStart_Boss when the
-# caster's kind ends in _Boss): the "VS" mote APM_DuelVS and the fire orbs
-# APM_DuelFireOrbs, and the spot APM_DuelSpot (or _Boss) with its projectile
-# shield of radius 5.9. The regular set is steel blue-grey (163, 180, 187), the
-# boss set orange (230, 130, 40).
-#
-# Two duels side by side, far enough apart that the two shields do not touch:
-# a Dominus against a raider on the left, a boss Dominus against a raider on
-# the right. The colour follows the caster's kind, not its faction, so both
-# Dominus are colony mechs used the way a player uses them: each has its own
-# mechanitor overseer (a Dominus takes 5 of a mechlink's 6 bandwidth), is
-# selected, its gizmo "The duel trial" pressed and its raider clicked. The
-# duelists are raiders, so each duel is between hostiles and the end effects
-# would be the rewarding ones; this file looks only at the start.
-#
-# Timing: both 1 s warmups (60 ticks) run side by side; the spots are waited for
-# with a budget of 240, so the asks begin the moment each duel has started.
-#
-# "ask", because a colour is no game state. Headless, it reports skip.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 despawn Thing:APM_DuelSpot

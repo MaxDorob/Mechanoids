@@ -1,46 +1,6 @@
 rwtest 1
 test "Gazer sun ray burns along its line" project="Apex Mechanoids" group="Ability" created=2026-09-26T00:00:00
 
-# APM_SunRay's verb is Verb_ShootSunBeamAbility, and the damage is in the verb,
-# not in the ability: WarmupComplete lays a Bresenham path from the Gazer
-# through the target cell out to the full range 30.9 (beamTargetsGround, so a
-# pawn target is read as its cell), then every burst shot, 14 ticks apart,
-# HitCell()s the next cell of it outward from minRange 3.9 - each cell within
-# radius 2 of that point hands APM_SunRay 38 (AP 1.8, a Beam -> BeamWound) to
-# one random thing standing there, and sets it alight (beamChanceToAttachFire
-# 1). The shots come from the verb, so the ray is used the way a player uses
-# it: select the Gazer, press the gizmo "Sun Ray", click the target. The cast
-# job then runs warmup and burst as in play.
-#
-# Scene: Gazer at 0,0; "Target", a drafted colonist, at 12,0; "Behind", a
-# drafted colonist, at -8,0 - on the extension of the line but on the wrong
-# side of the Gazer, which the beam never sweeps.
-# Effect: one hit is 38 x BeamWound painPerSeverity 0.0125 = 0.475 pain, and
-# the fire only adds; min=0.2 leaves room for a hit that burns a part off.
-#
-# Refused direction: a cell 2 away is inside minRange 3.9, so Verb.CanHitTarget
-# says no and Verb_CastAbility.ValidateTarget keeps the targeter open - a
-# targeter refusal, clicked as "target cell=2,0 expect=refused". The accepted
-# click on "Target" with the same gizmo is its control.
-#
-# Budget: warmup 9.5 s = 570 ticks, then the beam reaches 12 cells after
-# (12 - 4) x 14 = 112 ticks: 682. The whole sweep is 570 + 27 x 14 = 948;
-# "tick 1250" covers it with a quarter to spare, so "Behind" and the cooldown
-# are read after the sweep has ended.
-#
-# The hit on "Target" is read as a hit, not as pain. Each shot strikes every cell
-# within radius 2 of its point, so a pawn on the line sits under several shots
-# of 38 - enough to kill it. "waitfor pawn Target pain min=0.2" ended on
-# "Target is not on the map" in the runs of 2026-09-27 00:17 and 2026-10-01
-# 02:47 (dead before the poll read it alive) and on 0 in 2026-09-30 01:20 (each
-# hit goes to one random thing on the cell, grass included). "assert hit" counts
-# the Gazer's hits from the battle log and holds on a corpse; until the kit has
-# it, "requires assert=hit" reports it as skip. What runs today: the ray was
-# fired (the gizmo is on cooldown) and "Behind" is spared.
-#
-# The Gazer costs 6 bandwidth, the whole of a fresh mechlink. Its auto-laser
-# toggle defaults to on, so GazerLaserUtility does not block the ability.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 spawn Pawn:APM_Mech_Gazer at 0,0 faction=player name="Gazer"

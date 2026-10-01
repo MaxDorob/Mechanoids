@@ -1,29 +1,6 @@
 rwtest 1
 test "Ultimate sacrifice buffs conquerors and spends the caster" project="Apex Mechanoids" group="Ability" created=2026-09-26T00:00:00
 
-# The promise, from the Conqueror description: "one unit in a group can choose
-# to overclock their shared processing unit, giving nearby conquerors a larger
-# boost, at the cost of entirely frying the overlocked unit's physical
-# components."
-#
-# CompProperties_ConquerorSacrificeGiveHediff hands APM_Hediff_UltimateSacrifice
-# (9000 ticks) to the other awake Conquerors of the caster's faction within 12
-# cells, and CompAbilityEffect_KillCaster kills the caster. The hediff carries
-# Moving +0.25 and Consciousness +0.10, so a mech that reads 1.0 on both reads
-# 1.25 and 1.10 afterwards.
-#
-# The caster is used the way a player uses it: a colony Conqueror with a
-# mechanitor overseer (without one vanilla shows a colony mech no ability
-# gizmo), drafted because the def leaves displayGizmoWhileUndrafted off, then
-# its gizmo "Ultimate sacrifice" pressed. targetRequired is false, so the gizmo
-# opens no targeter and queues the cast on the caster itself. The comp buffs
-# the caster's own faction, so every mech here is a colony mech. The 5 s warmup
-# is 300 ticks; the waitfor budget of 480 is that plus slack.
-#
-# "Far" stands 15 cells out, past the radius of 12, and "Pulse" is an ally in
-# range that is no Conqueror - the promise names conquerors. Both are asserted
-# after "Near" took the buff.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 spawn Pawn:APM_Mech_Conqueror_DMR at 0,0 faction=player name="Caster"

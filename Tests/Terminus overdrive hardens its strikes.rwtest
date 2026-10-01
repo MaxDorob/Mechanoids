@@ -1,30 +1,6 @@
 rwtest 1
 test "Terminus overdrive hardens its strikes" project="Apex Mechanoids" group="Ability" created=2026-09-26T00:00:00
 
-# The promise: "Terminus diverts power inward and briefly enters an overdriven
-# combat state. While active, it sheds its cape, strikes harder, recovers
-# between swings faster ..."
-#
-# APM_TerminusOverdrive self-applies APM_Hediff_TerminusOverdrive for 2700
-# ticks: Moving +0.25, MeleeDamageFactor x1.6, MeleeCooldownFactor x0.65,
-# StaggerDurationFactor x0.35. "Strikes harder" is MeleeDamageFactor (1.0 to
-# 1.6), "recovers faster" is MeleeCooldownFactor (1.0 to 0.65); both are read
-# bare first. The shed cape is a picture and lives in the colour tests.
-#
-# The Terminus is used the way a player uses it: a colony Terminus with a
-# mechanitor overseer (without one vanilla shows a colony mech no ability
-# gizmo), drafted because the def leaves displayGizmoWhileUndrafted off, then
-# its gizmo "Overdrive" pressed. targetRequired is false, so the gizmo opens no
-# targeter and queues the cast on the Terminus itself. The 1.1 s warmup is 66
-# ticks; the first read after it is a waitfor with a budget of 240. The two
-# cooldown lines are the same gizmo greyed out, before and after a reload;
-# after the reload the Terminus is selected again, and it is still drafted
-# because the draft is saved.
-#
-# EMPResistance x0.98 is not asserted: a factor on a base of zero moves nothing,
-# which is the likely bug the inventory named - it wants a decision (offset or
-# drop it), not a test that pins zero.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 spawn Pawn:APM_Mech_Terminus faction=player name="Terminus"

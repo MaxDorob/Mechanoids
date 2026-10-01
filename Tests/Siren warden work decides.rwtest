@@ -1,23 +1,6 @@
 rwtest 1
 test "Siren warden work decides" project="Apex Mechanoids" group="Work" created=2026-09-26T00:00:00
 
-# Every Siren warden giver is guarded by SirenWardenUtility.CanSirenWork, which
-# accepts APM_Mech_Siren and nothing else, then by the interaction mode the
-# player set on the prisoner. This file asks the chat giver the questions a
-# player's choices put to it, in one scene:
-#
-#   1. a colony Siren, prisoner on ReduceResistance  -> offered
-#   2. a colony Lasher, same prisoner                 -> not offered (not a Siren)
-#   3. the Siren, prisoner switched to MaintainOnly   -> not offered (mode)
-#   4. the Siren, prisoner on AttemptRecruit          -> offered again
-#
-# Line 1 goes first so the two "absent" lines below it cannot be green because
-# the giver never works at all. The Lasher is a mech with its own work type, so
-# the refusal is the Siren check and not "a pawn that does no work".
-#
-# "speed paused": nothing here needs the clock, and a pawn that walks between
-# the questions is the classic way a warden file goes red for the wrong reason.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 speed paused

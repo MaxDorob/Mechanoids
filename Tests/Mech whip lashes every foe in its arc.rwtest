@@ -1,54 +1,6 @@
 rwtest 1
 test "Mech whip lashes every foe in its arc" project="Apex Mechanoids" group="Weapon" created=2026-09-26T00:00:00
 
-# Verb_Whip.TryCastShot (Verbs/Verb_Whip.cs:136) does no pull and no knockback.
-# What it does beyond one hit is a sweep: Cast() hits the aimed-at thing with
-# the full tool damage, then walks AffectedCells - a wedge WhipWidth 3.6 wide at
-# its end, from the Lasher out to (distance to target + 0.5), with line of
-# sight - and hits every thing in it whose faction is null or hostile to the
-# caster, at damageFactor 0.5 (0.1 on a corpse or downed pawn). Same-faction
-# and non-hostile pawns in the wedge are skipped.
-#
-# Numbers: tool "edge" power 14, APM_Whip (CutBase) -> Cut. Full hit 14, swept
-# hit 7. Cut painPerSeverity 0.0125, so pain 0.175 on the target and 0.0875 on
-# a swept foe (unarmoured spawned colonists, no traits). The 30% EMP extra
-# damage does nothing to flesh (EMP harmsHealth false).
-#
-# Geometry, Lasher at 0,0 facing the target at 4,0: reach 4.5, wedge half-angle
-# asin(1.8 / sqrt(16 + 1.8^2)) = 24.2 deg.
-#   Target     4,0   aimed at                       -> full hit
-#   Flank      4,1   14.0 deg, 4.12 cells, hostile  -> half hit
-#   Ally       4,-1  in the wedge, player faction   -> spared
-#   Far        6,0   inside verb range 6.9 but past the 4.5 reach -> spared
-#   Behind    -4,0   outside the wedge              -> spared
-# Pain bounds: Target min=0.05 (a 14 point cut on a small part can take the
-# part off instead); Flank min=0.04, below the lowest swept hit (0.07 at awful
-# quality) for the same reason; the spared three read 0.
-#
-# Warmup 0, so the lash lands a tick or two after the order. The scene is
-# paused while it is built so nobody walks out of the wedge.
-# The Lasher needs an overseer to be drafted (bandwidth 2).
-
-# Target, Flank, Far and Behind have no faction: as enemies they fought the
-# drafted Ally and the Lasher from the first tick, and every pain line measured
-# that fight. Verb_Whip hits "t.Faction == null || t.HostileTo(caster)" (:180),
-# so factionless pawns are hit exactly like foes and start no fight.
-#
-# One lash, on a paused clock. The file used "speed x1" and a waitfor after the
-# attack; with the clock running the Lasher lashed again every 2.6 s while the
-# asserts polled, and Flank read 0.1215 (2026-09-30 01:20) and 0.1581
-# (2026-10-01 02:47) against max 0.12. "tick 10" plays the first lash and
-# stops the clock again, long before the 156 tick cooldown runs out.
-#
-# Flank has no upper bound any more. The damage goes through
-# AdjustedBaseMeleeDamageAmount, so it moves with the whip's quality
-# (MeleeWeapon_DamageMultiplier 0.8 awful to 1.65 legendary), and the kit makes
-# the whip with whatever quality it gets: a swept hit is 5.6 to 11.55 (pain 0.07
-# to 0.144), a full hit 11.2 to 23.1 (0.14 to 0.289). The ranges overlap, so no
-# bound tells "half" from "full" until the quality can be pinned. That is the
-# open "quality" verb in RimDevKit's WHAT_TO_TEST.md; the claim left here is
-# that the swept foe is hit and the spared three are not.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 speed paused

@@ -1,29 +1,6 @@
 rwtest 1
 test "Dynamo turns into a power plant and back" project="Apex Mechanoids" group="Ability" created=2026-09-26T00:00:00
 
-# "Power Plant Mode": CompAbilityEffect_ConvertToBuilding spawns
-# APM_DynamoPoweredGenerator at the Dynamo's cell with the caster's faction and
-# stores the Dynamo inside it. The building's "Mobile Mode" gizmo destroys it
-# and drops the Dynamo again, stunned for 60 ticks, with its fuel.
-#
-# Both directions go through a gizmo, the way a player switches. The Dynamo is a
-# colony mech with a mechanitor overseer - without one vanilla shows a colony
-# mech no ability gizmo. The ability has targetRequired false, so pressing
-# "Power Plant Mode" opens no targeter: Command_Ability.ProcessInput queues the
-# casting job on the Dynamo itself. Its 5 s warmup is 300 ticks; the waitfor
-# budget of 480 is that plus slack.
-#
-# While it is a building the pawn is off the map, so "assert pawn" cannot find
-# it; the building is the proof. After "Mobile Mode" the pawn is found again and
-# the building is gone - both directions of the same switch.
-#
-# The reload sits between the two because the pawn lives in the building's
-# saved innerContainer: a lost ExposeData would drop the Dynamo for good, and
-# only a reload shows that.
-#
-# Power output is not asserted: a freshly spawned Dynamo carries no uranium, and
-# the generator runs on the fuel it brings along.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 despawn Thing:APM_DynamoPoweredGenerator

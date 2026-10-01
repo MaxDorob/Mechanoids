@@ -1,33 +1,6 @@
 rwtest 1
 test "Pulse wave blinds flesh in its radius" project="Apex Mechanoids" group="Ability" created=2026-09-26T00:00:00
 
-# The promise: "stunning and flash-blinding living pawns caught in the wave".
-# CompAbilityEffect_PulseWave takes every flesh pawn outside the Mechanoid
-# faction within 6.9 cells - friend or foe - and hangs APM_PulseWaveBlind on it
-# (Sight setMax 0.2, 1920 ticks) next to a stun.
-#
-# The Pulse is used the way a player uses it: a colony Pulse with a mechanitor
-# overseer (without one vanilla shows a colony mech no ability gizmo), selected
-# and its gizmo "Pulse wave" pressed. targetRequired is false, so the gizmo
-# opens no targeter and queues the cast on the Pulse itself. The mechanitor
-# stands drafted 11.7 cells out, past the wave, since friend or foe counts.
-#
-# The wave expands, so the hediff is waited for rather than read at once; the
-# 300 tick budget holds the 1.2 s warmup (72 ticks) and is still generous for a
-# wave that reaches 6.9 cells, and waitfor reports how much of it was used.
-# "Far" at 10 cells and the player mech "Tin" at 3 cells are the two pawns it
-# must skip: one out of range, one not flesh. They are read after "Near" went
-# blind and after another 120 ticks, so the wave had every chance to reach them.
-#
-# Sight is the effect behind the marker: the bare read pins full sight first.
-#
-# Everybody stands drafted. In seven of nine runs up to 2026-10-01 02:47 "Near"
-# had no hediff at all after 300 ticks; in the two green runs the blind landed
-# at 64 and 84 ticks. An undrafted colonist covers about 5.5 cells in the
-# 72 tick warmup (4.6 cells/s x 1.2 s), so a "Near" that starts 3 cells out can
-# be past 6.9 before the wave starts. The cell assert before the gizmo says
-# which way it went if it is red again.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 spawn Pawn:APM_Mech_Pulse at 0,0 faction=player name="Pulse"

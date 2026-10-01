@@ -1,34 +1,6 @@
 rwtest 1
 test "Mechamancer gear raises bandwidth" project="Apex Mechanoids" group="Apparel" created=2026-09-26T00:00:00
 
-# The promise of the three pieces is bandwidth: the suit "dramatically
-# amplifies a mechanitor's bandwidth", the pack "increases a mechanitor's
-# maximum total bandwidth and control groups". equippedStatOffsets:
-#   suit   MechBandwidth +24, MechControlGroups +2, PainShockThreshold +0.05
-#   helmet MechBandwidth +14
-#   pack   MechBandwidth +18, MechControlGroups +1
-# (VacuumResistance only with Odyssey, left out.)
-#
-# MechBandwidth is a MechanitorStatBase stat: its base is 0, and the 6 come
-# from the mechlink. A plain colonist reads 0 (red in every run up to
-# 2026-09-30), so the colonist is made a mechanitor first: "overseer" on a
-# Lifter puts a mechlink in directly. Overseeing the Lifter spends bandwidth but
-# does not move the stat, which is the total.
-#
-# With the mechlink the reads climb 6 -> 30 -> 44 -> 62 - one
-# bound per piece, each read after the piece went on, so a lost offset names
-# its piece. PainShockThreshold is the anchor WHAT_TO_TEST.md recommends: 0.8
-# for a trait-free human, 0.85 in the suit, with no parts and no factors to
-# muddy it.
-#
-# MechControlGroups is not bounded: its base differs between a mechanitor and a
-# plain colonist, and a bound here would pin vanilla's number instead of the
-# offset. The +2 and +1 are an open row until a test starts from a real
-# mechanitor (see "RimDevKit needed", verb overseer).
-#
-# "wear ... now=true" skips the walk: the claim is the offset, not the order,
-# and every walked wear shifts the tick every bound below is read at.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 spawn Pawn:Colonist name="Mechanitor"

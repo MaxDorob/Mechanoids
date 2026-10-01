@@ -1,24 +1,6 @@
 rwtest 1
 test "Stasis container takes a mech in" project="Apex Mechanoids" group="Building" created=2026-09-26T00:00:00
 
-# The player's stasis container (APM_MechanoidContainer_Player) starts empty.
-# While empty it shows "Choose mechanoid" (Comp_MechanoidContainerControlled);
-# the command opens a targeter for a colony mech that is ever controllable, not
-# downed, can move and can reach the container, and orders it in with
-# APM_EnterMechanoidContainer: walk there, wait 250 ticks, TryAcceptPawn.
-# Whether the mech has an overseer is deliberately not asked - "a mech nobody is
-# holding is the one the player most wants put away".
-#
-# CanAcceptMech refuses first on power: the gizmo is drawn greyed with vanilla's
-# "No power". That line comes before the solar generator exists, so it pins the
-# refusal; the rest of the file is the same gizmo once power is there.
-#
-# The inspect string is the read: "Contains nobody." while empty, "Contains
-# <mech>" afterwards. The mech lives in the saved innerContainer, so the read is
-# repeated after a reload.
-#
-# Budget: a short walk inside the yard plus 250 ticks of waiting.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 sky glow=1

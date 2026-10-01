@@ -1,56 +1,12 @@
 rwtest 1
 test "Javelin fires from behind its own cover" project="Apex Mechanoids" group="Weapon" created=2026-09-26T00:00:00
 
-# Verb_ShootJavelin.CanHitTargetFrom (Verbs/Verb_ShootJavelin.cs:124) only
-# widens what vanilla allows. A line vanilla refuses is let through when all of:
-#   1. every cell blocking the line of sight lies within maxBlockerTiles = 6 of
-#      the launcher (LineBlockedOnlyByOwnCover -> JavelinIndirectFire),
-#   2. the simulated curve ends within hitRadius 0.5 of the target
-#      (MissileReaches), and
-#   3. no Fillage.Full thing sits on the curve at 5 tiles
-#      (solidObstacleArmTiles) or more from the launch (MissilePathClearOfSolids).
-# The missile leaves on the cardinal facing the target, flies 22 boost ticks
-# straight, then turns at 2 deg/tick; speed 15 = 0.15 tiles/tick.
-#
-# Scene, east lane: Javelin at 0,0, five walls at x=3 (z -2..2), a drafted
-# colonist "Dummy A" at 20,0. The wall is 3 cells out - not adjacent, so vanilla
-# gets no lean-out cell and refuses the line; blocker distance 3 <= 6 passes
-# rule 1; the straight eastward curve passes rule 2; the wall is crossed at
-# 2.5..3.5 tiles, inside the 5 tile arm distance, so rule 3 passes too and the
-# projectile ignores it on the same rule (JavelinObstacleRules.Blocks).
-# The dummy is drafted so it stands still: evasion (evasionMaxChance 0.5)
-# rolls only for a target moving into the missile.
-#
-# What the hit leaves: ResolveAndAdvanceStack puts APM_Hediff_JavelinMissileLock
-# on the first pawn a basic rocket lands on (the marker), and the direct hit is
-# APM_JavelinWarhead 20 (Bomb child, fragmentation off) - the effect, read as
-# pain. Blast damage is 0, so nothing else in the scene hurts the dummy. The
-# player javelin has 0 uranium and fires the free basic rocket.
-# The injury is not named: Bomb leaves Shredded on soft tissue and its
-# hediffSolid, Crack, on a bone. The run of 2026-10-01 02:47 hit a bone and read
-# "APM_Hediff_JavelinMissileLock, Crack" against a "hediff=Shredded" line, so
-# that line read a real hit as a miss. Pain covers both: 20 x Shredded 0.0125 =
-# 0.25, 20 x Crack 0.01 = 0.2; min=0.1 leaves room for a hit that takes off a
-# small part instead.
-#
-# Budget: warmup 1.9 s = 114 ticks, flight 19.5 tiles / 0.15 = 130 ticks,
-# 244 in all; 600 leaves room for the job start and the turn to face.
-#
-# The refused direction, north lane: walls at z=10 (x -2..2), "Dummy B" at
-# 0,20. The blocker is 10 cells out, > 6, so rule 1 refuses: terrain around the
-# target, not the launcher's cover. "Dummy B stays unhurt" alone would be green
-# even if the rule broke, because a missile allowed into that wall detonates on
-# it (rule 3 / the projectile) - so the claim there is "no missile left the
-# tube", read with "assert shots".
-#
-# A player mech takes orders only with an overseer in range (24.9), so the
-# mechanitor stands behind it; now=true because the link is a precondition here.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 spawn Pawn:APM_Mech_Javelin at 0,0 faction=player name="Javelin"
 spawn Pawn:Colonist at -3,-2 name="Mechanitor"
 give "Mechanitor" need=Food value=1
+draft "Mechanitor"
 overseer "Javelin" by="Mechanitor" now=true
 equip "Javelin" thing=APM_Gun_JavelinRocketLauncher now=true
 assert pawn "Javelin" equipment=APM_Gun_JavelinRocketLauncher
@@ -76,9 +32,6 @@ assert pawn "Dummy A" pain max=0
 
 draft "Javelin"
 attack "Javelin" target="Dummy A"
-# Probe (2026-09-30): with Vehicle Map Framework loaded, which transpiles
-# Projectile.Launch and patches Projectile.CanHit, the lock never arrived.
-# This line splits "nothing left the barrel" from "the missile flew and missed".
 waitfor shots "Javelin" min=1 ticks=600
 waitfor pawn "Dummy A" hediff=APM_Hediff_JavelinMissileLock ticks=600
 assert pawn "Dummy A" pain min=0.1

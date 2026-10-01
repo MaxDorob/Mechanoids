@@ -1,41 +1,6 @@
 rwtest 1
 test "Blinding laser blinds eyes, not mechs" project="Apex Mechanoids" group="Ability" created=2026-09-26T00:00:00
 
-# APM_BlindingLaser is an area cast, not a pawn target: canTargetLocations
-# true and Ability_EffectRadius 2.4. A click on a mech is taken as its cell, so
-# the targeter never refuses one - the earlier "target Lifter expect=refused"
-# could not hold. Ability.Activate picks the affected things with GenRadial
-# around the clicked cell, filtered by ValidAOEAffectedTarget: the verb's
-# targetParams (canTargetMechs false drops every mech) and each comp's Valid.
-# There is no faction filter, so a colonist in the radius is blinded too.
-#
-# CompAbilityEffect_BlindingLaser.Apply then puts APM_LaserBlind on every
-# SightSource part - Sight setMax 0.05 for Ability_Duration 50 s - and its own
-# CanBlindPawn refuses mechanoids a second time (IsMechanoid, added by the mod
-# author on 2026-08-12, together with canTargetMechs false: mechs are immune
-# by design).
-#
-# Geometry around the Target's cell 5,0 (the click on "Target" is taken as
-# its cell):
-#   Target 5,0  distance 0    inside 2.4  -> blinded
-#   Lifter 5,2  distance 2    inside 2.4  -> a mech, untouched
-#   Far    0,2  distance 5.4  outside     -> untouched
-# The Tinker (0,0) and the Mechanitor (0,-2) stand 5 and 5.4 away, outside.
-#
-# Everyone stands in one sealed room without a roof (walls x -1..7, z -3..3,
-# door=none), and the clock is paused from the first spawn to the click: the
-# colonists cannot wander out of or into the radius. The Tinker is inside the
-# room too - the laser needs line of sight (requireLineOfSight defaults to
-# true) and a wall between caster and target would refuse the click.
-#
-# The Tinker is used the way a player uses it: a colony Tinker with a mechanitor
-# overseer (without one vanilla shows a colony mech no ability gizmo), selected,
-# its gizmo "Blinding Laser" pressed and the Target clicked. Range 11 covers 5 cells.
-# All pawns are the player's, so nobody starts a fight.
-#
-# Timing: the 0.6 s warmup is 36 ticks; the waitfor budget of 180 is that plus
-# slack, and it reports the tick the laser hit at.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 speed paused

@@ -1,27 +1,6 @@
 rwtest 1
 test "Celerus blinks to a free cell" project="Apex Mechanoids" group="Ability" created=2026-09-26T00:00:00
 
-# APM_CelerusBlink carries CompProperties_BlinkTeleport (range 17.9, line of
-# sight) and CompProperties_BlinkWarmupVisuals (motes while casting, nothing a
-# script reads). CompAbilityEffect_BlinkTeleport.Apply re-checks
-# IsValidDestination and then sets caster.Position = target cell in the same
-# call - no flyer, no delay (stunTicks is not set, 0). The blink goes through
-# the gizmo "Blink" and a click on the cell, so the 0.15 s warmup (9 ticks) runs
-# first; the landing is waited for with a budget of 120.
-#
-# IsValidDestination refuses, in order: out of bounds, beyond 17.9, no line of
-# sight, a door it cannot pass, an impassable or unwalkable cell, and a cell
-# another pawn stands on ("AbilityOccupiedCells"). The occupied cell is the
-# refusal only the comp makes: canTargetPawns=false sends the targeter to the
-# location, which is in reach (6.7 cells) and in sight. The targeter asks the
-# comp's Valid, so the refusal is a targeter refusal, not a greyed gizmo. The
-# refusal comes first - it costs no cooldown, the blink costs 600, and the last
-# line reads that cooldown as the same gizmo greyed out.
-#
-# The gizmo shows undrafted (displayGizmoWhileUndrafted, not disabled), but a
-# colony mech shows no ability gizmo without an overseer, and an undrafted mech
-# wanders; so: overseer and draft. The Bystander is drafted to hold its cell.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 spawn Pawn:APM_Mech_Celerus at 0,0 faction=player name="Celerus"

@@ -1,23 +1,6 @@
 rwtest 1
 test "Gazer emplacement names why it cannot fire" project="Apex Mechanoids" group="Building" created=2026-09-26T00:00:00
 
-# Building_GazerEmplacement.GetGizmos gives a colony emplacement one command,
-# labelled from its beam verb or, failing that, "Sun Ray"
-# (APM.GazerEmplacement.SunRay.Label). CanUseVerb refuses in this order:
-# "Not spawned.", "Sun Ray definition is missing.", "Broken down.",
-# "Turned off.", "No power.", "Needs an operator.".
-#
-# Two of those are reachable by a scene: no power, then power and nobody at the
-# controls. Each is pinned word for word, in that order, so the second line also
-# proves the power check moved on. The inspect line "Status: Ready" says the
-# charge and cooldown machine is idle.
-#
-# The usable direction needs a colonist manning it (CompMannable), which no
-# scene verb arranges; it stays an open row.
-#
-# If the command's label turns out to come from the verb and not from the key,
-# the first line reports the gizmos that were offered - fix the label here.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 sky glow=1

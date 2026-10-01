@@ -1,18 +1,6 @@
 rwtest 1
 test "Frostivus unload command needs food and an overseer" project="Apex Mechanoids" group="Work" created=2026-09-26T00:00:00
 
-# CompFrostivusFoodPreservation gives a colony Frostivus the command "Unload
-# preserved food" only while it carries food, and draws it greyed with
-# "Frostivus cannot use preservation commands right now." when
-# FrostivusFoodPreservationUtility.CanUseFrostivusMapCommand says no - which
-# for a colony Frostivus means it has no overseer.
-#
-# So the three states a player can meet are three lines here:
-#   no food           -> not offered at all
-#   food, no overseer -> offered, greyed, with that reason word for word
-#   food, overseer    -> offered and usable
-# The positive half needs the overseer link the kit cannot build yet.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 spawn Pawn:APM_Mech_Frostivus faction=player name="Frost"

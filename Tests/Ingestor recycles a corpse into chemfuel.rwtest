@@ -1,31 +1,6 @@
 rwtest 1
 test "Ingestor recycles a corpse into chemfuel" project="Apex Mechanoids" group="Work" created=2026-09-26T00:00:00
 
-# The way a player gets this: the Ingestor's work type
-# APM_IngestorCorpseProcessing, giver APM_IngestorProcessCorpses. The giver
-# (WorkGivers/WorkGiver_IngestorCorpseProcessing.cs) needs a player Ingestor
-# that is spawned, awake, can move and manipulate - no overseer - and hands out
-# the APM_Absorb ability as a job on a fresh flesh corpse. Default mode is
-# "all valid corpses", so an unmarked corpse qualifies.
-#
-# CompAbilityEffect_Absorb destroys the corpse and adds a batch to
-# APM_AbsorbedThing: floor(bodySize x 36) chemfuel, due after the
-# durationFromSize curve - 36 chemfuel after 30000 ticks for a human. The batch
-# is not waited out here: half a day of ticks for a spawn of chemfuel belongs to
-# its own test once the batch timer is readable; the hediff's own label names
-# it ("36 chemfuel in ...").
-#
-# The ability cooldown is 20000 ticks, so right after one corpse the giver must
-# not hand out a second job - the second corpse is the other direction, and it
-# is only spawned once the first job has finished.
-#
-# Job budget: walk plus a 5 s (300 tick) touch warmup; 2000 ticks is ample.
-#
-# The job is run "until=ended", not "until=done": JobDriver_Absorb is a
-# JobDriver_CastAbilityMelee, which ends Incompletable after a cast that worked,
-# because the corpse it used up is gone. "done" wants Succeeded and was red in
-# every run up to 2026-09-30. What the job did is read on the next two lines.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 despawn Thing:Corpse_Human

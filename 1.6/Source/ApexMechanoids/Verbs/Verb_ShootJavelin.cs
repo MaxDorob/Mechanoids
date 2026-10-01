@@ -121,6 +121,42 @@ namespace ApexMechanoids
             return true;
         }
 
+        public override bool TryStartCastOn(LocalTargetInfo castTarg, LocalTargetInfo destTarg, bool surpriseAttack = false, bool canHitNonTargetPawns = true, bool preventFriendlyFire = false, bool nonInterruptingSelfCast = false)
+        {
+            if (base.TryStartCastOn(castTarg, destTarg, surpriseAttack, canHitNonTargetPawns, preventFriendlyFire, nonInterruptingSelfCast))
+            {
+                return true;
+            }
+
+            if (!WarmupRefusedOnlyForMissingShootLine(castTarg))
+            {
+                return false;
+            }
+
+            StartCoverShotWarmup(castTarg);
+            return true;
+        }
+
+        private bool WarmupRefusedOnlyForMissingShootLine(LocalTargetInfo castTarg)
+        {
+            return IndirectFireEnabled
+                   && CasterIsPawn
+                   && caster.Spawned
+                   && WarmupTime > 0f
+                   && state != VerbState.Bursting
+                   && CanHitTarget(castTarg)
+                   && !TryFindShootLineFromTo(caster.Position, castTarg, out ShootLine _);
+        }
+
+        private void StartCoverShotWarmup(LocalTargetInfo castTarg)
+        {
+            ShootLine coverShotLine = new ShootLine(caster.Position, castTarg.Cell);
+            CasterPawn.Drawer.Notify_WarmingCastAlongLine(coverShotLine, caster.Position);
+            float aimingDelayFactor = CasterPawn.GetStatValue(StatDefOf.AimingDelayFactor);
+            int warmupTicks = (WarmupTime * aimingDelayFactor).SecondsToTicks();
+            CasterPawn.stances.SetStance(new Stance_Warmup(warmupTicks, castTarg, this));
+        }
+
         public override bool CanHitTargetFrom(IntVec3 root, LocalTargetInfo targ)
         {
             DefModExtension_JavelinIndirectFire props = Props;

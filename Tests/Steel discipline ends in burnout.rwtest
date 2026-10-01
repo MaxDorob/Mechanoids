@@ -1,40 +1,6 @@
 rwtest 1
 test "Steel discipline ends in burnout" project="Apex Mechanoids" group="Ability" created=2026-09-26T00:00:00
 
-# HediffComp_ApplyHediffOnRemove (Comps/HediffComp) runs when the discipline
-# buff leaves a pawn that is alive and spawned: a mechanoid gets
-# APM_Hediff_DisciplineBurnout_Mech, anything else APM_Hediff_DisciplineBurnout,
-# and a flesh pawn with mood also APM_Thought_DisciplineBurnout (-6).
-#
-# The buff is put on the way a player puts it on: the Vassal has a mechanitor
-# overseer (without one vanilla shows a colony mech no ability gizmo), is
-# selected and its gizmo "Steel Discipline" pressed. targetRequired is false,
-# so the gizmo opens no targeter and queues the cast on the Vassal itself. The
-# 1.5 s warmup is 90 ticks; the first read after it is a waitfor with a budget
-# of 240, and the Apply hands out every buff in one call. The mechanitor may
-# take the buff too; nothing below reads it.
-#
-# The buff lives 15000 ticks. Waiting that out costs over four minutes of a run
-# and tests vanilla's HediffComp_Disappears, not this mod. "give ... severity=0"
-# drops the severity to zero, Hediff.ShouldRemove turns true, and the health
-# tracker removes the hediff through the same PostRemoved path the timer takes.
-# The comp does not ask why it was removed - that is the code this file pins.
-#
-# Effects, read against the bare values the first lines pin:
-#   colonist: MoveSpeed 4.6 - 0.15 = 4.45, and WorkSpeedGlobal -0.1 from the
-#             burnout itself
-#   mech:     MechEnergyUsageFactor 1.0 x 1.35 = 1.35
-# WorkSpeedGlobal is read as the part the burnout contributes, not as a total:
-# the colony's ideoligion puts its own offset on the total (-16% in the run of
-# 2026-09-30 01:20, which read 0.74 = 1.0 - 0.1 - 0.16). "assert statpart"
-# reports skip until the kit has it.
-# The bare 4.6 holds for an adult only. In the run of 2026-10-01 02:47 the
-# rolled "Worker" was a teenager and read 4.37 (life stage x0.95) before
-# anything was cast, so it is pinned to age 30. It stands drafted so it cannot
-# walk out of the twelve-cell radius before the cast.
-# The mech row is the half nobody sees - no mood, no tab line that says why the
-# Vassal drains faster.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 spawn Pawn:APM_Mech_Vassal faction=player name="Vassal"

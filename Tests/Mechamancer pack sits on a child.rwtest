@@ -1,24 +1,6 @@
 rwtest 1
 test "Mechamancer pack sits on a child" project="Apex Mechanoids" group="Art" created=2026-09-26T00:00:00
 
-# Children may wear the pack: the def sets developmentalStageFilter to
-# "Child, Adult". Without it vanilla falls back to adults only, and
-# Pawn_ApparelTracker.Wear refuses a child with the warning "<pawn> tried to
-# wear APM_Apparel_MechamancerPack but is not allowed to" - the pack is then
-# not worn, so the apparel asserts fail and "assert log clean" goes red.
-#
-# Patch_MechamancerPackChildOffset shifts the pack's east and west draw offset
-# by 0.10 for the Child body type, because the adult offsets (-0.40 / +0.40 with
-# per-body corrections) put the pack beside a child's narrow back instead of on
-# it. North and south are not patched; they use the def's (0,0.05) at 0.7 scale
-# on every body.
-#
-# A child in each facing proves the pack is worn and drawn from every side; an
-# adult beside the east and west child is the reference for the patched views.
-#
-# The apparel asserts are state and run headless. "ask" is the picture;
-# headless, those lines are skips.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 speed paused

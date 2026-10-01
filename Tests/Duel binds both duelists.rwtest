@@ -1,26 +1,6 @@
 rwtest 1
 test "Duel binds both duelists" project="Apex Mechanoids" group="Duel" created=2026-09-26T00:00:00
 
-# The promise: "A selected target is chosen for a duel and a shield is
-# generated around the duelists. For the duration of the duel, ranged attacks,
-# abilities and incoming damage ..." - both duelists are bound, and they take
-# more damage while it lasts.
-#
-# A colonist reaches the duel through the duelist's psyspear: CompAbilityGranter
-# adds APM_Mech_Duel on equip. This file walks the player's route - the gizmo
-# "The duel trial" and a click on the raider - instead of "cast", so the
-# targeter's own validation and the 1 s warmup job run as in play.
-#
-# APM_Mech_Duel runs its comps in order: GiveMentalState (APM_Duel on the
-# target, which forces it back on the caster and adds APM_InDuel to both), then
-# SpawnThingDuelAttached - APM_DuelSpot at the midpoint, a projectile
-# interceptor of radius 5.9 that destroys itself after 1200 ticks. APM_InDuel
-# carries IncomingDamageFactor x1.75 and MeleeCooldownFactor x0.7, so a colonist
-# that reads 1.0 on both reads 1.75 and 0.7.
-#
-# The raider stands at 4 cells, inside the 8.9 reach. The waitfor budget is the
-# 60 tick warmup plus slack; it reports the tick the duel began at.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 despawn Thing:APM_DuelSpot

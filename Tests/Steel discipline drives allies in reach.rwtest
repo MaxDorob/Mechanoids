@@ -1,60 +1,6 @@
 rwtest 1
 test "Steel discipline drives allies in reach" project="Apex Mechanoids" group="Ability" created=2026-09-26T00:00:00
 
-# The promise, from the ability description: "Drives every colonist and colony
-# mechanoid in a radius around the Vassal: they move faster, work faster, and
-# organics hold together better against mental breaks". The Vassal race
-# description adds the mood boost for a player-gestated Vassal.
-#
-# CompAbilityEffect_SteelDiscipline (Comps/CompAbilityEffect) takes every
-# spawned, living pawn of the caster's faction whose integer squared distance is
-# at most 144 - twelve cells - and hangs APM_Hediff_SteelDiscipline on it for
-# 15000 ticks. The Vassal leaves apexMechsOnly false, so colonists count. Flesh
-# pawns with a mood need also get APM_Thought_InspiredByDiscipline (+8).
-#
-# The Vassal is used the way a player uses it: it has a mechanitor overseer
-# (without one vanilla shows a colony mech no ability gizmo), is selected and
-# its gizmo "Steel Discipline" pressed. targetRequired is false, so the gizmo
-# opens no targeter and queues the cast on the Vassal itself. The 1.5 s warmup
-# is 90 ticks; the first read after it is a waitfor with a budget of 240, and
-# the Apply that follows hands out every buff in one call. The mechanitor is a
-# colonist of the Vassal's faction and stands drafted 14 cells out, past the
-# twelve, so the buff leaves it alone.
-#
-# The hediff is the marker; the numbers are the effect. The single stage
-# carries MoveSpeed +0.3 and WorkSpeedGlobal +0.15. A trait-free adult human
-# walks at 4.6, which the bare read below pins before the cast, so the
-# after-read is 4.9. MentalBreakThreshold -0.08 is left out: its base moves
-# with every trait and need.
-#
-# WorkSpeedGlobal is not read as a total: the colony's ideoligion puts its own
-# offset on it (-16% in the run of 2026-09-30 01:20), so a bound on the total
-# pins the save, not the mod. The +0.15 is read as the part the hediff itself
-# contributes, with "assert statpart", which reports skip until the kit has it.
-#
-# "Near" is asserted on its cell before the cast. In the rerun of 2026-09-30
-# 12:42 that line was red - "the cell is empty" a few steps after the spawn:
-# an undrafted colonist walks off on its own, and a hostile "Raider" three cells
-# away gives it a reason to. That is also the likeliest reading of 2026-09-27,
-# where the Vassal held the buff and "Near" had none. So "Near" and "Far" stand
-# drafted - a drafted pawn holds its cell, and the radius is the thing under
-# test - and the Raider is pacified, so it neither fights nor scares anyone off.
-# Drafting alone was not enough: in the runs of 2026-09-30 23:28 and 2026-10-01
-# 02:47 "Near" stood at 5,-1 and 2,-1, because it took its first steps in the
-# frames between its spawn and its draft. The scene is now built on a paused
-# clock and the clock starts only for the cast ("waitfor" does not advance a
-# paused clock).
-#
-# The bare MoveSpeed 4.6 holds for an adult only: a rolled teenager walks at
-# 4.37 (life stage x0.95, run of 2026-10-01 02:47, in the sister test), so
-# "Near" and "Far" are pinned to age 30.
-#
-# "Far" stands 15 cells out and "Raider" 3 cells out but of another faction -
-# the two ways a pawn must be skipped. Both are asserted after "Near" went
-# green, so neither negation can pass because the cast did nothing.
-#
-# Coordinates are the claim here: the radius is the thing under test.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 speed paused

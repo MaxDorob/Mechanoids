@@ -1,43 +1,6 @@
 rwtest 1
 test "Duel carries on through a hook pull" project="Apex Mechanoids" group="Duel" created=2026-09-26T00:00:00
 
-# Commit 58ade69: "A duel carries on while a duelist is pulled by the hook".
-# DuelPresenceRules.IsPresent is !gone && !downed && (spawned || in a spawned
-# flyer), compared by MapHeld. Before the fix a duelist inside
-# APM_PawnFlyer_Hooked was not spawned and the duel ended the frame the pull
-# began.
-#
-# Both abilities are used the way a player uses them: select the caster, press
-# its gizmo, click the target. The duelist's psyspear grants "The duel trial";
-# the Terminus is a colony mech with a mechanitor overseer (without one vanilla
-# shows a colony mech no ability gizmo) and is drafted, so it holds its cell and
-# the only thing that moves the duelist is the hook. APM_HookPawn ("Grappling
-# Hook") pulls a victim smaller than the caster to the caster, so the colonist
-# flies.
-#
-# Timing: the duel's 1 s warmup is 60 ticks, the waitfor budget of 240 is that
-# plus slack. The hook's 1 s warmup is 60 ticks and the hook projectile (speed
-# 55) crosses the 10 cells in about 18; the flyer's budget of 240 covers both.
-#
-# The flyer being there is the proof the pull happened - without that line the
-# final asserts would be green on a hook that never fired. The duel is read
-# after the flyer is gone, because a pawn inside a flyer is not on the map
-# and "assert pawn" does not find it there.
-#
-# The duelist stands drafted and the raider is pacified. Undrafted, with an
-# armed hostile four cells away, the duelist walked off before the click in five
-# of eight runs up to 2026-10-01 02:47 ("Target is out of range" at 4 cells
-# against 8.9, measured from the duelist's own cell); the sister test "Duel binds
-# both duelists" drafts it and has never been red there. The cell assert in
-# front of the click says which way it went if it is red again. Pacify keeps
-# the raider from opening the fight before the duel does; the duel's mental
-# state forces the fight on both anyway.
-#
-# DRAFT: between the duel's start and landing the two duelists fight for a few
-# hundred ticks. If the duelist downs the raider in that time, the duel ends for
-# a legitimate reason and this file goes red for it. The report of the first run
-# says which one it was.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 despawn Thing:APM_DuelSpot

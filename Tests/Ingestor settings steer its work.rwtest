@@ -1,21 +1,6 @@
 rwtest 1
 test "Ingestor settings steer its work" project="Apex Mechanoids" group="Work" created=2026-09-26T00:00:00
 
-# CompIngestorAbsorbSettings gives a colony Ingestor two toggles, each labelled
-# with what pressing it will do:
-#   strip:   "Enable stripping"         <-> "Disable stripping"
-#   process: "Use marked corpses only"  <-> "Recycle all valid corpses"
-# Both start off (strip nothing, recycle every valid corpse) and both are saved.
-#
-# The process toggle has an effect this file can read: in marked-only mode the
-# giver APM_IngestorProcessCorpses offers nothing for an unmarked corpse. The
-# same corpse is offered first, in the default mode, so the "absent" line after
-# the toggle cannot be green because the giver never works.
-#
-# The strip toggle's effect - apparel dropped before the corpse is destroyed -
-# needs the job to run; that is owned by "Ingestor recycles a corpse into
-# chemfuel" in its default mode, and a stripped run is an open row.
-
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 despawn Thing:Corpse_Human
