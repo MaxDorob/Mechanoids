@@ -24,6 +24,15 @@ test "Duel carries on through a hook pull" project="Apex Mechanoids" group="Duel
 # after the flyer is gone, because a pawn inside a flyer is not on the map
 # and "assert pawn" does not find it there.
 #
+# The duelist stands drafted and the raider is pacified. Undrafted, with an
+# armed hostile four cells away, the duelist walked off before the click in five
+# of eight runs up to 2026-10-01 02:47 ("Target is out of range" at 4 cells
+# against 8.9, measured from the duelist's own cell); the sister test "Duel binds
+# both duelists" drafts it and has never been red there. The cell assert in
+# front of the click says which way it went if it is red again. Pacify keeps
+# the raider from opening the fight before the duel does; the duel's mental
+# state forces the fight on both anyway.
+#
 # DRAFT: between the duel's start and landing the two duelists fight for a few
 # hundred ticks. If the duelist downs the raider in that time, the duel ends for
 # a legitimate reason and this file goes red for it. The report of the first run
@@ -33,7 +42,9 @@ requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 despawn Thing:APM_DuelSpot
 spawn Pawn:Colonist at 0,0 name="Duelist"
+draft "Duelist"
 spawn Pawn:Colonist at 4,0 faction=enemy name="Raider"
+pacify "Raider"
 spawn Pawn:APM_Mech_Terminus at -10,0 faction=player name="Terminus"
 spawn Pawn:Colonist at -14,-4 name="Mechanitor"
 draft "Mechanitor"
@@ -41,6 +52,7 @@ overseer "Terminus" by="Mechanitor" now=true
 draft "Terminus"
 equip "Duelist" thing=APM_Weapon_DuelistsPsySpear now=true
 
+assert thing "Duelist" at 0,0
 select "Duelist"
 gizmo "The duel trial"
 target "Raider"

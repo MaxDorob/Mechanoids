@@ -34,9 +34,8 @@ test "Toxic mist gasses flesh around the haze" project="Apex Mechanoids" group="
 # drafted. The overseer stands far outside the cloud. The cooldown is read as
 # the same gizmo greyed out.
 #
-# The gas itself is not a Thing in 1.6 - it lives in map.gasGrid - and no
-# assert reads a cell's gas density today. That line is held back at the end
-# with "requires assert=gas"; everything above it runs now.
+# The gas itself is not a Thing in 1.6 - it lives in map.gasGrid - and is read
+# with "assert gas", the density of one gas type on one cell.
 
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
@@ -70,5 +69,4 @@ assert pawn "Far" capacity=Breathing min=0.95
 assert pawn "Mechanitor" hediff=ToxGasExposure expect=absent
 assert log clean
 
-requires assert=gas
 assert gas ToxGas at 0,0 density min=64

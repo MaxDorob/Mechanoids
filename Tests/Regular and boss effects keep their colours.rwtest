@@ -30,6 +30,13 @@ test "Regular and boss effects keep their colours" project="Apex Mechanoids" gro
 # edge 0.3 s (18) + 45 = 63, overdrive 1.1 s (66) + 90 = 156, smokescreen 1 s
 # (60) + 240 = 300. The hediff render nodes are hung with "give", which is the
 # state the ability would leave.
+#
+# Both Celerus stand drafted, like the two Terminus. In the run of 2026-10-01
+# 02:47 the boss's smokescreen click on 8,10 was refused as out of range - 4
+# cells from where the boss was spawned, against a range of 20 - and the report
+# found "Celerus regular mechanitor" under the mouse there. Undrafted, either
+# pawn can have moved. The two cell asserts before the second click say which
+# one did if it is red again.
 
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
@@ -73,9 +80,13 @@ draft "Celerus regular mechanitor"
 draft "Celerus boss mechanitor"
 overseer "Celerus regular" by="Celerus regular mechanitor" now=true
 overseer "Celerus boss" by="Celerus boss mechanitor" now=true
+draft "Celerus regular"
+draft "Celerus boss"
 select "Celerus regular"
 gizmo "Smokescreen"
 target cell=-8,10
+assert thing "Celerus boss" at 8,6
+assert thing "Celerus regular mechanitor" at -14,2
 select "Celerus boss"
 gizmo "Smokescreen"
 target cell=8,10

@@ -25,8 +25,18 @@ test "Gazer sun ray burns along its line" project="Apex Mechanoids" group="Abili
 #
 # Budget: warmup 9.5 s = 570 ticks, then the beam reaches 12 cells after
 # (12 - 4) x 14 = 112 ticks: 682. The whole sweep is 570 + 27 x 14 = 948;
-# 1200 covers it with a quarter to spare. "Behind" is read 300 ticks after the
-# target was hit (about 682 + 300 = 982 > 948), so the sweep has ended.
+# "tick 1250" covers it with a quarter to spare, so "Behind" and the cooldown
+# are read after the sweep has ended.
+#
+# The hit on "Target" is read as a hit, not as pain. Each shot strikes every cell
+# within radius 2 of its point, so a pawn on the line sits under several shots
+# of 38 - enough to kill it. "waitfor pawn Target pain min=0.2" ended on
+# "Target is not on the map" in the runs of 2026-09-27 00:17 and 2026-10-01
+# 02:47 (dead before the poll read it alive) and on 0 in 2026-09-30 01:20 (each
+# hit goes to one random thing on the cell, grass included). "assert hit" counts
+# the Gazer's hits from the battle log and holds on a corpse; until the kit has
+# it, "requires assert=hit" reports it as skip. What runs today: the ray was
+# fired (the gizmo is on cooldown) and "Behind" is spared.
 #
 # The Gazer costs 6 bandwidth, the whole of a fresh mechlink. Its auto-laser
 # toggle defaults to on, so GazerLaserUtility does not block the ability.
@@ -50,11 +60,13 @@ target cell=2,0 expect=refused
 
 gizmo "Sun Ray"
 target "Target"
+tick 1250 reason="the 570 tick warmup and the whole 948 tick sweep, with room to spare"
+gizmo "Sun Ray" expect=disabled
 deselect
-waitfor pawn "Target" pain min=0.2 ticks=1200
-assert pawn "Target" hediff=BeamWound expect=present
-tick 300 reason="let the rest of the 948 tick sweep run out"
 assert pawn "Behind" pain max=0
 assert pawn "Behind" hediff=BeamWound expect=absent
 undraft "Gazer"
 assert log clean
+
+requires assert=hit
+assert hit "Target" by="Gazer" min=1

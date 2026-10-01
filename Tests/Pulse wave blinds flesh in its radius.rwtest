@@ -20,18 +20,29 @@ test "Pulse wave blinds flesh in its radius" project="Apex Mechanoids" group="Ab
 # blind and after another 120 ticks, so the wave had every chance to reach them.
 #
 # Sight is the effect behind the marker: the bare read pins full sight first.
+#
+# Everybody stands drafted. In seven of nine runs up to 2026-10-01 02:47 "Near"
+# had no hediff at all after 300 ticks; in the two green runs the blind landed
+# at 64 and 84 ticks. An undrafted colonist covers about 5.5 cells in the
+# 72 tick warmup (4.6 cells/s x 1.2 s), so a "Near" that starts 3 cells out can
+# be past 6.9 before the wave starts. The cell assert before the gizmo says
+# which way it went if it is red again.
 
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 spawn Pawn:APM_Mech_Pulse at 0,0 faction=player name="Pulse"
 spawn Pawn:Colonist at 3,0 name="Near"
+draft "Near"
 spawn Pawn:Colonist at 10,0 name="Far"
+draft "Far"
 spawn Pawn:APM_Mech_Tinker at 0,3 faction=player name="Tin"
 spawn Pawn:Colonist at -10,-6 name="Mechanitor"
 draft "Mechanitor"
 overseer "Pulse" by="Mechanitor" now=true
+draft "Pulse"
 
 assert pawn "Near" capacity=Sight min=0.95
+assert thing "Near" at 3,0
 
 select "Pulse"
 gizmo "Pulse wave"

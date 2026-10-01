@@ -25,9 +25,7 @@ test "Shield charge stuns foes where it lands" project="Apex Mechanoids" group="
 # through the gizmo "Shield Charge"; the accepted click on the Raider is the
 # control, and the last line reads the cooldown as the same gizmo greyed out.
 #
-# No verb reads a stun: the stun half is written against "assert stun" and is
-# held back by "requires assert=stun" until the kit has it. Today the file
-# asserts the refusal and the landing.
+# The stun is read with "assert stun", ticks left at the landing.
 
 # The Raider has no faction: as an enemy it fought the Ally beside it from the
 # first tick, so the Ally's pain line measured that fight. JobDriver_BashStun
@@ -56,15 +54,16 @@ gizmo "Shield Charge"
 target "Raider"
 speed x1
 waitfor thing "Aegis" at 5,0 ticks=120
-# Probe (2026-09-30): the bound below read "not stunned; the last stun came
-# from Aegis" - a stun happened and was over by then. Read at the landing tick,
-# this line's actual names the ticks left, so it says whether 300 were ever set.
-assert stun "Raider"
+# The bound is read first, on the frames right after the landing. The probe of
+# 2026-09-30 settled it in the run of 2026-10-01 02:47: "assert stun" held at
+# the landing, and the bound behind five more steps read "the last stun came
+# from Aegis at tick 74783 for 300 ticks; it is tick 75445 now" - the 300 were
+# set, they had run below 280 by the time the line was reached. The kit has
+# "assert stun" now, so the "requires assert=stun" that held these lines back
+# is gone.
+assert stun "Raider" ticks min=280 max=300
+assert stun "Ally" expect=absent
 assert pawn "Ally" pain max=0
 gizmo "Shield Charge" expect=disabled
 deselect
 assert log clean
-
-requires assert=stun
-assert stun "Raider" ticks min=280 max=300
-assert stun "Ally" expect=absent

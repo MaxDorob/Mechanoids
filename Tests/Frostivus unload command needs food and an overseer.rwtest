@@ -10,7 +10,7 @@ test "Frostivus unload command needs food and an overseer" project="Apex Mechano
 # So the three states a player can meet are three lines here:
 #   no food           -> not offered at all
 #   food, no overseer -> offered, greyed, with that reason word for word
-#   food, overseer    -> offered and usable (behind "requires verb=overseer")
+#   food, overseer    -> offered and usable
 # The positive half needs the overseer link the kit cannot build yet.
 
 requires dlc=Biotech
@@ -27,7 +27,6 @@ gizmo "Unload preserved food" expect=disabled reason="Frostivus cannot use prese
 assert text contains "APM." expect=absent
 deselect
 
-requires verb=overseer
 spawn Pawn:Colonist name="Mechanitor"
 give "Mechanitor" need=Food value=1
 overseer "Frost" by="Mechanitor"

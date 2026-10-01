@@ -28,13 +28,11 @@ test "Maul fires longer bursts when damaged" project="Apex Mechanoids" group="We
 # 5.8 s = 348 ticks, so the next burst cannot start before 464. tick 250 sees
 # exactly one burst in either lane.
 #
-# No verb counts projectiles today. The line is written against the assert
-# the kit would need - "assert shots <pawn>", projectiles launched by that pawn
-# since its last "attack" step - and the whole test reports skip until it lands.
+# The bursts are counted with "assert shots <pawn>": projectiles launched by
+# that pawn since its last "attack" step.
 
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
-requires assert=shots
 spawn Pawn:APM_Mech_Maul at 0,0 faction=player name="Fresh"
 spawn Pawn:Colonist at -3,-2 name="Mechanitor A"
 give "Mechanitor A" need=Food value=1

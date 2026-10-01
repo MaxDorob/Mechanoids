@@ -9,8 +9,8 @@ test "Frostivus rescues loose food" project="Apex Mechanoids" group="Work" creat
 #
 # FrostivusFoodPreservationUtility.HasFoodPreservationControl closes the giver
 # for a colony Frostivus without an overseer - the first half pins that. The
-# second half needs a mechanitor overseeing the Frostivus; "requires
-# verb=overseer" holds it back until the kit can build that link.
+# second half needs a mechanitor overseeing the Frostivus, built with the
+# "overseer" verb.
 #
 # A simple meal lying loose on the ground is the plainest candidate: fresh,
 # rottable, not in storage. The mechanitor is fed full at the spawn: a fresh
@@ -32,7 +32,6 @@ spawn Thing:MealSimple in="pen" name="meal"
 
 work "Frost" giver=APM_FrostivusRescueFood on="meal" expect=absent
 
-requires verb=overseer
 spawn Pawn:Colonist name="Mechanitor"
 give "Mechanitor" need=Food value=1
 overseer "Frost" by="Mechanitor"

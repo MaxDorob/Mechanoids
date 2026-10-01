@@ -31,7 +31,6 @@ gizmo "Crypto Swallow" expect=absent
 deselect
 assert pawn "Fallen" hediff=APM_Hediff_Devoured expect=absent
 
-requires verb=overseer
 spawn Pawn:Colonist name="Mechanitor"
 overseer "Keeper" by="Mechanitor"
 select "Keeper"

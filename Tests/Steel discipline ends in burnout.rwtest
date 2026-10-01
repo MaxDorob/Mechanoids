@@ -28,13 +28,18 @@ test "Steel discipline ends in burnout" project="Apex Mechanoids" group="Ability
 # the colony's ideoligion puts its own offset on the total (-16% in the run of
 # 2026-09-30 01:20, which read 0.74 = 1.0 - 0.1 - 0.16). "assert statpart"
 # reports skip until the kit has it.
+# The bare 4.6 holds for an adult only. In the run of 2026-10-01 02:47 the
+# rolled "Worker" was a teenager and read 4.37 (life stage x0.95) before
+# anything was cast, so it is pinned to age 30. It stands drafted so it cannot
+# walk out of the twelve-cell radius before the cast.
 # The mech row is the half nobody sees - no mood, no tab line that says why the
 # Vassal drains faster.
 
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 spawn Pawn:APM_Mech_Vassal faction=player name="Vassal"
-spawn Pawn:Colonist name="Worker"
+spawn Pawn:Colonist age=30 name="Worker"
+draft "Worker"
 spawn Pawn:Colonist name="Mechanitor"
 draft "Mechanitor"
 overseer "Vassal" by="Mechanitor" now=true

@@ -39,6 +39,15 @@ test "Steel discipline drives allies in reach" project="Apex Mechanoids" group="
 # where the Vassal held the buff and "Near" had none. So "Near" and "Far" stand
 # drafted - a drafted pawn holds its cell, and the radius is the thing under
 # test - and the Raider is pacified, so it neither fights nor scares anyone off.
+# Drafting alone was not enough: in the runs of 2026-09-30 23:28 and 2026-10-01
+# 02:47 "Near" stood at 5,-1 and 2,-1, because it took its first steps in the
+# frames between its spawn and its draft. The scene is now built on a paused
+# clock and the clock starts only for the cast ("waitfor" does not advance a
+# paused clock).
+#
+# The bare MoveSpeed 4.6 holds for an adult only: a rolled teenager walks at
+# 4.37 (life stage x0.95, run of 2026-10-01 02:47, in the sister test), so
+# "Near" and "Far" are pinned to age 30.
 #
 # "Far" stands 15 cells out and "Raider" 3 cells out but of another faction -
 # the two ways a pawn must be skipped. Both are asserted after "Near" went
@@ -48,9 +57,10 @@ test "Steel discipline drives allies in reach" project="Apex Mechanoids" group="
 
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
+speed paused
 spawn Pawn:APM_Mech_Vassal at 0,0 faction=player name="Vassal"
-spawn Pawn:Colonist at 4,0 name="Near"
-spawn Pawn:Colonist at 15,0 name="Far"
+spawn Pawn:Colonist at 4,0 age=30 name="Near"
+spawn Pawn:Colonist at 15,0 age=30 name="Far"
 spawn Pawn:Colonist at 0,3 faction=enemy name="Raider"
 pacify "Raider"
 draft "Near"
@@ -62,6 +72,7 @@ overseer "Vassal" by="Mechanitor" now=true
 assert pawn "Near" stat=MoveSpeed min=4.5 max=4.7
 assert thing "Near" at 4,0
 
+speed x1
 select "Vassal"
 gizmo "Steel Discipline"
 deselect

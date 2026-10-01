@@ -23,11 +23,15 @@ test "Javelin fires from behind its own cover" project="Apex Mechanoids" group="
 #
 # What the hit leaves: ResolveAndAdvanceStack puts APM_Hediff_JavelinMissileLock
 # on the first pawn a basic rocket lands on (the marker), and the direct hit is
-# APM_JavelinWarhead 20 (Bomb child, fragmentation off) -> a Shredded injury
-# (the effect). Blast damage is 0, so nothing else in the scene hands out
-# Shredded. The player javelin has 0 uranium and fires the free basic rocket.
-# Pain: 20 x Shredded painPerSeverity 0.0125 = 0.25 on an unarmoured colonist;
-# min=0.1 leaves room for a hit that takes off a small part instead.
+# APM_JavelinWarhead 20 (Bomb child, fragmentation off) - the effect, read as
+# pain. Blast damage is 0, so nothing else in the scene hurts the dummy. The
+# player javelin has 0 uranium and fires the free basic rocket.
+# The injury is not named: Bomb leaves Shredded on soft tissue and its
+# hediffSolid, Crack, on a bone. The run of 2026-10-01 02:47 hit a bone and read
+# "APM_Hediff_JavelinMissileLock, Crack" against a "hediff=Shredded" line, so
+# that line read a real hit as a miss. Pain covers both: 20 x Shredded 0.0125 =
+# 0.25, 20 x Crack 0.01 = 0.2; min=0.1 leaves room for a hit that takes off a
+# small part instead.
 #
 # Budget: warmup 1.9 s = 114 ticks, flight 19.5 tiles / 0.15 = 130 ticks,
 # 244 in all; 600 leaves room for the job start and the turn to face.
@@ -37,8 +41,7 @@ test "Javelin fires from behind its own cover" project="Apex Mechanoids" group="
 # target, not the launcher's cover. "Dummy B stays unhurt" alone would be green
 # even if the rule broke, because a missile allowed into that wall detonates on
 # it (rule 3 / the projectile) - so the claim there is "no missile left the
-# tube", which needs a shot counter. That half is parked behind
-# "requires assert=shots" and reports skip until the kit counts projectiles.
+# tube", read with "assert shots".
 #
 # A player mech takes orders only with an overseer in range (24.9), so the
 # mechanitor stands behind it; now=true because the link is a precondition here.
@@ -69,7 +72,7 @@ spawn Pawn:Colonist at 0,20 name="Dummy B"
 draft "Dummy B"
 
 assert pawn "Dummy A" hediff=APM_Hediff_JavelinMissileLock expect=absent
-assert pawn "Dummy A" hediff=Shredded expect=absent
+assert pawn "Dummy A" pain max=0
 
 draft "Javelin"
 attack "Javelin" target="Dummy A"
@@ -78,11 +81,9 @@ attack "Javelin" target="Dummy A"
 # This line splits "nothing left the barrel" from "the missile flew and missed".
 waitfor shots "Javelin" min=1 ticks=600
 waitfor pawn "Dummy A" hediff=APM_Hediff_JavelinMissileLock ticks=600
-assert pawn "Dummy A" hediff=Shredded expect=present
 assert pawn "Dummy A" pain min=0.1
 undraft "Javelin"
 
-requires assert=shots
 tick 450 reason="cooldown 7.4 s = 444 ticks from the east shot runs out before the north order"
 draft "Javelin"
 attack "Javelin" target="Dummy B"
