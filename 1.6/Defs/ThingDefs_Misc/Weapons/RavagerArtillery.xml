@@ -127,11 +127,15 @@
 			<graphicClass>Graphic_Single</graphicClass>
 		</graphicData>
 		<projectile>
+			<flyOverhead>true</flyOverhead>
 			<explosionRadius>2.85</explosionRadius>
 			<damageDef>Bomb</damageDef>
 			<speed>32</speed>
 			<explosionDelay>0</explosionDelay>
 		</projectile>
+		<modExtensions>
+			<li Class="ApexMechanoids.DefModExtension_InterceptedByAnyShield" />
+		</modExtensions>
 	</ThingDef>
 
 	<ThingDef ParentName="BaseFragGrenadeProjectile">
@@ -147,6 +151,7 @@
 			<damageDef>Bomb</damageDef>
 		</projectile>
 		<modExtensions>
+			<li Class="ApexMechanoids.DefModExtension_InterceptedByAnyShield" />
 			<li Class="ApexMechanoids.DefModExtension_StarfallCarrier">
 				<splitProjectileDef>APM_StarfallSplitProjectile</splitProjectileDef>
 				<splitAfterProgress>0.72</splitAfterProgress>
@@ -173,5 +178,8 @@
 			<damageDef>Bomb</damageDef>
 			<explosionDelay>0</explosionDelay>
 		</projectile>
+		<modExtensions>
+			<li Class="ApexMechanoids.DefModExtension_InterceptedByAnyShield" />
+		</modExtensions>
 	</ThingDef>
 </Defs>

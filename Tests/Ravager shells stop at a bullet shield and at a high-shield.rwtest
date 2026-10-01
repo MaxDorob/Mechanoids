@@ -1,5 +1,5 @@
 rwtest 1
-test "Ravager shells stop at a bullet shield and pass under a high-shield" project="Apex Mechanoids" group="Weapon" created=2026-10-01T00:00:00
+test "Ravager shells stop at a bullet shield and at a high-shield" project="Apex Mechanoids" group="Weapon" created=2026-10-01T00:00:00
 
 requires dlc=Biotech
 requires dlc=Royalty
@@ -39,7 +39,6 @@ target "Covered"
 deselect
 waitfor shots "Ravager" min=2 ticks=400
 waitfor impact "Ravager" min=2 ticks=300
-assert impact "Ravager" near=20,-20 radius=3 min=1 max=1
-assert impact "Ravager" blocked min=1 max=1
-assert hit "Covered" by="Ravager" min=1 max=1
+assert impact "Ravager" blocked min=2 max=2
+assert hit "Covered" by="Ravager" min=0 max=0
 assert log clean
