@@ -121,6 +121,89 @@ namespace ApexMechanoids
             return true;
         }
 
+        public override bool TryStartCastOn(LocalTargetInfo castTarg, LocalTargetInfo destTarg, bool surpriseAttack = false, bool canHitNonTargetPawns = true, bool preventFriendlyFire = false, bool nonInterruptingSelfCast = false)
+        {
+            if (base.TryStartCastOn(castTarg, destTarg, surpriseAttack, canHitNonTargetPawns, preventFriendlyFire, nonInterruptingSelfCast))
+            {
+                return true;
+            }
+
+            if (!WarmupRefusedOnlyForMissingShootLine(castTarg))
+            {
+                return false;
+            }
+
+            StartCoverShotWarmup(castTarg);
+            return true;
+        }
+
+        private bool WarmupRefusedOnlyForMissingShootLine(LocalTargetInfo castTarg)
+        {
+            return IndirectFireEnabled
+                   && CasterIsPawn
+                   && caster.Spawned
+                   && WarmupTime > 0f
+                   && state != VerbState.Bursting
+                   && CanHitTarget(castTarg)
+                   && !TryFindShootLineFromTo(caster.Position, castTarg, out ShootLine _);
+        }
+
+        private void StartCoverShotWarmup(LocalTargetInfo castTarg)
+        {
+            ShootLine coverShotLine = new ShootLine(caster.Position, castTarg.Cell);
+            CasterPawn.Drawer.Notify_WarmingCastAlongLine(coverShotLine, caster.Position);
+            float aimingDelayFactor = CasterPawn.GetStatValue(StatDefOf.AimingDelayFactor);
+            int warmupTicks = (WarmupTime * aimingDelayFactor).SecondsToTicks();
+            CasterPawn.stances.SetStance(new Stance_Warmup(warmupTicks, castTarg, this));
+        }
+
+        // Vanilla's targeter asks CanHitTarget only for things that are not pawns
+        // (Targeter.CurrentTargetUnderMouse), so a pawn the launcher cannot hit from where it stands -
+        // no line of sight, and not close enough behind its own cover for the curve to come round -
+        // showed the attack cursor and took the order, and the drafted mech then stood in
+        // AttackStatic without ever firing. Show vanilla's cannot-shoot cursor and refuse the click
+        // instead; with the criteria met, the cover shot is ordered as before. Only the targeter
+        // calls ValidateTarget for a weapon verb, so the AI and running attacks are unaffected.
+        public override void OnGUI(LocalTargetInfo target)
+        {
+            if (CannotHitFromHere(target))
+            {
+                GenUI.DrawMouseAttachment(TexCommand.CannotShoot);
+                return;
+            }
+
+            base.OnGUI(target);
+        }
+
+        public override bool ValidateTarget(LocalTargetInfo target, bool showMessages = true)
+        {
+            if (!base.ValidateTarget(target, showMessages))
+            {
+                return false;
+            }
+
+            if (!CannotHitFromHere(target))
+            {
+                return true;
+            }
+
+            if (showMessages)
+            {
+                Messages.Message("CannotHitTarget".Translate(), caster, MessageTypeDefOf.RejectInput, historical: false);
+            }
+
+            return false;
+        }
+
+        private bool CannotHitFromHere(LocalTargetInfo target)
+        {
+            return target.IsValid
+                   && target.Thing != caster
+                   && CasterIsPawn
+                   && caster.Spawned
+                   && !CanHitTarget(target);
+        }
+
         public override bool CanHitTargetFrom(IntVec3 root, LocalTargetInfo targ)
         {
             DefModExtension_JavelinIndirectFire props = Props;
@@ -201,12 +284,18 @@ namespace ApexMechanoids
             };
         }
 
-        // The mech turns to face its target before firing, so the cardinal the missile will leave on
-        // is the one that facing snaps to.
-        private static JavelinFlightState LaunchState(Vector3 origin, Vector3 targetPos)
+        // The mech turns to face its target before firing, and the missile leaves along that facing
+        // (Projectile_JavelinMissile reads pawn.Rotation). Vanilla sets the facing through
+        // Pawn_RotationTracker.FaceCell, which snaps with RotFromAngleBiased - north and south only
+        // within 30 degrees of the axis, east and west everywhere else - not with Rot4.FromAngleFlat's
+        // even 90 degree split. Simulating with the even split flew a different departure than the
+        // missile takes for targets 30 to 45 degrees off the north/south axis.
+        private static JavelinFlightState LaunchState(IntVec3 root, IntVec3 targetCell)
         {
-            Vector3 toTarget = (targetPos - origin).Yto0();
-            int rot = toTarget.sqrMagnitude < 0.0001f ? Rot4.North.AsInt : Rot4.FromAngleFlat(toTarget.AngleFlat()).AsInt;
+            Vector3 origin = root.ToVector3Shifted();
+            int rot = targetCell == root
+                ? Rot4.North.AsInt
+                : Pawn_RotationTracker.RotFromAngleBiased((targetCell - root).ToVector3().AngleFlat()).AsInt;
             return JavelinMissileGuidance.CreateState(origin.x, origin.z, JavelinMissileGuidance.CardinalHeading(rot));
         }
 
@@ -222,7 +311,6 @@ namespace ApexMechanoids
                 return true;
             }
 
-            Vector3 origin = root.ToVector3Shifted();
             Vector3 targetPos = targ.HasThing ? targ.Thing.DrawPos : targ.Cell.ToVector3Shifted();
             JavelinFlightParams flightParams = FlightParams(missile);
 
@@ -230,7 +318,7 @@ namespace ApexMechanoids
             float[] zs = Buffer(ref reachZ, props.reachSampleMaxPoints);
 
             int points = JavelinMissileGuidance.SamplePath(
-                LaunchState(origin, targetPos), targetPos.x, targetPos.z, flightParams,
+                LaunchState(root, targ.Cell), targetPos.x, targetPos.z, flightParams,
                 Mathf.Max(1, props.reachSampleStrideTicks), xs, zs);
 
             return points > 0
@@ -259,7 +347,7 @@ namespace ApexMechanoids
             float[] zs = Buffer(ref obstacleZ, props.obstacleSampleMaxPoints);
 
             int points = JavelinMissileGuidance.SamplePath(
-                LaunchState(origin, targetPos), targetPos.x, targetPos.z, FlightParams(missile),
+                LaunchState(root, targ.Cell), targetPos.x, targetPos.z, FlightParams(missile),
                 Mathf.Max(1, props.obstacleSampleStrideTicks), xs, zs);
 
             IntVec3 lastCell = IntVec3.Invalid;

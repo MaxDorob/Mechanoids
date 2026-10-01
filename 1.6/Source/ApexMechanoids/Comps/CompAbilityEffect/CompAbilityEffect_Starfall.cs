@@ -82,6 +82,11 @@ namespace ApexMechanoids
 
         public override void Impact(Thing hitThing, bool blockedByShield = false)
         {
+            if (blockedByShield)
+            {
+                splitOccurred = true;
+            }
+
             if (!splitOccurred)
             {
                 SplitNow();
@@ -201,5 +206,18 @@ namespace ApexMechanoids
 
     public class Projectile_StarfallFragment : Projectile_Explosive
     {
+        private const float ShieldBlockedFlashScale = 1.2f;
+
+        public override void Impact(Thing hitThing, bool blockedByShield = false)
+        {
+            if (blockedByShield)
+            {
+                FleckMaker.Static(ExactPosition, Map, FleckDefOf.ExplosionFlash, ShieldBlockedFlashScale);
+                Destroy(DestroyMode.Vanish);
+                return;
+            }
+
+            base.Impact(hitThing, blockedByShield);
+        }
     }
 }
