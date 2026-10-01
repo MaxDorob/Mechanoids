@@ -5,8 +5,8 @@ requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 spawn Pawn:APM_Mech_Siren at 0,0 faction=player name="Siren"
 spawn Pawn:Colonist at 0,-2 name="Mechanitor"
-spawn Pawn:Colonist at 4,0 name="Near"
-spawn Pawn:Colonist at 15,0 name="Far"
+spawn Pawn:Colonist at 4,0 name="Near" gear=none
+spawn Pawn:Colonist at 15,0 name="Far" gear=none
 overseer "Siren" by="Mechanitor" now=true
 draft "Siren"
 give "Near" need=Joy value=0.3

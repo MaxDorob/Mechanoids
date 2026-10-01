@@ -17,6 +17,7 @@ draft "Mechanitor"
 draft "Inside"
 draft "Covered"
 overseer "Ravager" by="Mechanitor" now=true
+assert pawn "Ravager" equipment=APM_Ravager_Artillery
 draft "Ravager"
 
 spawn Thing:ShieldGeneratorBullets at 12,6 name="Bullet shield"
