@@ -3,14 +3,6 @@ test "Javelin fires from behind its own cover" project="Apex Mechanoids" group="
 
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
-spawn Pawn:APM_Mech_Javelin at 0,0 faction=player name="Javelin"
-spawn Pawn:Colonist at -1,-2 name="Mechanitor"
-give "Mechanitor" need=Food value=1
-draft "Mechanitor"
-overseer "Javelin" by="Mechanitor" now=true
-equip "Javelin" thing=APM_Gun_JavelinRocketLauncher now=true
-assert pawn "Javelin" equipment=APM_Gun_JavelinRocketLauncher
-
 spawn Thing:Wall at 3,-3
 spawn Thing:Wall at 3,-2
 spawn Thing:Wall at 3,-1
@@ -33,6 +25,15 @@ spawn Thing:Wall at -1,3
 spawn Thing:Wall at 0,3
 spawn Thing:Wall at 1,3
 spawn Thing:Wall at 2,3
+
+spawn Pawn:APM_Mech_Javelin at 0,0 faction=player name="Javelin"
+spawn Pawn:Colonist at -1,-2 name="Mechanitor"
+give "Mechanitor" need=Food value=1
+draft "Mechanitor"
+overseer "Javelin" by="Mechanitor" now=true
+equip "Javelin" thing=APM_Gun_JavelinRocketLauncher now=true
+assert pawn "Javelin" equipment=APM_Gun_JavelinRocketLauncher
+
 spawn Pawn:Colonist at 20,0 name="Dummy A"
 draft "Dummy A"
 

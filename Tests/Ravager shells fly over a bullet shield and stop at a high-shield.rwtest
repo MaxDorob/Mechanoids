@@ -1,0 +1,41 @@
+rwtest 1
+test "Ravager shells fly over a bullet shield and stop at a high-shield" project="Apex Mechanoids" group="Weapon" created=2026-10-01T00:00:00
+
+requires dlc=Biotech
+requires dlc=Royalty
+requires mod=Mortis.ApexMechanoids
+despawn Thing:ShieldGeneratorBullets
+despawn Thing:ShieldGeneratorMortar
+spawn Pawn:APM_Mech_Ravager at -26,0 faction=player name="Ravager"
+spawn Pawn:Colonist at -26,-8 name="Mechanitor"
+spawn Pawn:Colonist at 10,0 name="Inside"
+spawn Pawn:Colonist at 20,-20 name="Covered"
+give "Mechanitor" need=Food value=1
+give "Inside" need=Food value=1
+give "Covered" need=Food value=1
+draft "Mechanitor"
+draft "Inside"
+draft "Covered"
+overseer "Ravager" by="Mechanitor" now=true
+draft "Ravager"
+
+spawn Thing:ShieldGeneratorBullets at 12,6 name="Bullet shield"
+select "Ravager"
+gizmo "Starspewer"
+target cell=10,0
+deselect
+waitfor shots "Ravager" min=1 ticks=400
+waitfor hit "Inside" by="Ravager" min=1 ticks=300
+despawn Thing:ShieldGeneratorBullets
+
+spawn Thing:ShieldGeneratorMortar at 22,-16 name="High shield"
+tick 1400 reason="Starspewer cooldown 22 s = 1320 ticks runs out before the second order"
+select "Ravager"
+gizmo "Starspewer"
+target cell=20,-20
+deselect
+waitfor shots "Ravager" min=2 ticks=400
+tick 300 reason="a 50 cell flight at 0.32 cells per tick takes about 160 ticks, so the shell has landed or been stopped"
+assert shots "Ravager" min=2 max=2
+assert hit "Covered" by="Ravager" min=0 max=0
+assert log clean
