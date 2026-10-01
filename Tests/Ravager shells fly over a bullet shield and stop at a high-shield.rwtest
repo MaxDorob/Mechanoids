@@ -20,7 +20,7 @@ overseer "Ravager" by="Mechanitor" now=true
 assert pawn "Ravager" equipment=APM_Ravager_Artillery
 draft "Ravager"
 
-spawn Thing:ShieldGeneratorBullets at 12,6 name="Bullet shield"
+spawn Thing:ShieldGeneratorBullets at 12,6 faction=Mechanoid name="Bullet shield"
 select "Ravager"
 gizmo "Starspewer"
 target cell=10,0
@@ -29,7 +29,10 @@ waitfor shots "Ravager" min=1 ticks=400
 waitfor hit "Inside" by="Ravager" min=1 ticks=300
 despawn Thing:ShieldGeneratorBullets
 
-spawn Thing:ShieldGeneratorMortar at 22,-16 name="High shield"
+spawn Thing:ShieldGeneratorMortar at 22,-16 faction=Mechanoid name="High shield"
+spawn Pawn:Colonist at -2,-10 name="Edge"
+give "Edge" need=Food value=1
+draft "Edge"
 tick 1400 reason="Starspewer cooldown 22 s = 1320 ticks runs out before the second order"
 select "Ravager"
 gizmo "Starspewer"
@@ -38,5 +41,6 @@ deselect
 waitfor shots "Ravager" min=2 ticks=400
 tick 300 reason="a 50 cell flight at 0.32 cells per tick takes about 160 ticks, so the shell has landed or been stopped"
 assert shots "Ravager" min=2 max=2
+assert hit "Edge" by="Ravager" min=1 max=1
 assert hit "Covered" by="Ravager" min=0 max=0
 assert log clean

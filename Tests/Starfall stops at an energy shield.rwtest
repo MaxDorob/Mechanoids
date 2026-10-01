@@ -5,8 +5,8 @@ requires dlc=Biotech
 requires dlc=Royalty
 requires mod=Mortis.ApexMechanoids
 despawn Thing:ShieldGeneratorBullets
-spawn Thing:ShieldGeneratorBullets at 12,6 name="Near shield"
-spawn Thing:ShieldGeneratorBullets at 28,-12 name="Far shield"
+spawn Thing:ShieldGeneratorBullets at 12,6 faction=Mechanoid name="Near shield"
+spawn Thing:ShieldGeneratorBullets at 28,-12 faction=Mechanoid name="Far shield"
 spawn Pawn:APM_Mech_Ravager at -26,0 faction=player name="Ravager"
 spawn Pawn:APM_Mech_Ravager at -28,-22 faction=player name="Ravager B"
 spawn Pawn:Colonist at 10,0 name="Target"
