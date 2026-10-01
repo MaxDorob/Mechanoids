@@ -5,14 +5,14 @@ requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 spawn Pawn:APM_Mech_Ravager at -10,0 faction=player name="Ravager"
 spawn Pawn:Colonist at 10,0 name="Target"
+draft "Target"
 spawn Pawn:Colonist at 10,12 name="Far"
+draft "Far"
 spawn Pawn:Colonist at -16,-10 name="Mechanitor"
+draft "Mechanitor"
 give "Target" need=Food value=1
 give "Far" need=Food value=1
 give "Mechanitor" need=Food value=1
-draft "Target"
-draft "Far"
-draft "Mechanitor"
 overseer "Ravager" by="Mechanitor" now=true
 draft "Ravager"
 

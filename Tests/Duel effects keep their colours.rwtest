@@ -10,8 +10,8 @@ spawn Pawn:Colonist at -8,0 faction=enemy name="Left duelist"
 spawn Pawn:APM_Mech_Dominus_Boss at 12,0 faction=player name="Dominus boss" rolled=true
 spawn Pawn:Colonist at 8,0 faction=enemy name="Right duelist"
 spawn Pawn:Colonist at -16,-8 name="Left mechanitor"
-spawn Pawn:Colonist at 16,-8 name="Right mechanitor"
 draft "Left mechanitor"
+spawn Pawn:Colonist at 16,-8 name="Right mechanitor"
 draft "Right mechanitor"
 overseer "Dominus" by="Left mechanitor" now=true
 overseer "Dominus boss" by="Right mechanitor" now=true

@@ -5,6 +5,7 @@ requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 spawn Pawn:APM_Mech_Pulse at 0,0 faction=player name="Pulse"
 spawn Pawn:Colonist at -3,-2 name="Mechanitor"
+draft "Mechanitor"
 give "Mechanitor" need=Food value=1
 overseer "Pulse" by="Mechanitor" now=true
 draft "Pulse"

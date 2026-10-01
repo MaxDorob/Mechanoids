@@ -5,14 +5,14 @@ requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 spawn Pawn:APM_Mech_Haze at 0,0 faction=player name="Haze"
 spawn Pawn:Colonist at 1,0 name="Near"
+draft "Near"
 spawn Pawn:Colonist at 12,0 name="Far"
+draft "Far"
 spawn Pawn:Colonist at -14,-14 name="Mechanitor"
+draft "Mechanitor"
 give "Near" need=Food value=1
 give "Far" need=Food value=1
 give "Mechanitor" need=Food value=1
-draft "Near"
-draft "Far"
-draft "Mechanitor"
 overseer "Haze" by="Mechanitor" now=true
 draft "Haze"
 

@@ -4,11 +4,12 @@ test "Flash and beam effects look right" project="Apex Mechanoids" group="Art" c
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 spawn Pawn:Colonist at -4,-8 name="Mechanitor"
-spawn Pawn:Colonist at 0,-12 name="Gazer mechanitor"
 draft "Mechanitor"
+spawn Pawn:Colonist at 0,-12 name="Gazer mechanitor"
 draft "Gazer mechanitor"
 spawn Pawn:APM_Mech_Pulse at -10,0 faction=player name="Pulse" rolled=true
 spawn Pawn:Colonist at -7,0 name="Pulse target"
+draft "Pulse target"
 overseer "Pulse" by="Mechanitor" now=true
 select "Pulse"
 gizmo "Pulse wave"
@@ -17,6 +18,7 @@ ask "pulse-wave" ticks=132 claim="a warm white flash bursts from the Pulse mech 
 
 spawn Pawn:APM_Mech_Tinker at 0,6 faction=player name="Tinker" rolled=true
 spawn Pawn:Colonist at 5,6 name="Laser target"
+draft "Laser target"
 overseer "Tinker" by="Mechanitor" now=true
 select "Tinker"
 gizmo "Blinding Laser"
@@ -26,6 +28,7 @@ ask "blinding-laser" ticks=66 claim="a thin laser beam connects the Tinker to th
 
 spawn Pawn:APM_Mech_Gazer at 10,-6 faction=player name="Gazer" rolled=true
 spawn Pawn:Colonist at 13,-6 name="Thrown"
+draft "Thrown"
 overseer "Gazer" by="Gazer mechanitor" now=true
 select "Gazer"
 gizmo "Shockwave"

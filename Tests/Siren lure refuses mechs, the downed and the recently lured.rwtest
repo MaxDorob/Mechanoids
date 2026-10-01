@@ -6,6 +6,7 @@ requires mod=Mortis.ApexMechanoids
 spawn Pawn:APM_Mech_Siren at 0,0 faction=player name="Lure"
 spawn Pawn:APM_Mech_Siren at 0,4 faction=player name="Second"
 spawn Pawn:Colonist at -2,0 name="Mechanitor"
+draft "Mechanitor"
 spawn Pawn:Colonist at 8,0 name="Lured"
 spawn Pawn:Colonist at -8,0 name="Fresh"
 spawn Pawn:Colonist at 6,6 name="Fallen"

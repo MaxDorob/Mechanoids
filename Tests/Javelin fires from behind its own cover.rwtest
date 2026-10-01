@@ -28,8 +28,8 @@ spawn Thing:Wall at 2,3
 
 spawn Pawn:APM_Mech_Javelin at 0,0 faction=player name="Javelin"
 spawn Pawn:Colonist at -1,-2 name="Mechanitor"
-give "Mechanitor" need=Food value=1
 draft "Mechanitor"
+give "Mechanitor" need=Food value=1
 overseer "Javelin" by="Mechanitor" now=true
 equip "Javelin" thing=APM_Gun_JavelinRocketLauncher now=true
 assert pawn "Javelin" equipment=APM_Gun_JavelinRocketLauncher

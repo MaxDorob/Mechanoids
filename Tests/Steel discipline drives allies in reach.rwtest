@@ -6,11 +6,11 @@ requires mod=Mortis.ApexMechanoids
 speed paused
 spawn Pawn:APM_Mech_Vassal at 0,0 faction=player name="Vassal" gear=none
 spawn Pawn:Colonist at 4,0 age=30 name="Near"
+draft "Near"
 spawn Pawn:Colonist at 15,0 age=30 name="Far"
+draft "Far"
 spawn Pawn:Colonist at 0,3 faction=enemy name="Raider"
 pacify "Raider"
-draft "Near"
-draft "Far"
 spawn Pawn:Colonist at -14,0 name="Mechanitor"
 draft "Mechanitor"
 overseer "Vassal" by="Mechanitor" now=true

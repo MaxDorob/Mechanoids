@@ -5,7 +5,8 @@ requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 speed paused
 spawn Pawn:APM_Mech_Tinker at 0,0 faction=player name="Tinker"
-spawn Pawn:Colonist at -3,-2 name="Mechanitor"
+spawn Pawn:Colonist at -3,-2 name="Mechanitor" gear=none
+draft "Mechanitor"
 give "Mechanitor" need=Food value=1
 overseer "Tinker" by="Mechanitor" now=true
 draft "Tinker"

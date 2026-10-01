@@ -5,6 +5,7 @@ requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 spawn Pawn:APM_Mech_Celerus at 0,0 faction=player name="Celerus"
 spawn Pawn:Colonist at -4,0 name="Mechanitor"
+draft "Mechanitor"
 give "Mechanitor" need=Food value=1
 overseer "Celerus" by="Mechanitor"
 draft "Celerus"

@@ -6,6 +6,7 @@ requires mod=Mortis.ApexMechanoids
 speed paused
 spawn Pawn:APM_Mech_Lasher at 0,0 faction=player facing=east name="Lasher"
 spawn Pawn:Colonist at -2,-3 name="Mechanitor"
+draft "Mechanitor"
 give "Mechanitor" need=Food value=1
 overseer "Lasher" by="Mechanitor" now=true
 equip "Lasher" thing=APM_Weapon_MechWhip now=true

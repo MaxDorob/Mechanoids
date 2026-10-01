@@ -4,7 +4,8 @@ test "Bladehopp lands on an enemy and hits it" project="Apex Mechanoids" group="
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 spawn Pawn:APM_Mech_Mantis at 0,0 faction=player name="Mantis"
-spawn Pawn:Colonist at -4,0 name="Mechanitor"
+spawn Pawn:Colonist at -4,0 name="Mechanitor" gear=none
+draft "Mechanitor"
 give "Mechanitor" need=Food value=1
 overseer "Mantis" by="Mechanitor"
 draft "Mantis"

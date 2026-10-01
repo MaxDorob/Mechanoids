@@ -10,20 +10,20 @@ spawn Thing:ShieldGeneratorBullets at 28,-12 faction=Mechanoid name="Far shield"
 spawn Pawn:APM_Mech_Ravager at -26,0 faction=player name="Ravager"
 spawn Pawn:APM_Mech_Ravager at -28,-22 faction=player name="Ravager B"
 spawn Pawn:Colonist at 10,0 name="Target"
+draft "Target"
 spawn Pawn:Colonist at 18,-22 name="Target B"
+draft "Target B"
 spawn Pawn:Colonist at 12,-22 name="Guarded"
+draft "Guarded"
 spawn Pawn:Colonist at -26,-8 name="Mechanitor"
+draft "Mechanitor"
 spawn Pawn:Colonist at -28,-28 name="Mechanitor B"
+draft "Mechanitor B"
 give "Target" need=Food value=1
 give "Target B" need=Food value=1
 give "Guarded" need=Food value=1
 give "Mechanitor" need=Food value=1
 give "Mechanitor B" need=Food value=1
-draft "Target"
-draft "Target B"
-draft "Guarded"
-draft "Mechanitor"
-draft "Mechanitor B"
 overseer "Ravager" by="Mechanitor" now=true
 overseer "Ravager B" by="Mechanitor B" now=true
 draft "Ravager"
