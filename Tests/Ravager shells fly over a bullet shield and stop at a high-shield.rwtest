@@ -26,6 +26,9 @@ gizmo "Starspewer"
 target cell=10,0
 deselect
 waitfor shots "Ravager" min=1 ticks=400
+requires assert=impact
+waitfor impact "Ravager" min=1 ticks=300
+assert impact "Ravager" near=10,0 radius=3 min=1 max=1
 waitfor hit "Inside" by="Ravager" min=1 ticks=300
 despawn Thing:ShieldGeneratorBullets
 

@@ -38,5 +38,4 @@ assert pawn "Near" hediff=APM_Hediff_SteelDiscipline expect=present
 assert pawn "Near" stat=MoveSpeed min=4.8 max=5.0
 assert log clean
 
-requires assert=statpart
 assert statpart "Near" stat=WorkSpeedGlobal from=APM_Hediff_SteelDiscipline offset min=0.14 max=0.16

@@ -28,5 +28,4 @@ assert pawn "Behind" hediff=BeamWound expect=absent
 undraft "Gazer"
 assert log clean
 
-requires assert=hit
 assert hit "Target" by="Gazer" min=1
