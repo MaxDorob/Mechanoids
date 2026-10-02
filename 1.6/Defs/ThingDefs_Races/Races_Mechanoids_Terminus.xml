@@ -360,6 +360,7 @@
 		<warmupMote>Mote_SeveringEdge_Intro</warmupMote>
 		<comps>
 			<li Class="CompProperties_AbilityLaunchProjectile">
+				<compClass>ApexMechanoids.CompAbilityEffect_LaunchMeleeScaledProjectile</compClass>
 				<projectileDef>SeveringEdge</projectileDef>
 			</li>
 			<li Class="ApexMechanoids.CompProperties_RotateMoteTowardsDestination">
@@ -378,6 +379,7 @@
 		<warmupMote>Mote_SeveringEdge_Intro_Boss</warmupMote>
 		<comps>
 			<li Class="CompProperties_AbilityLaunchProjectile">
+				<compClass>ApexMechanoids.CompAbilityEffect_LaunchMeleeScaledProjectile</compClass>
 				<projectileDef>SeveringEdge_Boss</projectileDef>
 			</li>
 			<li Class="ApexMechanoids.CompProperties_RotateMoteTowardsDestination">
@@ -401,6 +403,11 @@
 			<speed>12</speed>
 			<useGraphicClass>true</useGraphicClass>
 		</projectile>
+		<modExtensions>
+			<li Class="ApexMechanoids.DefModExtension_MeleeScaledProjectile">
+				<meleeDamageMultiplier>1.5</meleeDamageMultiplier>
+			</li>
+		</modExtensions>
 	</ThingDef>
 
 	<ThingDef ParentName="APM_SeveringEdge_Base">

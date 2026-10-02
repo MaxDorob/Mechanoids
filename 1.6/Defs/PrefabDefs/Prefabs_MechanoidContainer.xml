@@ -17,8 +17,8 @@
 		The chance is what keeps a large complex from filling with them. Each of the three rooms this
 		is injected into takes at most one, so the count follows the number of rooms rather than the
 		size of the complex, and a 9800 point mechanitor complex has enough of them to hand the
-		player fifteen. Three in ten placements keeps that closer to four or five without changing
-		which rooms they turn up in.
+		player fifteen. Three in twenty placements keeps that to two or three without changing which
+		rooms they turn up in.
 	-->
 	<PrefabDef>
 		<defName>APM_MechanoidStasisContainer</defName>
@@ -26,7 +26,7 @@
 		<size>(2,3)</size>
 		<things>
 			<APM_MechanoidContainer_Ancient>
-				<chance>0.3</chance>
+				<chance>0.15</chance>
 				<position>(0, 0, 0)</position>
 			</APM_MechanoidContainer_Ancient>
 		</things>
