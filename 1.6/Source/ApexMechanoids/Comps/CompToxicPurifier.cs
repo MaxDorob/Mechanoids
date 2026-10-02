@@ -138,8 +138,6 @@ namespace ApexMechanoids
             {
                 return;
             }
-            // Emptied as the packs go down, so a purifier that is minified and set up again does
-            // not drop the same packs a second time.
             Thing t = ThingMaker.MakeThing(ThingDefOf.Wastepack);
             t.stackCount = wastepacksCount;
             wastepacksCount = 0;

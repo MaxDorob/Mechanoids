@@ -157,13 +157,6 @@ namespace ApexMechanoids
             CasterPawn.stances.SetStance(new Stance_Warmup(warmupTicks, castTarg, this));
         }
 
-        // Vanilla's targeter asks CanHitTarget only for things that are not pawns
-        // (Targeter.CurrentTargetUnderMouse), so a pawn the launcher cannot hit from where it stands -
-        // no line of sight, and not close enough behind its own cover for the curve to come round -
-        // showed the attack cursor and took the order, and the drafted mech then stood in
-        // AttackStatic without ever firing. Show vanilla's cannot-shoot cursor and refuse the click
-        // instead; with the criteria met, the cover shot is ordered as before. Only the targeter
-        // calls ValidateTarget for a weapon verb, so the AI and running attacks are unaffected.
         public override void OnGUI(LocalTargetInfo target)
         {
             if (CannotHitFromHere(target))
@@ -284,12 +277,6 @@ namespace ApexMechanoids
             };
         }
 
-        // The mech turns to face its target before firing, and the missile leaves along that facing
-        // (Projectile_JavelinMissile reads pawn.Rotation). Vanilla sets the facing through
-        // Pawn_RotationTracker.FaceCell, which snaps with RotFromAngleBiased - north and south only
-        // within 30 degrees of the axis, east and west everywhere else - not with Rot4.FromAngleFlat's
-        // even 90 degree split. Simulating with the even split flew a different departure than the
-        // missile takes for targets 30 to 45 degrees off the north/south axis.
         private static JavelinFlightState LaunchState(IntVec3 root, IntVec3 targetCell)
         {
             Vector3 origin = root.ToVector3Shifted();

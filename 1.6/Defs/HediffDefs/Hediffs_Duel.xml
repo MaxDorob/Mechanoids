@@ -17,7 +17,6 @@
 		<comps>
 			<li Class="HediffCompProperties_Disappears">
 				<disappearsAfterTicks>1600</disappearsAfterTicks>
-				<!--The same as duel mental state-->
 				<showRemainingTime>True</showRemainingTime>
 			</li>
 			<li Class="HediffCompProperties_DisappearsOnDeath" />

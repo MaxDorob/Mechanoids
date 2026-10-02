@@ -54,7 +54,6 @@
 		</graphicData>
 	</ThingDef>
 
-	<!-- ===== Damage Def ===== -->
 	<DamageDef ParentName="Beam">
 		<defName>APM_HazeAcidBeam</defName>
 		<label>haze acid beam</label>
@@ -100,7 +99,6 @@
 		</filth>
 	</ThingDef>
 
-	<!-- ===== Weapon Def ===== -->
 	<ThingDef ParentName="BaseGun">
 		<defName>APM_Haze_BeamGun</defName>
 		<label>Beam Witherer</label>

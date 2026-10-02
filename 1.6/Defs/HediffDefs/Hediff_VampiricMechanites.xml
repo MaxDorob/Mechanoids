@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
-	<!-- Apex Mechanoid Heal On Kill -->
 	<HediffDef>
 		<defName>APM_ApexMechanoid_HealOnKills</defName>
 		<label>Vampiric Mechanites</label>

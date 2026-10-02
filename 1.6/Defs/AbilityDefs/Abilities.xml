@@ -99,7 +99,6 @@
 		<sendMessageOnCooldownComplete>true</sendMessageOnCooldownComplete>
 		<modExtensions>
 			<li Class="ApexMechanoids.DefModExtension_SunRayAbility">
-				<!-- SunRay_Start.ogg is ~5 s; 5 * 60 = 300 ticks. Adjust if the clip length changes. -->
 				<soundWarmupLeadInTicks>300</soundWarmupLeadInTicks>
 			</li>
 		</modExtensions>
@@ -163,7 +162,6 @@
 		</verbProperties>
 	</AbilityDef>
 
-	<!-- "pulse wave" for pulse mech -->
 	<AbilityDef>
 		<defName>APM_PulseWave</defName>
 		<abilityClass>ApexMechanoids.Ability_PulseWave</abilityClass>
@@ -171,7 +169,7 @@
 		<description>Unleash a blinding acoustic pulse that expands out from the mech, stunning and flash-blinding living pawns caught in the wave.</description>
 		<jobDef>CastAbilityOnThingWithoutWeapon</jobDef>
 		<iconPath>UI/PulseWave</iconPath>
-		<cooldownTicksRange>3600</cooldownTicksRange><!-- 1 minute -->
+		<cooldownTicksRange>3600</cooldownTicksRange>
 		<hostile>true</hostile>
 		<writeCombatLog>true</writeCombatLog>
 		<aiCanUse>true</aiCanUse>
@@ -610,7 +608,7 @@
 		<label>Toxic Mist</label>
 		<description>Similar to a tox pack, the haze releases tox gas around itself, enveloping the surrounding area in a toxic cloud.</description>
 		<iconPath>UI/ToxicMist</iconPath>
-		<cooldownTicksRange>18000</cooldownTicksRange><!-- 5 hours -->
+		<cooldownTicksRange>18000</cooldownTicksRange>
 		<hostile>false</hostile>
 		<writeCombatLog>true</writeCombatLog>
 		<aiCanUse>false</aiCanUse>

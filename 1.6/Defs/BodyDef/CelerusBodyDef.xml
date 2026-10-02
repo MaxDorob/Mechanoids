@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
 
-	<!-- Celerus: Swift ninja-commander mech. Bipedal humanoid with agile frame.
-       Uses LeftHand, RightHand, HeadAttackTool. 4-directional textures confirm humanoid rotation. -->
 	<BodyDef>
 		<defName>APM_Celerus</defName>
 		<label>celerus</label>

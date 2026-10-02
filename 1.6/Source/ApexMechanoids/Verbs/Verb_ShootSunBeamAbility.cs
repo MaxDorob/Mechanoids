@@ -11,7 +11,6 @@ namespace ApexMechanoids
 {
     public class DefModExtension_SunRayAbility : DefModExtension
     {
-        // How many ticks before firing to start the warmup sound (= clip duration in ticks; 1 s = 60 ticks).
         public int soundWarmupLeadInTicks = 0;
     }
 

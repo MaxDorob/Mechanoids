@@ -4,31 +4,18 @@ using Verse;
 
 namespace ApexMechanoids
 {
-    /// <summary>
-    /// ThingComp for the passive "Unity" ability.
-    /// Goes on the Conqueror's ThingDef under &lt;comps&gt;.
-    /// Periodically counts same-faction Conquerors on the map (or within range)
-    /// and sets the severity of a configured HediffDef so that XML stages apply stat buffs.
-    /// Each faction's Conquerors are counted independently.
-    /// </summary>
     public class CompProperties_Unity : CompProperties
     {
-        // PawnKindDefs to count. If empty, the pawn's own kindDef is used.
         public List<PawnKindDef> kindDefs = new List<PawnKindDef>();
 
-        // Hediff whose severity is driven by the ally count.
         public HediffDef hediff;
 
-        // How often (in ticks) the ally count is recalculated.
         public int checkInterval = 250;
 
-        // Severity added per ally found. Severity drives the XML stage buffs.
         public float severityPerAlly = 0.1f;
 
-        // Maximum severity cap (0 = no cap).
         public float maxSeverity = 0f;
 
-        // Search radius in cells. 0 = entire map.
         public float range = 0f;
 
         public CompProperties_Unity()

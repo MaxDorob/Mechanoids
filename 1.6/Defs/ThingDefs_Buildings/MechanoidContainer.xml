@@ -54,14 +54,9 @@
 			<deconstructible>false</deconstructible>
 		</building>
 		<modExtensions>
-			<!--
-				Rare on purpose. At most one per cluster, never below 500 point clusters, and the chance
-				climbs with the cluster: a token 500 point cluster keeps the old 8%, while the ones
-				worth bringing an army to are better than even money.
-			-->
 			<li Class="ApexMechanoids.DefModExtension_MechClusterExtra">
 				<minTotalPoints>500</minTotalPoints>
-				<maxPerCluster>1</maxPerCluster>
+				<maxPerCluster>2</maxPerCluster>
 				<spawnChanceByTotalPoints>
 					<points>
 						<li>(500, 0.08)</li>
@@ -70,6 +65,13 @@
 						<li>(6000, 0.60)</li>
 					</points>
 				</spawnChanceByTotalPoints>
+				<extraSlotChanceByTotalPoints>
+					<points>
+						<li>(1500, 0)</li>
+						<li>(3000, 0.05)</li>
+						<li>(6000, 0.10)</li>
+					</points>
+				</extraSlotChanceByTotalPoints>
 			</li>
 		</modExtensions>
 		<comps>
@@ -154,21 +156,24 @@
 				<!--
 					Colony threat points to the highest combatPower this container may hold.
 					80 covers militor and scorcher, 150 adds pikeman, cyclops, scyther, tesseron, tinker
-					and haze, 200 adds lancer, lasher, conqueror and frostivus. It stops there, at the
-					tier vanilla itself hands out free on the mechanitor ship; anything heavier is
-					gestated, not found.
-
-					There is deliberately no floor. Vanilla never makes a found reward better because the
-					colony got richer, and a floor that climbed with wealth turned every late game
-					container into a guaranteed heavy.
+					and haze, 250 adds lancer, tunneler, centurion, lasher, conqueror, frostivus, siren,
+					pulse and vassal, 400 opens up the centipedes and our heavies.
 				-->
 				<maxCombatPowerByThreatPoints>
 					<points>
 						<li>(0, 80)</li>
 						<li>(350, 150)</li>
-						<li>(1000, 200)</li>
+						<li>(800, 250)</li>
+						<li>(1600, 400)</li>
 					</points>
 				</maxCombatPowerByThreatPoints>
+				<minCombatPowerByThreatPoints>
+					<points>
+						<li>(500, 0)</li>
+						<li>(1000, 110)</li>
+						<li>(1800, 190)</li>
+					</points>
+				</minCombatPowerByThreatPoints>
 				<emptyGraphic>
 					<texPath>Things/Building/MechanoidContainer/MechanoidContainerCluster_Empty</texPath>
 					<graphicClass>Graphic_Single</graphicClass>
@@ -407,9 +412,17 @@
 					<points>
 						<li>(0, 80)</li>
 						<li>(350, 150)</li>
-						<li>(1000, 200)</li>
+						<li>(800, 250)</li>
+						<li>(1600, 400)</li>
 					</points>
 				</maxCombatPowerByThreatPoints>
+				<minCombatPowerByThreatPoints>
+					<points>
+						<li>(500, 0)</li>
+						<li>(1000, 110)</li>
+						<li>(1800, 190)</li>
+					</points>
+				</minCombatPowerByThreatPoints>
 				<emptyGraphic>
 					<texPath>Things/Building/MechanoidContainer/MechanoidContainer_Empty</texPath>
 					<graphicClass>Graphic_Single</graphicClass>
