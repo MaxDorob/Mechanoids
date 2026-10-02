@@ -197,7 +197,7 @@ namespace ApexMechanoids
 			}
 		}
 
-		public override string CompTipStringExtra => "APM_VampiricCharges".Translate(charges, Props.maxCharges, charges * Props.healTicksPerCharge * Props.healAmountPerTick);
+		public override string CompTipStringExtra => "APM_VampiricCharges".Translate(charges.ToString("0.#"), Props.maxCharges, (charges * Props.healTicksPerCharge * Props.healAmountPerTick).ToString("0"));
 
 		// Resolves the comp on a pawn in O(1) via the lookup table (used by the damage patch).
 		public static HediffComp_VampiricMechanites GetOn(Pawn pawn)

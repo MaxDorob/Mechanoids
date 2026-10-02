@@ -249,7 +249,7 @@ namespace ApexMechanoids
             Rot4 rot4 = oldBuilding.Rotation;
 
 
-            oldBuilding.Kill(null);
+            oldBuilding.Destroy(DestroyMode.WillReplace);
 
             GenSpawn.Spawn(building, pos, map, rot4, WipeMode.Vanish, false);
 

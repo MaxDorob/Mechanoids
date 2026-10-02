@@ -15,8 +15,8 @@
 				<chargesPerKill>2</chargesPerKill>
 				<maxCharges>25</maxCharges>
 				<healIntervalTicks>60</healIntervalTicks>
-				<healAmountPerTick>2</healAmountPerTick>
-				<healTicksPerCharge>30</healTicksPerCharge>
+				<healAmountPerTick>5</healAmountPerTick>
+				<healTicksPerCharge>40</healTicksPerCharge>
 				<restoreMissingParts>true</restoreMissingParts>
 			</li>
 		</comps>
