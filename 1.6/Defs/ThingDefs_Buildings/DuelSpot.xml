@@ -26,6 +26,7 @@
 			<destroySound>BuildingDestroyed_Metal_Small</destroySound>
 			<ai_chillDestination>false</ai_chillDestination>
 			<isEdifice>false</isEdifice>
+			<expandHomeArea>false</expandHomeArea>
 			<destroyEffecter MayRequire="Ludeon.RimWorld.Royalty">Broadshield_Burnout</destroyEffecter>
 		</building>
 		<comps>

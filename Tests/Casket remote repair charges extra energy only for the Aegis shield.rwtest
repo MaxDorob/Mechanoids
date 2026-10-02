@@ -1,0 +1,34 @@
+rwtest 1
+test "Casket remote repair charges extra energy only for the Aegis shield" project="Apex Mechanoids" group="Building" created=2026-10-02T00:00:00
+
+requires dlc=Biotech
+requires mod=Mortis.ApexMechanoids
+sky glow=1
+room size=15,11 roof=false name="yard"
+spawn Thing:SolarGenerator in="yard" faction=player
+spawn Thing:APM_MechCommandCasket in="yard" faction=player name="casket"
+spawn Pawn:Colonist in="yard" name="Mechanitor"
+spawn Pawn:APM_Mech_Aegis in="yard" faction=player name="Aegis"
+waitfor power "casket" ticks=250
+overseer "Aegis" by="Mechanitor" now=true
+give "Mechanitor" hediff=RemoteRepairerImplant severity=1 part=Brain
+ordermenu "Mechanitor" on="casket"
+menu "Enter command casket"
+waitfor inspect "casket" contains "Contains:" ticks=2500
+
+give "Aegis" need=MechEnergy value=0.5
+damage "Aegis" amount=20 def=Burn
+select "Mechanitor"
+gizmo "remote repair"
+target "Aegis"
+waitfor pawn "Aegis" hediff=Burn expect=absent ticks=6000
+assert pawn "Aegis" need=MechEnergy min=0.42 max=0.47
+
+give "Aegis" need=MechEnergy value=0.5
+damage "Aegis" amount=20 def=Burn part=APM_AegisShield
+select "Mechanitor"
+gizmo "remote repair"
+target "Aegis"
+waitfor pawn "Aegis" hediff=Burn expect=absent ticks=6000
+assert pawn "Aegis" need=MechEnergy min=0.29 max=0.35
+assert log clean
