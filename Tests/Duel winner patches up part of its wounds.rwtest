@@ -1,0 +1,28 @@
+rwtest 1
+test "Duel winner patches up part of its wounds" project="Apex Mechanoids" group=Duel created=2026-10-02T00:00:00
+
+requires dlc=Biotech
+requires mod=Mortis.ApexMechanoids
+speed paused
+despawn Thing:APM_DuelSpot
+spawn Pawn:Colonist at 0,0 name="Duelist" gear=none
+spawn Pawn:Colonist at 4,0 faction=enemy name="Raider" gear=none
+equip "Duelist" thing=APM_Weapon_DuelistsPsySpear now=true
+damage "Duelist" amount=20 def=Burn part=Torso
+damage "Raider" amount=20 def=Burn part=Torso
+assert pawn "Duelist" hediff=Burn severity min=19 max=21
+assert pawn "Raider" hediff=Burn severity min=19 max=21
+select "Duelist"
+gizmo "The duel trial"
+target "Raider"
+deselect
+speed x1
+waitfor pawn "Duelist" hediff=APM_InDuel ticks=240
+speed paused
+assert pawn "Duelist" hediff=Burn severity min=19 max=21
+down "Raider"
+tick 5 reason="MentalStateTick notices the downed opponent on its next tick"
+assert pawn "Duelist" hediff=APM_DuelWinner expect=present
+assert pawn "Duelist" hediff=Burn severity min=11 max=13
+assert pawn "Raider" hediff=Burn severity min=19 max=21
+assert log clean

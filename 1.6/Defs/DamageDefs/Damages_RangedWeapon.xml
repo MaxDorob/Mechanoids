@@ -2,7 +2,7 @@
 <Defs>
 	<DamageDef ParentName="BluntBase">
 		<defName>Push</defName>
-		<deathMessage>{0} has been ... to death.</deathMessage>
+		<deathMessage>{0} has been beaten to death.</deathMessage>
 		<label>push damage</label>
 		<workerClass>VEF.Weapons.DamageWorker_PushBackAttackMelee</workerClass>
 		<modExtensions>

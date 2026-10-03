@@ -31,7 +31,7 @@
   <APM_InDuel.label>決鬥中</APM_InDuel.label>
   <APM_InDuel.description>已鎖定於決鬥之中。雙方鬥士周圍已生成一座護盾競技場，期間所有遠程攻擊與能力都被封鎖。所受傷害大幅提高，以迫使雙方做出決斷——決鬥本就該迅速而殘酷地結束。競技場內的一切治療都被壓制，唯有從打擊敵人中汲取的少量回復除外。若任何一方被擊倒或殺死，倖存者即宣告勝利；若時間耗盡時雙方仍屹立不倒，則決鬥以平局收場——雙方都將為此付出代價。</APM_InDuel.description>
   <APM_DuelWinner.label>決鬥勝利者</APM_DuelWinner.label>
-  <APM_DuelWinner.description>這名鬥士已在競技場中勝出。每贏下一場決鬥都會讓他的鋒芒更加銳利——反應更快、打擊更重，敵人的攻擊也愈發容易被擋開。連勝的場次越長，這名戰士就越發可畏。榮光會隨時間褪去，但勝利的餘韻仍在。</APM_DuelWinner.description>
+  <APM_DuelWinner.description>這名鬥士已在競技場中勝出。勝利也會修復部分在戰鬥中受到的損傷。每贏下一場決鬥都會讓他的鋒芒更加銳利——反應更快、打擊更重，敵人的攻擊也愈發容易被擋開。連勝的場次越長，這名戰士就越發可畏。榮光會隨時間褪去，但勝利的餘韻仍在。</APM_DuelWinner.description>
   <APM_DuelWinner.stages.0.label>竊線（1 勝）</APM_DuelWinner.stages.0.label>
   <APM_DuelWinner.stages.1.label>陣列擴張（2 勝）</APM_DuelWinner.stages.1.label>
   <APM_DuelWinner.stages.2.label>網路支配（3 勝）</APM_DuelWinner.stages.2.label>

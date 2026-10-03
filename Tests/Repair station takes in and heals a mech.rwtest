@@ -5,7 +5,7 @@ requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 sky glow=1
 room size=13,9 roof=false name="yard"
-spawn Thing:SolarGenerator in="yard" faction=player
+spawn Thing:WoodFiredGenerator in="yard" faction=player fueled=true
 spawn Thing:APM_RepairStation_Small in="yard" faction=player name="station"
 spawn Pawn:Mech_Lifter in="yard" faction=player name="Repairee"
 waitfor power "station" ticks=250

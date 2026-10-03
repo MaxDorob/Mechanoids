@@ -27,7 +27,7 @@
 		<defName>APM_DuelWinner</defName>
 		<label>duel winner</label>
 		<hediffClass>HediffWithComps</hediffClass>
-		<description>This combatant has emerged victorious from the arena. Each duel won sharpens their edge — reflexes quicken, strikes land harder and the enemy's blows are turned aside with growing ease. The longer this warrior's unbroken winning streak the more formidable they become. The glory fades with time but the memory of victory lingers.</description>
+		<description>This combatant has emerged victorious from the arena. The victory also mends part of the damage taken in the fight. Each duel won sharpens their edge — reflexes quicken, strikes land harder and the enemy's blows are turned aside with growing ease. The longer this warrior's unbroken winning streak the more formidable they become. The glory fades with time but the memory of victory lingers.</description>
 		<isBad>false</isBad>
 		<maxSeverity>2.0</maxSeverity>
 		<stages>

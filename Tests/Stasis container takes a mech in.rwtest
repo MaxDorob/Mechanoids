@@ -13,7 +13,7 @@ select "container"
 gizmo "Choose mechanoid" expect=disabled reason="No power" match=equals
 deselect
 
-spawn Thing:SolarGenerator in="yard" faction=player
+spawn Thing:WoodFiredGenerator in="yard" faction=player fueled=true
 waitfor power "container" ticks=250
 
 select "container"

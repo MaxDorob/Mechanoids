@@ -10,7 +10,7 @@ select "emplacement"
 gizmo "Sun Ray" expect=disabled reason="No power." match=equals
 deselect
 
-spawn Thing:SolarGenerator in="yard" faction=player
+spawn Thing:WoodFiredGenerator in="yard" faction=player fueled=true
 waitfor power "emplacement" ticks=250
 select "emplacement"
 gizmo "Sun Ray" expect=disabled reason="Needs an operator." match=equals
