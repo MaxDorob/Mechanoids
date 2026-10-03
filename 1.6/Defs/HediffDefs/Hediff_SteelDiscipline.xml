@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
 
-	<!--
-        Applied to allies by the "Steel Discipline" ability.
-        Grants a move speed boost and reduces mental break threshold.
-        Uses HediffComp_Disappears for automatic expiry.
-    -->
 	<HediffDef>
 		<defName>APM_Hediff_SteelDiscipline</defName>
 		<label>steel discipline</label>
@@ -61,9 +56,6 @@
 		</renderNodeProperties>
 	</HediffDef>
 
-	<!--
-        Thought given to organic same-faction pawns with a mood need.
-    -->
 	<ThoughtDef>
 		<defName>APM_Thought_InspiredByDiscipline</defName>
 		<thoughtClass>Thought_Memory</thoughtClass>

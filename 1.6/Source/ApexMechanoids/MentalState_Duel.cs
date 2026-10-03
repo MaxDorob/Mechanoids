@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -9,6 +10,8 @@ namespace ApexMechanoids
     public class MentalState_Duel : MentalState
     {
         private const float SeverityPerWin = 1f / 8f; // 7 stages
+        private const float WinnerHealFractionOfPartHealth = 0.2f;
+        private static readonly List<Hediff_Injury> injuriesToHeal = new List<Hediff_Injury>();
 
         public Thing attachedThing;
         public Pawn duelStarter;
@@ -75,6 +78,10 @@ namespace ApexMechanoids
                 if (causedByPawn.DeadOrDowned)
                 {
                     HealthUtility.AdjustSeverity(pawn, ApexDefsOf.APM_DuelWinner, SeverityPerWin);
+                    if (!pawn.Dead)
+                    {
+                        HealInjuriesByPartHealthFraction(pawn, WinnerHealFractionOfPartHealth);
+                    }
                 }
                 else if (!pawn.DeadOrDowned)
                 { 
@@ -127,6 +134,37 @@ namespace ApexMechanoids
                     drawEffecter.Spawn(pawn, pawn.Map).Cleanup();
                 } 
             }
+        }
+
+        private static void HealInjuriesByPartHealthFraction(Pawn healedPawn, float fractionOfPartHealth)
+        {
+            injuriesToHeal.Clear();
+            List<Hediff> hediffs = healedPawn.health.hediffSet.hediffs;
+            for (int index = 0; index < hediffs.Count; index++)
+            {
+                if (hediffs[index] is Hediff_Injury injury && injury.Part != null && !injury.IsPermanent())
+                {
+                    injuriesToHeal.Add(injury);
+                }
+            }
+
+            Dictionary<BodyPartRecord, float> remainingHealByPart = new Dictionary<BodyPartRecord, float>();
+            for (int index = 0; index < injuriesToHeal.Count; index++)
+            {
+                Hediff_Injury injury = injuriesToHeal[index];
+                if (!remainingHealByPart.TryGetValue(injury.Part, out float remainingHeal))
+                {
+                    remainingHeal = injury.Part.def.GetMaxHealth(healedPawn) * fractionOfPartHealth;
+                }
+
+                float healAmount = Mathf.Min(injury.Severity, remainingHeal);
+                if (healAmount > 0f)
+                {
+                    injury.Heal(healAmount);
+                }
+                remainingHealByPart[injury.Part] = remainingHeal - healAmount;
+            }
+            injuriesToHeal.Clear();
         }
 
         public override TaggedString GetBeginLetterText()

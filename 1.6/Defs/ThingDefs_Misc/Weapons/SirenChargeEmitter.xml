@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
-	<!-- ===== Damage Def — no armorCategory means armor is bypassed entirely ===== -->
 	<DamageDef>
 		<defName>APM_SonicVibration</defName>
 		<label>sonic vibration</label>
@@ -11,7 +10,6 @@
 		<hediff>Bruise</hediff>
 	</DamageDef>
 
-	<!-- ===== Weapon Def ===== -->
 	<ThingDef ParentName="BaseGun">
 		<defName>APM_Siren_ChargeEmitter</defName>
 		<label>charge emitter</label>
@@ -66,7 +64,6 @@
 		</tools>
 	</ThingDef>
 
-	<!-- ===== Projectile Def ===== -->
 	<ThingDef ParentName="BaseBullet">
 		<defName>APM_Proj_SirenChargeEmitter</defName>
 		<label>sonic pulse</label>

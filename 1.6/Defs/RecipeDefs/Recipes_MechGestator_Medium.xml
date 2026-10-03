@@ -113,7 +113,6 @@
   </RecipeDef>
 
 
-	<!-- ==================== Conqueror ==================== -->
 <RecipeDef Name="APM_ConquerorBase" ParentName="MediumMechanoidRecipe" Abstract="True">
     <researchPrerequisite>AdvancedMechtech</researchPrerequisite>
     <gestationCycles>2</gestationCycles>

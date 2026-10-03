@@ -54,11 +54,6 @@
 			<deconstructible>false</deconstructible>
 		</building>
 		<modExtensions>
-			<!--
-				Rare on purpose. One slot per cluster, never below 500 point clusters, and the chance
-				climbs with the cluster: a token 500 point cluster keeps the old 8%, while the ones
-				worth bringing an army to are better than even money.
-			-->
 			<li Class="ApexMechanoids.DefModExtension_MechClusterExtra">
 				<minTotalPoints>500</minTotalPoints>
 				<maxPerCluster>2</maxPerCluster>
@@ -70,6 +65,13 @@
 						<li>(6000, 0.60)</li>
 					</points>
 				</spawnChanceByTotalPoints>
+				<extraSlotChanceByTotalPoints>
+					<points>
+						<li>(1500, 0)</li>
+						<li>(3000, 0.05)</li>
+						<li>(6000, 0.10)</li>
+					</points>
+				</extraSlotChanceByTotalPoints>
 			</li>
 		</modExtensions>
 		<comps>
@@ -165,19 +167,11 @@
 						<li>(1600, 400)</li>
 					</points>
 				</maxCombatPowerByThreatPoints>
-				<!--
-					And the lowest. The ceiling alone only ever widens the pool, so a colony with a few
-					million in wealth kept rolling militors and scythers because those carry the heavy
-					weights. This walks the floor up behind it, so the container tracks the colony
-					instead of trailing it.
-				-->
 				<minCombatPowerByThreatPoints>
 					<points>
-						<li>(0, 0)</li>
 						<li>(500, 0)</li>
 						<li>(1000, 110)</li>
 						<li>(1800, 190)</li>
-						<li>(3000, 300)</li>
 					</points>
 				</minCombatPowerByThreatPoints>
 				<emptyGraphic>
@@ -424,11 +418,9 @@
 				</maxCombatPowerByThreatPoints>
 				<minCombatPowerByThreatPoints>
 					<points>
-						<li>(0, 0)</li>
 						<li>(500, 0)</li>
 						<li>(1000, 110)</li>
 						<li>(1800, 190)</li>
-						<li>(3000, 300)</li>
 					</points>
 				</minCombatPowerByThreatPoints>
 				<emptyGraphic>

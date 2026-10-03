@@ -60,6 +60,8 @@ namespace ApexMechanoids
     {
         private VerbProperties_ShootBeamFromOffset OffsetProps => verbProps as VerbProperties_ShootBeamFromOffset;
 
+        private IntVec3 shotSourceCell = IntVec3.Invalid;
+
         public override bool TryStartCastOn(LocalTargetInfo castTarg, LocalTargetInfo destTarg, bool surpriseAttack = false, bool canHitNonTargetPawns = true, bool preventFriendlyFire = false, bool nonInterruptingSelfCast = false)
         {
             if (CasterIsPawn && GazerLaserUtility.AutoWeaponFireBlocked(CasterPawn) && !GazerLaserUtility.IsManualLaserJob(CasterPawn))
@@ -90,16 +92,18 @@ namespace ApexMechanoids
             Vector3 targetPosition = InterpolatedPosition;
             IntVec3 targetCell = targetPosition.ToIntVec3();
             Vector3 casterCenter = caster.Position.ToVector3Shifted();
-            Vector3 toTarget = InterpolatedPosition - casterCenter;
-            float beamLength = toTarget.MagnitudeHorizontal();
-            Vector3 beamDirection = toTarget.Yto0().normalized;
-            IntVec3 blockedCell = GenSight.LastPointOnLineOfSight(caster.Position, targetCell, (IntVec3 c) => c.CanBeSeenOverFast(caster.Map), skipFirstCell: true);
+            Vector3 beamDirection = (InterpolatedPosition - casterCenter).Yto0().normalized;
+            IntVec3 sourceCell = VisibleBeamSourceCell();
+            Vector3 sourceCenter = sourceCell.ToVector3Shifted();
+            IntVec3 blockedCell = GenSight.LastPointOnLineOfSight(sourceCell, targetCell, (IntVec3 c) => c.CanBeSeenOverFast(caster.Map), skipFirstCell: true);
             if (blockedCell.IsValid)
             {
-                beamLength -= (targetCell - blockedCell).LengthHorizontal;
-                targetPosition = casterCenter + beamDirection * beamLength;
+                Vector3 sourceToTarget = targetPosition - sourceCenter;
+                float visibleLength = sourceToTarget.MagnitudeHorizontal() - (targetCell - blockedCell).LengthHorizontal;
+                targetPosition = sourceCenter + sourceToTarget.Yto0().normalized * visibleLength;
                 targetCell = targetPosition.ToIntVec3();
             }
+            float beamLength = (targetPosition - casterCenter).MagnitudeHorizontal();
 
             Vector3 origin = BeamOrigin(beamDirection);
             Vector3 originOffset = origin - casterCenter;
@@ -137,6 +141,21 @@ namespace ApexMechanoids
             }
 
             sustainer?.Maintain();
+        }
+
+        public override bool TryCastShot()
+        {
+            shotSourceCell = TryFindShootLineFromTo(caster.Position, currentTarget, out ShootLine shootLine) ? shootLine.Source : IntVec3.Invalid;
+            return base.TryCastShot();
+        }
+
+        private IntVec3 VisibleBeamSourceCell()
+        {
+            if (shotSourceCell.IsValid && shotSourceCell.AdjacentTo8WayOrInside(caster.Position))
+            {
+                return shotSourceCell;
+            }
+            return caster.Position;
         }
 
         private Vector3 BeamOrigin(Vector3 beamDirection)

@@ -42,9 +42,9 @@ namespace ApexMechanoids
                     continue;
                 }
 
-                float chance = parms.ChanceFor(budget);
                 for (int i = 0; i < parms.maxPerCluster; i++)
                 {
+                    float chance = i == 0 ? parms.ChanceFor(budget) : parms.ExtraSlotChanceFor(budget);
                     if (!Rand.Chance(chance))
                     {
                         break;

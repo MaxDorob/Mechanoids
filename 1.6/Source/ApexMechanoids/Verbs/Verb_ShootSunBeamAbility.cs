@@ -11,7 +11,6 @@ namespace ApexMechanoids
 {
     public class DefModExtension_SunRayAbility : DefModExtension
     {
-        // How many ticks before firing to start the warmup sound (= clip duration in ticks; 1 s = 60 ticks).
         public int soundWarmupLeadInTicks = 0;
     }
 
@@ -46,6 +45,7 @@ namespace ApexMechanoids
         private const int NumSubdivisionsPerUnitLength = 1;
 
         private Vector3 LasttargetPosition;
+        private IntVec3 shotSourceCell = IntVec3.Invalid;
         private int min => Mathf.RoundToInt(verbProps.minRange);
 
         public override int ShotsPerBurst => base.BurstShotCount;
@@ -140,6 +140,7 @@ namespace ApexMechanoids
         {
             ShootLine resultingLine;
             bool flag = TryFindShootLineFromTo(caster.Position, currentTarget, out resultingLine);
+            shotSourceCell = flag ? resultingLine.Source : IntVec3.Invalid;
             if (currentTarget.HasThing && currentTarget.Thing.Map != caster.Map)
             {
                 resultingLine = new ShootLine(caster.Position, LasttargetPosition.ToIntVec3());
@@ -283,22 +284,33 @@ namespace ApexMechanoids
             warmupSoundPlayed = true;
         }
 
+        private IntVec3 VisibleBeamSourceCell()
+        {
+            if (shotSourceCell.IsValid && shotSourceCell.AdjacentTo8WayOrInside(caster.Position))
+            {
+                return shotSourceCell;
+            }
+            return caster.Position;
+        }
+
         public override void BurstingTick()
         {
             ticksToNextPathStep--;
             Vector3 val = InterpolatedPosition;
             IntVec3 intVec = val.ToIntVec3();
-            Vector3 val2 = InterpolatedPosition - caster.Position.ToVector3Shifted();
-            float num = val2.MagnitudeHorizontal();
-            Vector3 val3 = val2.Yto0();
-            Vector3 normalized = ((Vector3)(val3)).normalized;
-            IntVec3 intVec2 = GenSight.LastPointOnLineOfSight(caster.Position, intVec, (IntVec3 c) => c.CanBeSeenOverFast(caster.Map), skipFirstCell: true);
+            Vector3 casterCenter = caster.Position.ToVector3Shifted();
+            Vector3 normalized = (InterpolatedPosition - casterCenter).Yto0().normalized;
+            IntVec3 sourceCell = VisibleBeamSourceCell();
+            Vector3 sourceCenter = sourceCell.ToVector3Shifted();
+            IntVec3 intVec2 = GenSight.LastPointOnLineOfSight(sourceCell, intVec, (IntVec3 c) => c.CanBeSeenOverFast(caster.Map), skipFirstCell: true);
             if (intVec2.IsValid)
             {
-                num -= (intVec - intVec2).LengthHorizontal;
-                val = caster.Position.ToVector3Shifted() + normalized * num;
+                Vector3 sourceToTarget = val - sourceCenter;
+                float visibleLength = sourceToTarget.MagnitudeHorizontal() - (intVec - intVec2).LengthHorizontal;
+                val = sourceCenter + sourceToTarget.Yto0().normalized * visibleLength;
                 intVec = val.ToIntVec3();
             }
+            float num = (val - casterCenter).MagnitudeHorizontal();
             Vector3 offsetA = normalized * verbProps.beamStartOffset;
             Vector3 val4 = val - intVec.ToVector3Shifted();
             if (mote != null)

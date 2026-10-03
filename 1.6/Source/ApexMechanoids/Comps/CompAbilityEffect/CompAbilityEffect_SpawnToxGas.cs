@@ -9,9 +9,7 @@ namespace ApexMechanoids
     {
         public float radius = 5f;
         public float gasAmount = 1f;
-        // Total ticks over which to spread gas emission (default: 300 ticks = 5s)
         public int spreadTicks = 300;
-        // How often (in ticks) to emit a batch of gas
         public int emitIntervalTicks = 5;
         public int cellsToPollute = 0;
         public float pollutionRadius = 0f;

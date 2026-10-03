@@ -73,7 +73,6 @@
 			<careIfWornByCorpse>false</careIfWornByCorpse>
 			<careIfDamaged>false</careIfDamaged>
 			<wearPerDay>0</wearPerDay>
-			<!-- Vanilla defaults to adults only; Patch_MechamancerPackChildOffset exists to fit it on a child. -->
 			<developmentalStageFilter>Child, Adult</developmentalStageFilter>
 			<bodyPartGroups>
 				<li>Waist</li>

@@ -102,7 +102,7 @@
 
   <!-- Misc Stats & Tooltips -->
   <APM_ShieldIntegrity>Shield integrity</APM_ShieldIntegrity>
-  <APM_VampiricCharges>Vampiric charges: {0}/{1} </APM_VampiricCharges>
+  <APM_VampiricCharges>Vampiric charges: {0}/{1} ({2} HP usable for repairing)</APM_VampiricCharges>
   <APM_UnityTooltip_Current>Current stats (with unity uplink):</APM_UnityTooltip_Current>
 
   <!-- Command Casket & Remote Links -->

@@ -1,0 +1,26 @@
+rwtest 1
+test "Mechamancer gear renders" project="Apex Mechanoids" created=2026-09-26T00:00:00
+
+requires dlc=Biotech
+requires mod=Mortis.ApexMechanoids
+speed paused
+spawn Pawn:Colonist at -6,0 name="South" facing=south
+spawn Pawn:Colonist at -2,0 name="East" facing=east
+spawn Pawn:Colonist at 2,0 name="North" facing=north
+spawn Pawn:Colonist at 6,0 name="West" facing=west
+wear "South" apparel=APM_Apparel_MechamancerSuit now=true
+wear "South" apparel=APM_Apparel_ArmorHelmetMechamancerHelmet now=true
+wear "South" apparel=APM_Apparel_MechamancerPack now=true
+wear "East" apparel=APM_Apparel_MechamancerSuit now=true
+wear "East" apparel=APM_Apparel_ArmorHelmetMechamancerHelmet now=true
+wear "East" apparel=APM_Apparel_MechamancerPack now=true
+wear "North" apparel=APM_Apparel_MechamancerSuit now=true
+wear "North" apparel=APM_Apparel_ArmorHelmetMechamancerHelmet now=true
+wear "North" apparel=APM_Apparel_MechamancerPack now=true
+wear "West" apparel=APM_Apparel_MechamancerSuit now=true
+wear "West" apparel=APM_Apparel_ArmorHelmetMechamancerHelmet now=true
+wear "West" apparel=APM_Apparel_MechamancerPack now=true
+
+ask "mechamancer-facings" claim="the four pawns face south, east, north and west, and each wears the mechamancer suit, helmet and backpack; the helmet sits over the head, the pack sits on the back (behind the body from the south, in front of it from the north, beside it from east and west), nothing is cut off, stretched or pink"
+ask "mechamancer-masks" claim="on every piece only the panels take a grey tint and the rest keeps its painted colours; no piece is tinted over its whole surface, and no piece shows a pink or white square, in any of the four views"
+assert log clean

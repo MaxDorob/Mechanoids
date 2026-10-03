@@ -31,7 +31,7 @@
   <APM_InDuel.label>决斗中</APM_InDuel.label>
   <APM_InDuel.description>已锁定于决斗之中。双方斗士周围已生成一座护盾竞技场，期间所有远程攻击与能力都被封锁。所受伤害大幅提高，以迫使双方做出决断——决斗本就该迅速而残酷地结束。竞技场内的一切治疗都被压制，唯有从打击敌人中汲取的少量回复除外。若任何一方被击倒或杀死，幸存者即宣告胜利；若时间耗尽时双方仍屹立不倒，则决斗以平局收场——双方都将为此付出代价。</APM_InDuel.description>
   <APM_DuelWinner.label>决斗胜利者</APM_DuelWinner.label>
-  <APM_DuelWinner.description>这名斗士已在竞技场中胜出。每赢下一场决斗都会让他的锋芒更加锐利——反应更快、打击更重，敌人的攻击也愈发容易被挡开。连胜的场次越长，这名战士就越发可畏。荣光会随时间褪去，但胜利的余韵仍在。</APM_DuelWinner.description>
+  <APM_DuelWinner.description>这名斗士已在竞技场中胜出。胜利也会修复部分在战斗中受到的损伤。每赢下一场决斗都会让他的锋芒更加锐利——反应更快、打击更重，敌人的攻击也愈发容易被挡开。连胜的场次越长，这名战士就越发可畏。荣光会随时间褪去，但胜利的余韵仍在。</APM_DuelWinner.description>
   <APM_DuelWinner.stages.0.label>窃线（1 胜）</APM_DuelWinner.stages.0.label>
   <APM_DuelWinner.stages.1.label>阵列扩张（2 胜）</APM_DuelWinner.stages.1.label>
   <APM_DuelWinner.stages.2.label>网络支配（3 胜）</APM_DuelWinner.stages.2.label>

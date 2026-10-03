@@ -7,7 +7,6 @@ namespace ApexMechanoids
 {
     public class CompProperties_AbilitySteelDiscipline : CompProperties_AbilityEffect
     {
-        // Radius in which allies are buffed.
         public float radius = 12f;
 
         public HediffDef buffHediff;
@@ -16,7 +15,6 @@ namespace ApexMechanoids
 
         public bool apexMechsOnly = true;
 
-        // Thought given to organic same-faction pawns that have a mood need.
         public ThoughtDef inspiredThought = null;
 
         public CompProperties_AbilitySteelDiscipline()

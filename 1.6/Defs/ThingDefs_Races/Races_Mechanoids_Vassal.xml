@@ -50,11 +50,8 @@
 		</tools>
 		<comps>
 			<li Class="ApexMechanoids.CompProperties_MechanitorRangeExtender">
-				<!-- use this comp -->
 				<minRange>7.9</minRange>
-				<!-- when not used, for performance reasons -->
 				<maxRange>15.4</maxRange>
-				<!-- when used -->
 			</li>
 		</comps>
 		<race>

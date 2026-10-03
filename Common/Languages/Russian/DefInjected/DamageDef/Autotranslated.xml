@@ -4,6 +4,7 @@
   <APM_GazerBeam.label>луч созерцателя</APM_GazerBeam.label>
   <APM_SunRay.label>солнечный луч</APM_SunRay.label>
   <Push.label>урон от толчка</Push.label>
+  <Push.deathMessage>{0} был забит до смерти.</Push.deathMessage>
   <APM_Shockwave.label>ударная волна</APM_Shockwave.label>
   <MegaBeam.label>мега-луч</MegaBeam.label>
   <APM_HazeAcidBeam.label>кислотный луч мглы</APM_HazeAcidBeam.label>

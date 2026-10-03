@@ -8,33 +8,20 @@ using Verse;
 
 namespace ApexMechanoids
 {
-	/// <summary>
-	/// Hediff comp that banks "charges" whenever its host downs or kills a target,
-	/// then spends those charges to self-repair whenever the host is damaged.
-	/// </summary>
 	public class HediffCompProperties_VampiricMechanites : HediffCompProperties
 	{
-		// Charges gained per downed target.
 		public int chargesPerDown = 1;
 
-		// Charges gained per killed target.
 		public int chargesPerKill = 2;
 
-		// Maximum banked charges.
 		public int maxCharges = 25;
 
-		// Ticks between self-repair attempts.
 		public int healIntervalTicks = 600;
 
-		// HP restored per heal tick. One heal tick consumes one charge.
 		public float healAmountPerTick = 0.5f;
 
-		// How many heal ticks a single charge is worth. Each heal tick heals
-		// healAmountPerTick HP and consumes one charge, so one charge restores
-		// (healTicksPerCharge * healAmountPerTick) HP before being spent.
 		public int healTicksPerCharge = 300;
 
-		// Whether a single charge can regrow a missing body part.
 		public bool restoreMissingParts = true;
 
 		public HediffCompProperties_VampiricMechanites()
@@ -63,9 +50,6 @@ namespace ApexMechanoids
 		// explicitly removed in CompPostPostRemoved when its hediff is cured.
 		private static readonly ConditionalWeakTable<Pawn, HediffComp_VampiricMechanites> pawnsWithVampiric = new ConditionalWeakTable<Pawn, HediffComp_VampiricMechanites>();
 
-		// Victims already credited for a down, so a still-downed pawn is not repeatedly
-		// banked by every follow-up hit. Weak keys avoid holding victims alive.
-		// Internal so the sibling damage-patch class can access it.
 		internal static readonly ConditionalWeakTable<Pawn, object> downedCredited = new ConditionalWeakTable<Pawn, object>();
 
 		public float Charges => charges;
@@ -123,12 +107,10 @@ namespace ApexMechanoids
 			cachedDamaged = TryHealOnce();
 		}
 
-		// Spends one repair attempt's worth of charges. Returns true if anything was repaired.
 		private bool TryHealOnce()
 		{
 			HediffSet hediffSet = Pawn.health.hediffSet;
 
-			// Prioritise regrowing a missing part.
 			if (Props.restoreMissingParts)
 			{
 				Hediff_MissingPart missing = hediffSet.GetMissingPartsCommonAncestors().FirstOrDefault();
@@ -140,7 +122,6 @@ namespace ApexMechanoids
 				}
 			}
 
-			// Otherwise heal injuries up to the per-tick budget.
 			float budget = Props.healAmountPerTick;
 			List<Hediff> hediffs = hediffSet.hediffs;
 			bool healed = false;
@@ -185,9 +166,6 @@ namespace ApexMechanoids
 			base.CompExposeData();
 			Scribe_Values.Look(ref charges, "vampiricCharges", 0);
 			Scribe_Values.Look(ref healTimer, "vampiricHealTimer", 0);
-			// HediffSet only assigns hediff.pawn during ResolvingCrossRefs, after this
-			// comp's own ExposeData ran, so Pawn is null before PostLoadInit. CompPostMake
-			// does not run on load, so the lookup table is refilled here as well.
 			if (Scribe.mode == LoadSaveMode.PostLoadInit && Pawn != null)
 			{
 				pawnsWithVampiric.Remove(Pawn);
@@ -197,7 +175,7 @@ namespace ApexMechanoids
 			}
 		}
 
-		public override string CompTipStringExtra => "APM_VampiricCharges".Translate(charges, Props.maxCharges, charges * Props.healTicksPerCharge * Props.healAmountPerTick);
+		public override string CompTipStringExtra => "APM_VampiricCharges".Translate(charges.ToString("0.#"), Props.maxCharges, (charges * Props.healTicksPerCharge * Props.healAmountPerTick).ToString("0"));
 
 		// Resolves the comp on a pawn in O(1) via the lookup table (used by the damage patch).
 		public static HediffComp_VampiricMechanites GetOn(Pawn pawn)
@@ -220,7 +198,6 @@ namespace ApexMechanoids
 		}
 	}
 
-	// Credits the attacking pawn's Vampiric Mechanites whenever it downs or kills a target.
 	[HarmonyPatch(typeof(Pawn_HealthTracker), nameof(Pawn_HealthTracker.PostApplyDamage))]
 	public static class VampiricMechanites_DamagePatch
 	{
@@ -281,7 +258,6 @@ namespace ApexMechanoids
 			}
 			else
 			{
-				// Victim recovered (or was never downed); allow future downs to be credited.
 				HediffComp_VampiricMechanites.downedCredited.Remove(victim);
 			}
 		}
