@@ -5,9 +5,11 @@ requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 speed paused
 despawn Thing:APM_DuelSpot
-spawn Pawn:Colonist at 0,0 name="Duelist" gear=none
-spawn Pawn:Colonist at 4,0 faction=enemy name="Raider" gear=none
+spawn Pawn:Colonist at 0,0 name="Duelist" gear=none xenotype=Baseliner
+spawn Pawn:Colonist at 4,0 faction=enemy name="Raider" gear=none xenotype=Baseliner
 equip "Duelist" thing=APM_Weapon_DuelistsPsySpear now=true
+assert pawn "Duelist" stat=IncomingDamageFactor min=0.99 max=1.01
+assert pawn "Raider" stat=IncomingDamageFactor min=0.99 max=1.01
 damage "Duelist" amount=20 def=Burn part=Torso
 damage "Raider" amount=20 def=Burn part=Torso
 assert pawn "Duelist" hediff=Burn severity min=19 max=21

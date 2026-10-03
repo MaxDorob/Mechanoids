@@ -7,7 +7,7 @@ spawn Pawn:APM_Mech_Mantis at 0,0 faction=player name="Mantis"
 spawn Pawn:Colonist at -4,0 name="Mechanitor" gear=none
 draft "Mechanitor"
 give "Mechanitor" need=Food value=1
-overseer "Mantis" by="Mechanitor"
+overseer "Mantis" by="Mechanitor" now=true
 draft "Mantis"
 
 speed paused

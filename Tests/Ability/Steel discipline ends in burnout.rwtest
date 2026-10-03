@@ -3,6 +3,7 @@ test "Steel discipline ends in burnout" project="Apex Mechanoids" created=2026-0
 
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
+requires assert=thoughtpart
 spawn Pawn:APM_Mech_Vassal faction=player name="Vassal"
 spawn Pawn:Colonist age=30 name="Worker"
 draft "Worker"
@@ -29,7 +30,7 @@ assert pawn "Worker" hediff=APM_Hediff_DisciplineBurnout expect=present
 assert pawn "Worker" hediff=APM_Hediff_DisciplineBurnout_Mech expect=absent
 assert pawn "Worker" stat=MoveSpeed min=4.35 max=4.55
 assert pawn "Worker" thought=APM_Thought_DisciplineBurnout expect=present
-assert pawn "Worker" thought=APM_Thought_DisciplineBurnout mood min=-6.5 max=-5.5
+assert thoughtpart "Worker" thought=APM_Thought_DisciplineBurnout min=-6.1 max=-5.9
 
 assert pawn "Vassal" hediff=APM_Hediff_DisciplineBurnout_Mech expect=present
 assert pawn "Vassal" hediff=APM_Hediff_DisciplineBurnout expect=absent

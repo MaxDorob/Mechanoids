@@ -25,6 +25,34 @@ spawn Pawn:APM_Mech_Satellite at -6,-6 faction=player facing=east name="Satellit
 spawn Pawn:APM_Mech_Siren at -1,-6 faction=player facing=east name="Siren" rolled=true
 spawn Pawn:APM_Mech_Vassal at 4,-6 faction=player facing=east name="Vassal" rolled=true
 spawn Pawn:Colonist at 24,3 faction=none name="Target"
+spawn Pawn:Colonist at -8,3 name="Mechanitor" gear=none drafted
+spawn Pawn:Colonist at -8,9 name="Second mechanitor" gear=none drafted
+overseer "Celerus" by="Mechanitor" now=true
+overseer "Gazer" by="Second mechanitor" now=true
+wear "Mechanitor" apparel=APM_Apparel_MechamancerSuit now=true
+wear "Mechanitor" apparel=APM_Apparel_ArmorHelmetMechamancerHelmet now=true
+wear "Second mechanitor" apparel=APM_Apparel_MechamancerSuit now=true
+wear "Second mechanitor" apparel=APM_Apparel_ArmorHelmetMechamancerHelmet now=true
+assert pawn "Mechanitor" stat=MechBandwidth min=43.9 max=44.1
+assert pawn "Second mechanitor" stat=MechBandwidth min=43.9 max=44.1
+overseer "CelerusBoss" by="Mechanitor" now=true
+overseer "Dominus" by="Mechanitor" now=true
+overseer "DominusBoss" by="Mechanitor" now=true
+overseer "Terminus" by="Mechanitor" now=true
+overseer "TerminusBoss" by="Mechanitor" now=true
+overseer "ConquerorAR" by="Mechanitor" now=true
+overseer "ConquerorDMR" by="Mechanitor" now=true
+overseer "ConquerorSMG" by="Mechanitor" now=true
+overseer "Dynamo" by="Mechanitor" now=true
+overseer "Haze" by="Second mechanitor" now=true
+overseer "Javelin" by="Second mechanitor" now=true
+overseer "Lasher" by="Second mechanitor" now=true
+overseer "Maul" by="Second mechanitor" now=true
+overseer "Pulse" by="Second mechanitor" now=true
+overseer "Ravager" by="Second mechanitor" now=true
+overseer "Satellite" by="Second mechanitor" now=true
+overseer "Siren" by="Second mechanitor" now=true
+overseer "Vassal" by="Second mechanitor" now=true
 
 assert pawn "Celerus" equipment=APM_Weapon_CelerusVoltana
 assert pawn "CelerusBoss" equipment=APM_Weapon_CelerusApexVoltana
@@ -88,5 +116,5 @@ attack "Siren" target="Target"
 draft "Vassal"
 attack "Vassal" target="Target"
 tick 40 reason="the shortest ranged warmup is 0.9 s = 54 ticks, so every gun is still aiming and none has fired yet"
-ask "apex-weapons-drawn" claim="all twenty apex mechs stand spread apart, each holding its own weapon drawn and turned towards the colonist to the east; the six melee mechs walk towards him with their blade or lance in hand; no mech is empty-handed, and no weapon is pink, a white square or drawn away from its body"
+ask "apex-weapons-drawn" claim="all twenty apex mechs stand spread apart around two mechanitors in mechamancer gear, each mech holding its own weapon drawn and turned towards the colonist to the east; the six melee mechs walk towards him with their blade or lance in hand; no mech is empty-handed, and no weapon is pink, a white square or drawn away from its body"
 assert log clean

@@ -5,7 +5,7 @@ requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 sky glow=1
 room size=15,11 roof=false name="yard"
-spawn Thing:WoodFiredGenerator in="yard" faction=player fueled=true
+spawn Thing:WoodFiredGenerator at 0,1 faction=player fueled=true
 spawn Thing:APM_MechCommandCasket in="yard" faction=player name="casket"
 spawn Pawn:Colonist in="yard" name="Mechanitor"
 spawn Pawn:Colonist in="yard" name="Plain"

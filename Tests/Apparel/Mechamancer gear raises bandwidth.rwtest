@@ -8,12 +8,11 @@ spawn Pawn:Mech_Lifter faction=player name="Lifter"
 overseer "Lifter" by="Mechanitor" now=true
 assert pawn "Mechanitor" hediff=MechlinkImplant expect=present
 assert pawn "Mechanitor" stat=MechBandwidth min=5.9 max=6.1
-assert pawn "Mechanitor" stat=PainShockThreshold min=0.75 max=0.85
 
 wear "Mechanitor" apparel=APM_Apparel_MechamancerSuit now=true
 assert pawn "Mechanitor" apparel=APM_Apparel_MechamancerSuit
 assert pawn "Mechanitor" stat=MechBandwidth min=29.9 max=30.1
-assert pawn "Mechanitor" stat=PainShockThreshold min=0.82 max=0.88
+assert statpart "Mechanitor" stat=PainShockThreshold from=APM_Apparel_MechamancerSuit offset min=0.04 max=0.06
 
 wear "Mechanitor" apparel=APM_Apparel_ArmorHelmetMechamancerHelmet now=true
 assert pawn "Mechanitor" apparel=APM_Apparel_ArmorHelmetMechamancerHelmet

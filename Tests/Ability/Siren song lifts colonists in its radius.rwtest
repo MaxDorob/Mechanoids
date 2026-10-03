@@ -3,6 +3,7 @@ test "Siren song lifts colonists in its radius" project="Apex Mechanoids" create
 
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
+requires assert=thoughtpart
 spawn Pawn:APM_Mech_Siren at 0,0 faction=player name="Siren"
 spawn Pawn:Colonist at 0,-2 name="Mechanitor"
 draft "Mechanitor"
@@ -27,7 +28,7 @@ assert pawn "Near" need=Joy min=0.48 max=0.52
 assert pawn "Near" capacity=Moving min=1.07 max=1.13
 assert pawn "Near" capacity=Consciousness min=1.02 max=1.08
 waitfor pawn "Near" thought=APM_Thought_SirenSong ticks=300
-assert pawn "Near" thought=APM_Thought_SirenSong mood min=5.5 max=6.5
+assert thoughtpart "Near" thought=APM_Thought_SirenSong min=5.9 max=6.1
 
 assert pawn "Far" hediff=APM_Hediff_SirenSong expect=absent
 assert pawn "Far" need=Joy max=0.32
