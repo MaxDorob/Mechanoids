@@ -1,0 +1,92 @@
+rwtest 1
+test "Every apex mech kind spawns armed with its own weapon" project="Apex Mechanoids" created=2026-09-26T00:00:00
+
+requires dlc=Biotech
+requires mod=Mortis.ApexMechanoids
+speed paused
+spawn Pawn:APM_Mech_Celerus at -16,12 faction=player facing=east name="Celerus" rolled=true
+spawn Pawn:APM_Mech_Celerus_Boss at -11,12 faction=player facing=east name="CelerusBoss" rolled=true
+spawn Pawn:APM_Mech_Dominus at -6,12 faction=player facing=east name="Dominus" rolled=true
+spawn Pawn:APM_Mech_Dominus_Boss at -1,12 faction=player facing=east name="DominusBoss" rolled=true
+spawn Pawn:APM_Mech_Terminus at 4,12 faction=player facing=east name="Terminus" rolled=true
+spawn Pawn:APM_Mech_Terminus_Boss at -16,6 faction=player facing=east name="TerminusBoss" rolled=true
+spawn Pawn:APM_Mech_Conqueror_AR at -11,6 faction=player facing=east name="ConquerorAR" rolled=true
+spawn Pawn:APM_Mech_Conqueror_DMR at -6,6 faction=player facing=east name="ConquerorDMR" rolled=true
+spawn Pawn:APM_Mech_Conqueror_SMG at -1,6 faction=player facing=east name="ConquerorSMG" rolled=true
+spawn Pawn:APM_Mech_Dynamo at 4,6 faction=player facing=east name="Dynamo" rolled=true
+spawn Pawn:APM_Mech_Gazer at -16,0 faction=player facing=east name="Gazer" rolled=true
+spawn Pawn:APM_Mech_Haze at -11,0 faction=player facing=east name="Haze" rolled=true
+spawn Pawn:APM_Mech_Javelin at -6,0 faction=player facing=east name="Javelin" rolled=true
+spawn Pawn:APM_Mech_Lasher at -1,0 faction=player facing=east name="Lasher" rolled=true
+spawn Pawn:APM_Mech_Maul at 4,0 faction=player facing=east name="Maul" rolled=true
+spawn Pawn:APM_Mech_Pulse at -16,-6 faction=player facing=east name="Pulse" rolled=true
+spawn Pawn:APM_Mech_Ravager at -11,-6 faction=player facing=east name="Ravager" rolled=true
+spawn Pawn:APM_Mech_Satellite at -6,-6 faction=player facing=east name="Satellite" rolled=true
+spawn Pawn:APM_Mech_Siren at -1,-6 faction=player facing=east name="Siren" rolled=true
+spawn Pawn:APM_Mech_Vassal at 4,-6 faction=player facing=east name="Vassal" rolled=true
+spawn Pawn:Colonist at 24,3 faction=none name="Target"
+
+assert pawn "Celerus" equipment=APM_Weapon_CelerusVoltana
+assert pawn "CelerusBoss" equipment=APM_Weapon_CelerusApexVoltana
+assert pawn "Dominus" equipment=APM_Weapon_DominusMechlance
+assert pawn "DominusBoss" equipment=APM_Weapon_DominusApexMechlance
+assert pawn "Terminus" equipment=APM_Weapon_TerminusExoblade
+assert pawn "TerminusBoss" equipment=APM_Weapon_TerminusApexExoblade
+assert pawn "ConquerorAR" equipment=APM_Gun_Conqueror_AR
+assert pawn "ConquerorDMR" equipment=APM_Gun_Conqueror_DMR
+assert pawn "ConquerorSMG" equipment=APM_Gun_Conqueror_SMG
+assert pawn "Dynamo" equipment=APM_Gun_EMP_Impactor
+assert pawn "Gazer" equipment=APM_Gazer_Laser
+assert pawn "Haze" equipment=APM_Haze_BeamGun
+assert pawn "Javelin" equipment=APM_Gun_JavelinRocketLauncher
+assert pawn "Lasher" equipment=APM_Weapon_MechWhip
+assert pawn "Maul" equipment=APM_Gun_Maul
+assert pawn "Pulse" equipment=APM_Gun_Pulse_Shotgun
+assert pawn "Ravager" equipment=APM_Ravager_Artillery
+assert pawn "Satellite" equipment=APM_Gun_Satellite
+assert pawn "Siren" equipment=APM_Siren_ChargeEmitter
+assert pawn "Vassal" equipment=APM_Gun_Vassal_SwordRifle
+
+draft "Celerus"
+attack "Celerus" target="Target" melee=true
+draft "CelerusBoss"
+attack "CelerusBoss" target="Target" melee=true
+draft "Dominus"
+attack "Dominus" target="Target" melee=true
+draft "DominusBoss"
+attack "DominusBoss" target="Target" melee=true
+draft "Terminus"
+attack "Terminus" target="Target" melee=true
+draft "TerminusBoss"
+attack "TerminusBoss" target="Target" melee=true
+draft "ConquerorAR"
+attack "ConquerorAR" target="Target"
+draft "ConquerorDMR"
+attack "ConquerorDMR" target="Target"
+draft "ConquerorSMG"
+attack "ConquerorSMG" target="Target"
+draft "Dynamo"
+attack "Dynamo" target="Target"
+draft "Gazer"
+attack "Gazer" target="Target"
+draft "Haze"
+attack "Haze" target="Target"
+draft "Javelin"
+attack "Javelin" target="Target"
+draft "Lasher"
+attack "Lasher" target="Target"
+draft "Maul"
+attack "Maul" target="Target"
+draft "Pulse"
+attack "Pulse" target="Target"
+draft "Ravager"
+attack "Ravager" target="Target"
+draft "Satellite"
+attack "Satellite" target="Target"
+draft "Siren"
+attack "Siren" target="Target"
+draft "Vassal"
+attack "Vassal" target="Target"
+tick 40 reason="the shortest ranged warmup is 0.9 s = 54 ticks, so every gun is still aiming and none has fired yet"
+ask "apex-weapons-drawn" claim="all twenty apex mechs stand spread apart, each holding its own weapon drawn and turned towards the colonist to the east; the six melee mechs walk towards him with their blade or lance in hand; no mech is empty-handed, and no weapon is pink, a white square or drawn away from its body"
+assert log clean
