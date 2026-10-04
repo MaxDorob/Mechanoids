@@ -269,7 +269,6 @@
     </subSounds>
 </SoundDef>
 
-	<!-- Sun Ray Sounds -->
 	<SoundDef>
 		<defName>APM_SunRayStart</defName>
 		<context>MapOnly</context>
@@ -347,7 +346,6 @@
 		</subSounds>
 	</SoundDef>
 
-	<!-- PulseWave Ability Sound -->
 	<SoundDef>
 		<defName>APM_PulseWave</defName>
 		<context>MapOnly</context>
@@ -373,7 +371,6 @@
 		</subSounds>
 	</SoundDef>
 
-	<!-- SteelDiscipline Ability Sound -->
 	<SoundDef>
 		<defName>APM_SteelDiscipline_Cast</defName>
 		<context>MapOnly</context>
@@ -398,7 +395,6 @@
 		</subSounds>
 	</SoundDef>
 
-	<!-- Starfall Ability Sound -->
 	<SoundDef>
 		<defName>APM_Starfall</defName>
 		<context>MapOnly</context>
@@ -449,7 +445,6 @@
 		</subSounds>
 	</SoundDef>
 
-	<!-- Hookshot Ability Sound -->
 	<SoundDef>
 		<defName>APM_Hookshot</defName>
 		<context>MapOnly</context>
@@ -499,7 +494,6 @@
 			</li>
 		</subSounds>
 	</SoundDef>
-	<!-- Siren Charge Emitter Weapon Sound -->
     <SoundDef>
         <defName>APM_SirenWeapon</defName>
         <context>MapOnly</context>
@@ -525,7 +519,6 @@
         </subSounds>
     </SoundDef>
 
-	<!-- Blinding Laser Ability Sound -->
 	<SoundDef>
 		<defName>APM_BlindingLaser</defName>
 		<context>MapOnly</context>

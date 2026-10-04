@@ -7,8 +7,8 @@
 	
 	<!--              EN: duel winner -->
 	<APM_DuelWinner.label>duel winner</APM_DuelWinner.label>
-	<!--                    EN: This combatant has emerged victorious from the arena. Each duel won sharpens their edge — reflexes quicken, strikes land harder and the enemy's blows are turned aside with growing ease. The longer this warrior's unbroken winning streak the more formidable they become. The glory fades with time but the memory of victory lingers. -->
-	<APM_DuelWinner.description>This combatant has emerged victorious from the arena. Each duel won sharpens their edge — reflexes quicken, strikes land harder and the enemy's blows are turned aside with growing ease. The longer this warrior's unbroken winning streak the more formidable they become. The glory fades with time but the memory of victory lingers.</APM_DuelWinner.description>
+	<!--                    EN: This combatant has emerged victorious from the arena. The victory also mends part of the damage taken in the fight. Each duel won sharpens their edge — reflexes quicken, strikes land harder and the enemy's blows are turned aside with growing ease. The longer this warrior's unbroken winning streak the more formidable they become. The glory fades with time but the memory of victory lingers. -->
+	<APM_DuelWinner.description>This combatant has emerged victorious from the arena. The victory also mends part of the damage taken in the fight. Each duel won sharpens their edge — reflexes quicken, strikes land harder and the enemy's blows are turned aside with growing ease. The longer this warrior's unbroken winning streak the more formidable they become. The glory fades with time but the memory of victory lingers.</APM_DuelWinner.description>
 	<!--                       EN: stolen thread (1 win) -->
 	<APM_DuelWinner.stages.0.label>stolen thread (1 win)</APM_DuelWinner.stages.0.label>
 	<!--                       EN: array expansion (2 wins) -->

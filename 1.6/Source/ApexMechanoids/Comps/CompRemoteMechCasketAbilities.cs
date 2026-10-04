@@ -975,7 +975,10 @@ namespace ApexMechanoids
                 {
                     mech.needs.energy.CurLevel -= mech.GetStatValue(StatDefOf.MechEnergyLossPerHP) * (float)delta;
                 }
-                MechRepairUtility.RepairTick(mech, delta);
+                for (int repairStep = 0; repairStep < delta && MechRepairUtility.CanRepair(mech); repairStep++)
+                {
+                    MechRepairUtility.RepairTick(mech);
+                }
                 ticksToNextRepair = TicksPerHeal;
 
                 if (CanRemoteRepair(curLocalTargetInfo))

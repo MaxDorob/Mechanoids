@@ -4,6 +4,7 @@
   <APM_GazerBeam.label>凝視者光束</APM_GazerBeam.label>
   <APM_SunRay.label>太陽光線</APM_SunRay.label>
   <Push.label>衝擊傷害</Push.label>
+  <Push.deathMessage>{0} 被毆打致死。</Push.deathMessage>
   <APM_Shockwave.label>衝擊波</APM_Shockwave.label>
   <MegaBeam.label>巨型光束</MegaBeam.label>
   <APM_HazeAcidBeam.label>迷霧酸液光束</APM_HazeAcidBeam.label>

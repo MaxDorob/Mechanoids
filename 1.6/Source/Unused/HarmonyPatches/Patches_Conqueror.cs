@@ -4,8 +4,6 @@ using Verse;
 
 namespace ApexMechanoids
 {
-    // Sets the Conqueror's Name on first spawn so every label path shows the equipped weapon.
-    // SpawnSetup is guaranteed to run after PawnGenerator has assigned equipment.
     [HarmonyPatch(typeof(Pawn), "SpawnSetup")]
     public static class Patch_ConquerorSpawnName
     {

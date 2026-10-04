@@ -134,8 +134,13 @@ namespace ApexMechanoids
             {
 				GameCondition.purifiersOnMap.Remove(parent);
             }
+            if (wastepacksCount <= 0)
+            {
+                return;
+            }
             Thing t = ThingMaker.MakeThing(ThingDefOf.Wastepack);
             t.stackCount = wastepacksCount;
+            wastepacksCount = 0;
             GenPlace.TryPlaceThing(t, parent.Position, map, ThingPlaceMode.Near);
 		}
 

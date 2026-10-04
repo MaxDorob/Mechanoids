@@ -12,8 +12,8 @@
 	
 	<!--    EN: push damage -->
 	<Push.label>push damage</Push.label>
-	<!--           EN: {0} has been ... to death. -->
-	<Push.deathMessage>{0} has been ... to death.</Push.deathMessage>
+	<!--           EN: {0} has been beaten to death. -->
+	<Push.deathMessage>{0} has been beaten to death.</Push.deathMessage>
 	
 	<!--        EN: cut -->
 	<APM_Whip.label>cut</APM_Whip.label>

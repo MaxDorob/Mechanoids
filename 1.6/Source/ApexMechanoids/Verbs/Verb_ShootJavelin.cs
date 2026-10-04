@@ -121,6 +121,82 @@ namespace ApexMechanoids
             return true;
         }
 
+        public override bool TryStartCastOn(LocalTargetInfo castTarg, LocalTargetInfo destTarg, bool surpriseAttack = false, bool canHitNonTargetPawns = true, bool preventFriendlyFire = false, bool nonInterruptingSelfCast = false)
+        {
+            if (base.TryStartCastOn(castTarg, destTarg, surpriseAttack, canHitNonTargetPawns, preventFriendlyFire, nonInterruptingSelfCast))
+            {
+                return true;
+            }
+
+            if (!WarmupRefusedOnlyForMissingShootLine(castTarg))
+            {
+                return false;
+            }
+
+            StartCoverShotWarmup(castTarg);
+            return true;
+        }
+
+        private bool WarmupRefusedOnlyForMissingShootLine(LocalTargetInfo castTarg)
+        {
+            return IndirectFireEnabled
+                   && CasterIsPawn
+                   && caster.Spawned
+                   && WarmupTime > 0f
+                   && state != VerbState.Bursting
+                   && CanHitTarget(castTarg)
+                   && !TryFindShootLineFromTo(caster.Position, castTarg, out ShootLine _);
+        }
+
+        private void StartCoverShotWarmup(LocalTargetInfo castTarg)
+        {
+            ShootLine coverShotLine = new ShootLine(caster.Position, castTarg.Cell);
+            CasterPawn.Drawer.Notify_WarmingCastAlongLine(coverShotLine, caster.Position);
+            float aimingDelayFactor = CasterPawn.GetStatValue(StatDefOf.AimingDelayFactor);
+            int warmupTicks = (WarmupTime * aimingDelayFactor).SecondsToTicks();
+            CasterPawn.stances.SetStance(new Stance_Warmup(warmupTicks, castTarg, this));
+        }
+
+        public override void OnGUI(LocalTargetInfo target)
+        {
+            if (CannotHitFromHere(target))
+            {
+                GenUI.DrawMouseAttachment(TexCommand.CannotShoot);
+                return;
+            }
+
+            base.OnGUI(target);
+        }
+
+        public override bool ValidateTarget(LocalTargetInfo target, bool showMessages = true)
+        {
+            if (!base.ValidateTarget(target, showMessages))
+            {
+                return false;
+            }
+
+            if (!CannotHitFromHere(target))
+            {
+                return true;
+            }
+
+            if (showMessages)
+            {
+                Messages.Message("CannotHitTarget".Translate(), caster, MessageTypeDefOf.RejectInput, historical: false);
+            }
+
+            return false;
+        }
+
+        private bool CannotHitFromHere(LocalTargetInfo target)
+        {
+            return target.IsValid
+                   && target.Thing != caster
+                   && CasterIsPawn
+                   && caster.Spawned
+                   && !CanHitTarget(target);
+        }
+
         public override bool CanHitTargetFrom(IntVec3 root, LocalTargetInfo targ)
         {
             DefModExtension_JavelinIndirectFire props = Props;
@@ -201,12 +277,12 @@ namespace ApexMechanoids
             };
         }
 
-        // The mech turns to face its target before firing, so the cardinal the missile will leave on
-        // is the one that facing snaps to.
-        private static JavelinFlightState LaunchState(Vector3 origin, Vector3 targetPos)
+        private static JavelinFlightState LaunchState(IntVec3 root, IntVec3 targetCell)
         {
-            Vector3 toTarget = (targetPos - origin).Yto0();
-            int rot = toTarget.sqrMagnitude < 0.0001f ? Rot4.North.AsInt : Rot4.FromAngleFlat(toTarget.AngleFlat()).AsInt;
+            Vector3 origin = root.ToVector3Shifted();
+            int rot = targetCell == root
+                ? Rot4.North.AsInt
+                : Pawn_RotationTracker.RotFromAngleBiased((targetCell - root).ToVector3().AngleFlat()).AsInt;
             return JavelinMissileGuidance.CreateState(origin.x, origin.z, JavelinMissileGuidance.CardinalHeading(rot));
         }
 
@@ -222,7 +298,6 @@ namespace ApexMechanoids
                 return true;
             }
 
-            Vector3 origin = root.ToVector3Shifted();
             Vector3 targetPos = targ.HasThing ? targ.Thing.DrawPos : targ.Cell.ToVector3Shifted();
             JavelinFlightParams flightParams = FlightParams(missile);
 
@@ -230,7 +305,7 @@ namespace ApexMechanoids
             float[] zs = Buffer(ref reachZ, props.reachSampleMaxPoints);
 
             int points = JavelinMissileGuidance.SamplePath(
-                LaunchState(origin, targetPos), targetPos.x, targetPos.z, flightParams,
+                LaunchState(root, targ.Cell), targetPos.x, targetPos.z, flightParams,
                 Mathf.Max(1, props.reachSampleStrideTicks), xs, zs);
 
             return points > 0
@@ -259,7 +334,7 @@ namespace ApexMechanoids
             float[] zs = Buffer(ref obstacleZ, props.obstacleSampleMaxPoints);
 
             int points = JavelinMissileGuidance.SamplePath(
-                LaunchState(origin, targetPos), targetPos.x, targetPos.z, FlightParams(missile),
+                LaunchState(root, targ.Cell), targetPos.x, targetPos.z, FlightParams(missile),
                 Mathf.Max(1, props.obstacleSampleStrideTicks), xs, zs);
 
             IntVec3 lastCell = IntVec3.Invalid;

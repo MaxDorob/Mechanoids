@@ -14,6 +14,11 @@ namespace ApexMechanoids
         const float maxDist = 1.9f;
         const int ticksBeforeImpact = 10;
         private List<Thing> ignore = new List<Thing>();
+
+        public override int DamageAmount => GenMath.RoundRandom(MeleeScaledProjectileUtility.CalculateDamage(def, launcher));
+
+        public override float ArmorPenetration => MeleeScaledProjectileUtility.CalculateArmorPenetration(def, launcher);
+
         public override void Tick()
         {
             base.Tick();

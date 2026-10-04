@@ -28,10 +28,16 @@ namespace ApexMechanoids
             return spawnChanceByTotalPoints?.Evaluate(totalPoints) ?? spawnChance;
         }
 
+        public SimpleCurve extraSlotChanceByTotalPoints;
+
+        public float ExtraSlotChanceFor(float totalPoints)
+        {
+            return extraSlotChanceByTotalPoints?.Evaluate(totalPoints) ?? ChanceFor(totalPoints);
+        }
+
         /// <summary>Clusters below this many total points never get one.</summary>
         public float minTotalPoints;
 
-        /// <summary>Slots rolled per cluster. Each is an independent <see cref="spawnChance"/> roll.</summary>
         public int maxPerCluster = 1;
     }
 }

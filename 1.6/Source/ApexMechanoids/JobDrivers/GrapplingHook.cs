@@ -363,9 +363,15 @@ namespace ApexMechanoids
 
 	public class PawnFlyer_Hooked : PawnFlyer
 	{
-		public Thing target;
+		public new Thing target;
 
 		public MoteDualAttached mote;
+
+		private const string HookedTargetSaveKey = "hookedTarget";
+
+		private const string LegacyHookedTargetSaveKey = "target";
+
+		private bool isLoadingLegacyHookedTargetKey;
 
 		public override void RespawnPawn()
 		{
@@ -376,7 +382,21 @@ namespace ApexMechanoids
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_References.Look(ref target, "target");
+			if (Scribe.mode == LoadSaveMode.LoadingVars)
+			{
+				isLoadingLegacyHookedTargetKey = Scribe.loader.curXmlParent[HookedTargetSaveKey] == null
+					&& Scribe.loader.curXmlParent[LegacyHookedTargetSaveKey] != null;
+			}
+			Scribe_References.Look(ref target, HookedTargetSaveKeyForCurrentMode());
+		}
+
+		private string HookedTargetSaveKeyForCurrentMode()
+		{
+			if (Scribe.mode != LoadSaveMode.Saving && isLoadingLegacyHookedTargetKey)
+			{
+				return LegacyHookedTargetSaveKey;
+			}
+			return HookedTargetSaveKey;
 		}
 
 		public override void Tick()

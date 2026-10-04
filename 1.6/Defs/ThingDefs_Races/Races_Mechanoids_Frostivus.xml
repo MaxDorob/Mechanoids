@@ -145,7 +145,6 @@
 		</abilities>
 	</PawnKindDef>
 	
-	<!-- Abilities -->
 	<AbilityDef>
 		<defName>APM_Ability_CryptoSwallow</defName>
 		<label>Crypto Swallow</label>

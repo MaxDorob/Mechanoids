@@ -144,6 +144,7 @@
 			<graphicClass>Graphic_Single</graphicClass>
 		</graphicData>
 		<projectile>
+			<flyOverhead>true</flyOverhead>
 			<speed>32</speed>
 			<damageDef>Bomb</damageDef>
 		</projectile>
@@ -169,6 +170,7 @@
 			<drawSize>(0.75, 0.75)</drawSize>
 		</graphicData>
 		<projectile>
+			<flyOverhead>true</flyOverhead>
 			<speed>64</speed>
 			<explosionRadius>2.85</explosionRadius>
 			<damageDef>Bomb</damageDef>
