@@ -14,17 +14,17 @@ draft "Far"
 spawn Pawn:Colonist at 0,-2 name="Mechanitor"
 draft "Mechanitor"
 overseer "Tinker" by="Mechanitor" now=true
-assert pawn "Target" capacity=Sight min=0.95
-assert pawn "Far" capacity=Sight min=0.95
+assert pawn "Target" capacity=Sight min=0.95 expect=present
+assert pawn "Far" capacity=Sight min=0.95 expect=present
 
 select "Tinker"
-gizmo "Blinding Laser"
-target "Target"
+gizmo "Blinding Laser" expect=allowed
+target "Target" expect=allowed
 speed x1
 deselect
-waitfor pawn "Target" hediff=APM_LaserBlind ticks=180
-assert pawn "Target" capacity=Sight max=0.06
+waitfor pawn "Target" hediff=APM_LaserBlind ticks=180 expect=present
+assert pawn "Target" capacity=Sight max=0.06 expect=present
 assert pawn "Lifter" hediff=APM_LaserBlind expect=absent
 assert pawn "Far" hediff=APM_LaserBlind expect=absent
-assert pawn "Far" capacity=Sight min=0.95
+assert pawn "Far" capacity=Sight min=0.95 expect=present
 assert log clean

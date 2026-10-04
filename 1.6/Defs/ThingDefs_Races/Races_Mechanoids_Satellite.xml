@@ -68,6 +68,8 @@
 			<MarketValue>700</MarketValue>
 			<MechEnergyLossPerHP MayRequire="Ludeon.RimWorld.Biotech">0.66</MechEnergyLossPerHP>
 			<BandwidthCost MayRequire="Ludeon.RimWorld.Biotech">1</BandwidthCost>
+			<CarryingCapacity>50</CarryingCapacity>
+			<Mass>50</Mass>
 		</statBases>
 		<comps Inherit="False">
 			<li Class="CompProperties_CanBeDormant" />

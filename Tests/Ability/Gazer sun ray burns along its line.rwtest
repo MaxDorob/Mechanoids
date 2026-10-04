@@ -13,18 +13,18 @@ spawn Pawn:Colonist at 12,0 name="Target"
 draft "Target"
 spawn Pawn:Colonist at -8,0 name="Behind"
 draft "Behind"
-assert pawn "Target" pain max=0
+assert pawn "Target" pain max=0 expect=present
 
 select "Gazer"
-gizmo "Sun Ray"
+gizmo "Sun Ray" expect=allowed
 target cell=2,0 expect=refused
 
-gizmo "Sun Ray"
-target "Target"
-tick 1250 reason="the 570 tick warmup and the whole 948 tick sweep, with room to spare"
+gizmo "Sun Ray" expect=allowed
+target "Target" expect=allowed
+tick 1250 note="the 570 tick warmup and the whole 948 tick sweep, with room to spare"
 gizmo "Sun Ray" expect=disabled
 deselect
-assert pawn "Behind" pain max=0
+assert pawn "Behind" pain max=0 expect=present
 assert pawn "Behind" hediff=BeamWound expect=absent
 undraft "Gazer"
 assert log clean

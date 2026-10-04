@@ -11,6 +11,8 @@
 			<ArmorRating_Sharp>0.55</ArmorRating_Sharp>
 			<ArmorRating_Heat>2.0</ArmorRating_Heat>
 			<BandwidthCost MayRequire="Ludeon.Rimworld.Biotech">2</BandwidthCost>
+			<CarryingCapacity>37.5</CarryingCapacity>
+			<Mass>50</Mass>
 			<ControlTakingTime MayRequire="Ludeon.Rimworld.Biotech">15</ControlTakingTime>
 			<MechEnergyLossPerHP MayRequire="Ludeon.Rimworld.Biotech">0.2</MechEnergyLossPerHP>
 			<WastepacksPerRecharge MayRequire="Ludeon.Rimworld.Biotech">5</WastepacksPerRecharge>

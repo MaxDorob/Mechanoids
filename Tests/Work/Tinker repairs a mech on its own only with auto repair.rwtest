@@ -11,14 +11,14 @@ give "Mechanitor" need=Food value=1
 overseer "Tinker" by="Mechanitor" now=true
 overseer "Patient" by="Mechanitor" now=true
 comp "Patient" type=CompMechRepairable autoRepair=false
-damage "Patient" amount=10 def=Blunt
+damage "Patient" amount=10 kind=Blunt
 assert pawn "Patient" hediff=Crack expect=present
 
-tick 2500 reason="the pick-up budget of the positive half, spent with auto repair off"
+tick 2500 note="the pick-up budget of the positive half, spent with auto repair off"
 assert jobhistory "Tinker" job=APM_RepairMech expect=absent
 assert pawn "Patient" hediff=Crack expect=present
 
 comp "Patient" type=CompMechRepairable autoRepair=true
-waitfor jobhistory "Tinker" job=APM_RepairMech ticks=2500
+waitfor jobhistory "Tinker" job=APM_RepairMech ticks=2500 expect=present
 waitfor pawn "Patient" hediff=Crack expect=absent ticks=2500
 assert log clean

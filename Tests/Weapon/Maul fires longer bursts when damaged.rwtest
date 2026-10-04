@@ -19,7 +19,7 @@ overseer "Worn" by="Mechanitor B" now=true
 equip "Worn" thing=APM_Gun_Maul now=true
 spawn Thing:Wall at 12,10 name="Wall B"
 
-damage "Worn" amount=129 def=Blunt
+damage "Worn" amount=129 kind=Blunt
 assert pawn "Worn" hediff=Crack expect=present
 assert pawn "Fresh" hediff=Crack expect=absent
 
@@ -27,7 +27,7 @@ draft "Fresh"
 draft "Worn"
 attack "Fresh" target="Wall A"
 attack "Worn" target="Wall B"
-tick 250 reason="warmup 72 + burst up to 44 = 116; the next burst no earlier than 116 + 348"
+tick 250 note="warmup 72 + burst up to 44 = 116; the next burst no earlier than 116 + 348"
 assert shots "Fresh" min=8 max=8
 assert shots "Worn" min=12 max=60
 undraft "Fresh"

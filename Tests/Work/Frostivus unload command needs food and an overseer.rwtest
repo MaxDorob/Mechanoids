@@ -9,7 +9,7 @@ gizmo "Unload preserved food" expect=absent
 deselect
 
 pack "Frost" thing=MealSimple count=2
-assert pawn "Frost" inventory=MealSimple
+assert pawn "Frost" inventory=MealSimple expect=present
 select "Frost"
 gizmo "Unload preserved food" expect=disabled reason="Frostivus cannot use preservation commands right now." match=equals
 assert text contains "APM." expect=absent
@@ -19,8 +19,8 @@ spawn Pawn:Colonist name="Mechanitor"
 give "Mechanitor" need=Food value=1
 overseer "Frost" by="Mechanitor"
 select "Frost"
-gizmo "Unload preserved food"
-target cell=3,0
+gizmo "Unload preserved food" expect=allowed
+target cell=3,0 expect=allowed
 deselect
-waitfor thing MealSimple ticks=600
+waitfor thing MealSimple ticks=600 expect=present
 assert log clean

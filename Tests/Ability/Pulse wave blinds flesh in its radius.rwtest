@@ -14,17 +14,17 @@ draft "Mechanitor"
 overseer "Pulse" by="Mechanitor" now=true
 draft "Pulse"
 
-assert pawn "Near" capacity=Sight min=0.95
-assert thing "Near" at 3,0
+assert pawn "Near" capacity=Sight min=0.95 expect=present
+assert thing "Near" at 3,0 expect=present
 
 select "Pulse"
-gizmo "Pulse wave"
+gizmo "Pulse wave" expect=allowed
 deselect
-waitfor pawn "Near" hediff=APM_PulseWaveBlind ticks=300
-assert pawn "Near" capacity=Sight max=0.21
-tick 120 reason="let the wave finish past its 6.9 cell radius"
+waitfor pawn "Near" hediff=APM_PulseWaveBlind ticks=300 expect=present
+assert pawn "Near" capacity=Sight max=0.21 expect=present
+tick 120 note="let the wave finish past its 6.9 cell radius"
 
 assert pawn "Far" hediff=APM_PulseWaveBlind expect=absent
-assert pawn "Far" capacity=Sight min=0.95
+assert pawn "Far" capacity=Sight min=0.95 expect=present
 assert pawn "Tin" hediff=APM_PulseWaveBlind expect=absent
 assert log clean

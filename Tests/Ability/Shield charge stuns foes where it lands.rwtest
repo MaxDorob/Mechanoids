@@ -12,20 +12,20 @@ draft "Aegis"
 spawn Thing:Sandbags at 3,3 name="sandbags"
 
 select "Aegis"
-gizmo "Shield Charge"
+gizmo "Shield Charge" expect=allowed
 target cell=3,3 expect=refused
 
 speed paused
 spawn Pawn:Colonist at 5,0 faction=none name="Raider"
 spawn Pawn:Colonist at 5,-1 faction=player name="Ally"
 draft "Ally"
-gizmo "Shield Charge"
-target "Raider"
+gizmo "Shield Charge" expect=allowed
+target "Raider" expect=allowed
 speed x1
-waitfor thing "Aegis" at 5,0 ticks=120
-assert stun "Raider" ticks min=280 max=300
+waitfor thing "Aegis" at 5,0 ticks=120 expect=present
+assert stun "Raider" ticks min=280 max=300 expect=present
 assert stun "Ally" expect=absent
-assert pawn "Ally" pain max=0
+assert pawn "Ally" pain max=0 expect=present
 gizmo "Shield Charge" expect=disabled
 deselect
 assert log clean

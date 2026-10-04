@@ -11,6 +11,7 @@
 			<ArmorRating_Sharp>0.80</ArmorRating_Sharp>
 			<ArmorRating_Heat>2.0</ArmorRating_Heat>
 			<BandwidthCost MayRequire="Ludeon.RimWorld.Biotech">3</BandwidthCost>
+			<Mass>80</Mass>
 			<MechEnergyLossPerHP MayRequire="Ludeon.Rimworld.Biotech">0.2</MechEnergyLossPerHP>
 		</statBases>
 		<uiIconPath>Things/Pawn/Mechanoid/Ingestor/IngestorIcon</uiIconPath>

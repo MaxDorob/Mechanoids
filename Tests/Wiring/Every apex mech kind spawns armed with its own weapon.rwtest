@@ -25,16 +25,16 @@ spawn Pawn:APM_Mech_Satellite at -6,-6 faction=player facing=east name="Satellit
 spawn Pawn:APM_Mech_Siren at -1,-6 faction=player facing=east name="Siren" rolled=true
 spawn Pawn:APM_Mech_Vassal at 4,-6 faction=player facing=east name="Vassal" rolled=true
 spawn Pawn:Colonist at 24,3 faction=none name="Target"
-spawn Pawn:Colonist at -8,3 name="Mechanitor" gear=none drafted
-spawn Pawn:Colonist at -8,9 name="Second mechanitor" gear=none drafted
+spawn Pawn:Colonist at -8,3 name="Mechanitor" gear=none drafted=true
+spawn Pawn:Colonist at -8,9 name="Second mechanitor" gear=none drafted=true
 overseer "Celerus" by="Mechanitor" now=true
 overseer "Gazer" by="Second mechanitor" now=true
 wear "Mechanitor" apparel=APM_Apparel_MechamancerSuit now=true
 wear "Mechanitor" apparel=APM_Apparel_ArmorHelmetMechamancerHelmet now=true
 wear "Second mechanitor" apparel=APM_Apparel_MechamancerSuit now=true
 wear "Second mechanitor" apparel=APM_Apparel_ArmorHelmetMechamancerHelmet now=true
-assert pawn "Mechanitor" stat=MechBandwidth min=43.9 max=44.1
-assert pawn "Second mechanitor" stat=MechBandwidth min=43.9 max=44.1
+assert pawn "Mechanitor" stat=MechBandwidth min=43.9 max=44.1 expect=present
+assert pawn "Second mechanitor" stat=MechBandwidth min=43.9 max=44.1 expect=present
 overseer "CelerusBoss" by="Mechanitor" now=true
 overseer "Dominus" by="Mechanitor" now=true
 overseer "DominusBoss" by="Mechanitor" now=true
@@ -53,26 +53,26 @@ overseer "Ravager" by="Second mechanitor" now=true
 overseer "Siren" by="Second mechanitor" now=true
 overseer "Vassal" by="Second mechanitor" now=true
 
-assert pawn "Celerus" equipment=APM_Weapon_CelerusVoltana
-assert pawn "CelerusBoss" equipment=APM_Weapon_CelerusApexVoltana
-assert pawn "Dominus" equipment=APM_Weapon_DominusMechlance
-assert pawn "DominusBoss" equipment=APM_Weapon_DominusApexMechlance
-assert pawn "Terminus" equipment=APM_Weapon_TerminusExoblade
-assert pawn "TerminusBoss" equipment=APM_Weapon_TerminusApexExoblade
-assert pawn "ConquerorAR" equipment=APM_Gun_Conqueror_AR
-assert pawn "ConquerorDMR" equipment=APM_Gun_Conqueror_DMR
-assert pawn "ConquerorSMG" equipment=APM_Gun_Conqueror_SMG
-assert pawn "Dynamo" equipment=APM_Gun_EMP_Impactor
-assert pawn "Gazer" equipment=APM_Gazer_Laser
-assert pawn "Haze" equipment=APM_Haze_BeamGun
-assert pawn "Javelin" equipment=APM_Gun_JavelinRocketLauncher
-assert pawn "Lasher" equipment=APM_Weapon_MechWhip
-assert pawn "Maul" equipment=APM_Gun_Maul
-assert pawn "Pulse" equipment=APM_Gun_Pulse_Shotgun
-assert pawn "Ravager" equipment=APM_Ravager_Artillery
-assert pawn "Satellite" equipment=APM_Gun_Satellite
-assert pawn "Siren" equipment=APM_Siren_ChargeEmitter
-assert pawn "Vassal" equipment=APM_Gun_Vassal_SwordRifle
+assert pawn "Celerus" equipment=APM_Weapon_CelerusVoltana expect=present
+assert pawn "CelerusBoss" equipment=APM_Weapon_CelerusApexVoltana expect=present
+assert pawn "Dominus" equipment=APM_Weapon_DominusMechlance expect=present
+assert pawn "DominusBoss" equipment=APM_Weapon_DominusApexMechlance expect=present
+assert pawn "Terminus" equipment=APM_Weapon_TerminusExoblade expect=present
+assert pawn "TerminusBoss" equipment=APM_Weapon_TerminusApexExoblade expect=present
+assert pawn "ConquerorAR" equipment=APM_Gun_Conqueror_AR expect=present
+assert pawn "ConquerorDMR" equipment=APM_Gun_Conqueror_DMR expect=present
+assert pawn "ConquerorSMG" equipment=APM_Gun_Conqueror_SMG expect=present
+assert pawn "Dynamo" equipment=APM_Gun_EMP_Impactor expect=present
+assert pawn "Gazer" equipment=APM_Gazer_Laser expect=present
+assert pawn "Haze" equipment=APM_Haze_BeamGun expect=present
+assert pawn "Javelin" equipment=APM_Gun_JavelinRocketLauncher expect=present
+assert pawn "Lasher" equipment=APM_Weapon_MechWhip expect=present
+assert pawn "Maul" equipment=APM_Gun_Maul expect=present
+assert pawn "Pulse" equipment=APM_Gun_Pulse_Shotgun expect=present
+assert pawn "Ravager" equipment=APM_Ravager_Artillery expect=present
+assert pawn "Satellite" equipment=APM_Gun_Satellite expect=present
+assert pawn "Siren" equipment=APM_Siren_ChargeEmitter expect=present
+assert pawn "Vassal" equipment=APM_Gun_Vassal_SwordRifle expect=present
 
 draft "Celerus"
 attack "Celerus" target="Target" melee=true
@@ -112,6 +112,6 @@ draft "Siren"
 attack "Siren" target="Target"
 draft "Vassal"
 attack "Vassal" target="Target"
-tick 40 reason="the shortest ranged warmup is 0.9 s = 54 ticks, so every gun is still aiming and none has fired yet"
+tick 40 note="the shortest ranged warmup is 0.9 s = 54 ticks, so every gun is still aiming and none has fired yet"
 ask "apex-weapons-drawn" claim="all twenty apex mechs stand spread apart around two mechanitors in mechamancer gear; nineteen of them hold their own weapon drawn and turned towards the colonist to the east, while the Satellite, a summoned mech no mechanitor controls, stands undrafted; the six melee mechs walk towards him with their blade or lance in hand; no mech is empty-handed, and no weapon is pink, a white square or drawn away from its body"
 assert log clean

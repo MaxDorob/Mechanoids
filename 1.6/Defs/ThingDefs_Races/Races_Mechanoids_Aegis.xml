@@ -11,6 +11,8 @@
 			<ArmorRating_Heat>2.0</ArmorRating_Heat>
 			<MarketValue>1200</MarketValue>
 			<BandwidthCost MayRequire="Ludeon.RimWorld.Biotech">4</BandwidthCost>
+			<CarryingCapacity>34</CarryingCapacity>
+			<Mass>57</Mass>
 			<MechEnergyLossPerHP>0.2</MechEnergyLossPerHP>
 			<WorkSpeedGlobal>1.5</WorkSpeedGlobal>
 		</statBases>

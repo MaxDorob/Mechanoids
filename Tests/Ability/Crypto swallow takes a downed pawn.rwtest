@@ -10,21 +10,21 @@ draft "Mechanitor"
 overseer "Frost" by="Mechanitor" now=true
 
 select "Frost"
-gizmo "Crypto Swallow"
+gizmo "Crypto Swallow" expect=allowed
 target "Raider" expect=refused
 deselect
 assert pawn "Raider" hediff=APM_Hediff_Devoured expect=absent
 
 down "Raider"
-assert pawn "Raider" downed
+assert pawn "Raider" downed expect=present
 select "Frost"
-gizmo "Crypto Swallow"
-target "Raider"
+gizmo "Crypto Swallow" expect=allowed
+target "Raider" expect=allowed
 deselect
-waitfor pawn "Raider" hediff=APM_Hediff_Devoured ticks=600
-assert pawn "Frost" inventory=Human
+waitfor pawn "Raider" hediff=APM_Hediff_Devoured ticks=600 expect=present
+assert pawn "Frost" inventory=Human expect=present
 
-reload reason="the swallowed pawn lives in a saved inventory with a saved hediff"
-assert pawn "Frost" inventory=Human
+reload note="the swallowed pawn lives in a saved inventory with a saved hediff"
+assert pawn "Frost" inventory=Human expect=present
 assert pawn "Raider" hediff=APM_Hediff_Devoured expect=present
 assert log clean

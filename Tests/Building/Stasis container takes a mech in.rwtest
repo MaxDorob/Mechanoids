@@ -7,25 +7,25 @@ sky glow=1
 room size=13,9 roof=false name="yard"
 spawn Thing:APM_MechanoidContainer_Player in="yard" faction=player name="container"
 spawn Pawn:APM_Mech_Lasher in="yard" faction=player name="Lasher"
-assert inspect "container" contains "Contains nobody."
+assert inspect "container" contains "Contains nobody." expect=present
 
 select "container"
 gizmo "Choose mechanoid" expect=disabled reason="No power" match=equals
 deselect
 
 spawn Thing:WoodFiredGenerator in="yard" faction=player fueled=true
-waitfor power "container" ticks=250
+waitfor power "container" ticks=250 expect=present
 
 select "container"
-gizmo "Choose mechanoid"
-target "Lasher"
+gizmo "Choose mechanoid" expect=allowed
+target "Lasher" expect=allowed
 assert text contains "APM." expect=absent
 deselect
 waitfor inspect "container" contains "Contains nobody." expect=absent ticks=1500
-assert inspect "container" contains "Contains"
+assert inspect "container" contains "Contains" expect=present
 assert inspect "container" contains "unidentified" expect=absent
 
-reload reason="the mech is kept in the container's saved innerContainer"
+reload note="the mech is kept in the container's saved innerContainer"
 assert inspect "container" contains "Contains nobody." expect=absent
-assert inspect "container" contains "Contains"
+assert inspect "container" contains "Contains" expect=present
 assert log clean

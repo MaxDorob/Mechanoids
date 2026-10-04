@@ -7,18 +7,18 @@ despawn Thing:Corpse_Human
 spawn Pawn:APM_Mech_Ingestor faction=player name="Ingestor"
 spawn Pawn:Colonist faction=enemy name="Body"
 damage "Body" amount=999
-work "Ingestor" giver=APM_IngestorProcessCorpses on=Corpse_Human
+work "Ingestor" giver=APM_IngestorProcessCorpses on=Corpse_Human expect=allowed
 
 select "Ingestor"
 gizmo "Recycle all valid corpses" expect=absent
-gizmo "Use marked corpses only"
-gizmo "Enable stripping"
+gizmo "Use marked corpses only" expect=allowed
+gizmo "Enable stripping" expect=allowed
 assert text contains "APM_" expect=absent
 deselect
 
 work "Ingestor" giver=APM_IngestorProcessCorpses on=Corpse_Human expect=absent
 
-reload reason="both settings are saved on the comp"
+reload note="both settings are saved on the comp"
 select "Ingestor"
 gizmo "Use marked corpses only" expect=absent
 gizmo "Enable stripping" expect=absent
@@ -26,8 +26,8 @@ deselect
 work "Ingestor" giver=APM_IngestorProcessCorpses on=Corpse_Human expect=absent
 
 select "Ingestor"
-gizmo "Recycle all valid corpses"
-gizmo "Disable stripping"
+gizmo "Recycle all valid corpses" expect=allowed
+gizmo "Disable stripping" expect=allowed
 deselect
-work "Ingestor" giver=APM_IngestorProcessCorpses on=Corpse_Human
+work "Ingestor" giver=APM_IngestorProcessCorpses on=Corpse_Human expect=allowed
 assert log clean

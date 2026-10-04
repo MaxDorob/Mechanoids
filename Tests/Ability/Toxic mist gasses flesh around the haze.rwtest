@@ -16,21 +16,21 @@ give "Mechanitor" need=Food value=1
 overseer "Haze" by="Mechanitor" now=true
 draft "Haze"
 
-assert pawn "Near" capacity=Breathing min=0.95
+assert pawn "Near" capacity=Breathing min=0.95 expect=present
 assert pawn "Near" hediff=ToxGasExposure expect=absent
 
 select "Haze"
-gizmo "Toxic Mist"
-waitfor pawn "Near" hediff=ToxGasExposure ticks=720
-assert pawn "Near" capacity=Breathing max=0.86
+gizmo "Toxic Mist" expect=allowed
+waitfor pawn "Near" hediff=ToxGasExposure ticks=720 expect=present
+assert pawn "Near" capacity=Breathing max=0.86 expect=present
 assert pawn "Haze" hediff=ToxGasExposure expect=absent
 gizmo "Toxic Mist" expect=disabled
 deselect
-tick 480 reason="past the end of the 360 tick emission, whatever the waitfor used"
+tick 480 note="past the end of the 360 tick emission, whatever the waitfor used"
 
 assert pawn "Far" hediff=ToxGasExposure expect=absent
-assert pawn "Far" capacity=Breathing min=0.95
+assert pawn "Far" capacity=Breathing min=0.95 expect=present
 assert pawn "Mechanitor" hediff=ToxGasExposure expect=absent
 assert log clean
 
-assert gas ToxGas at 0,0 density min=64
+assert gas ToxGas at 0,0 density min=64 expect=present

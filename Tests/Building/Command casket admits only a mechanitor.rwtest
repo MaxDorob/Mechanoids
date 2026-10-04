@@ -10,7 +10,7 @@ spawn Thing:APM_MechCommandCasket in="yard" faction=player name="casket"
 spawn Pawn:Colonist in="yard" name="Mechanitor"
 spawn Pawn:Colonist in="yard" name="Plain"
 spawn Pawn:Mech_Lifter in="yard" faction=player name="Lifter"
-waitfor power "casket" ticks=250
+waitfor power "casket" ticks=250 expect=present
 
 ordermenu "Plain" on="casket"
 menu "Cannot enter command casket: Not mechanitor" expect=disabled
@@ -20,9 +20,9 @@ overseer "Lifter" by="Mechanitor" now=true
 assert pawn "Mechanitor" hediff=MechlinkImplant expect=present
 
 ordermenu "Mechanitor" on="casket"
-menu "Enter command casket"
-waitfor inspect "casket" contains "Contains:" ticks=2500
+menu "Enter command casket" expect=allowed
+waitfor inspect "casket" contains "Contains:" ticks=2500 expect=present
 assert text contains "APM." expect=absent
-reload reason="the casket user and its nutrition are saved"
-assert inspect "casket" contains "Contains:"
+reload note="the casket user and its nutrition are saved"
+assert inspect "casket" contains "Contains:" expect=present
 assert log clean

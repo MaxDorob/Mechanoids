@@ -8,21 +8,21 @@ room size=13,9 roof=false name="yard"
 spawn Thing:WoodFiredGenerator in="yard" faction=player fueled=true
 spawn Thing:APM_RepairStation_Small in="yard" faction=player name="station"
 spawn Pawn:Mech_Lifter in="yard" faction=player name="Repairee"
-waitfor power "station" ticks=250
+waitfor power "station" ticks=250 expect=present
 
-damage "Repairee" amount=10 def=Blunt
+damage "Repairee" amount=10 kind=Blunt
 assert pawn "Repairee" hediff=Crack expect=present
 
 select "station"
-gizmo "Insert mech..."
-menu "Repairee"
+gizmo "Insert mech..." expect=allowed
+menu "Repairee" expect=allowed
 assert text contains "APM_" expect=absent
 deselect
-waitfor inspect "station" contains "Repairing" ticks=1500
+waitfor inspect "station" contains "Repairing" ticks=1500 expect=present
 waitfor pawn "Repairee" hediff=Crack expect=absent ticks=2500
 
 select "station"
-gizmo "Insert mech..."
+gizmo "Insert mech..." expect=allowed
 menu "Repairee" expect=absent
 menu "No mechs available." expect=disabled
 assert log clean

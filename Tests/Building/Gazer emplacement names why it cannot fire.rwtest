@@ -11,10 +11,10 @@ gizmo "Sun Ray" expect=disabled reason="No power." match=equals
 deselect
 
 spawn Thing:WoodFiredGenerator in="yard" faction=player fueled=true
-waitfor power "emplacement" ticks=250
+waitfor power "emplacement" ticks=250 expect=present
 select "emplacement"
 gizmo "Sun Ray" expect=disabled reason="Needs an operator." match=equals
 assert text contains "APM." expect=absent
 deselect
-assert inspect "emplacement" contains "Status: Ready"
+assert inspect "emplacement" contains "Status: Ready" expect=present
 assert log clean

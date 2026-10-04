@@ -16,33 +16,33 @@ overseer "Second" by="Mechanitor" now=true
 draft "Lure"
 draft "Second"
 down "Fallen"
-assert pawn "Fallen" downed
+assert pawn "Fallen" downed expect=present
 
 select "Lure"
-gizmo "Aluring Song"
+gizmo "Aluring Song" expect=allowed
 target "Tin" expect=refused
-gizmo "Aluring Song"
+gizmo "Aluring Song" expect=allowed
 target "Fallen" expect=refused
 assert pawn "Lured" hediff=APM_Hediff_SirenLureCooldown expect=absent
 
-gizmo "Aluring Song"
-target "Lured"
+gizmo "Aluring Song" expect=allowed
+target "Lured" expect=allowed
 deselect
-waitfor pawn "Lured" hediff=APM_Hediff_SirenLureCooldown ticks=150
-assert pawn "Lured" job=GotoMindControlled
-assert pawn "Lure" job=APM_SirenLureChannel
+waitfor pawn "Lured" hediff=APM_Hediff_SirenLureCooldown ticks=150 expect=present
+assert pawn "Lured" job=GotoMindControlled expect=present
+assert pawn "Lure" job=APM_SirenLureChannel expect=present
 
-tick 700 reason="song 600 ticks, then 100 spare; the mark (3100) keeps 2400"
+tick 700 note="song 600 ticks, then 100 spare; the mark (3100) keeps 2400"
 assert pawn "Lured" job=GotoMindControlled expect=absent
 assert pawn "Lured" hediff=APM_Hediff_SirenLureCooldown expect=present
 
 select "Second"
-gizmo "Aluring Song"
+gizmo "Aluring Song" expect=allowed
 target "Lured" expect=refused
-gizmo "Aluring Song"
-target "Fresh"
+gizmo "Aluring Song" expect=allowed
+target "Fresh" expect=allowed
 deselect
-waitfor pawn "Fresh" hediff=APM_Hediff_SirenLureCooldown ticks=150
+waitfor pawn "Fresh" hediff=APM_Hediff_SirenLureCooldown ticks=150 expect=present
 assert pawn "Tin" hediff=APM_Hediff_SirenLureCooldown expect=absent
 assert pawn "Fallen" hediff=APM_Hediff_SirenLureCooldown expect=absent
 assert log clean

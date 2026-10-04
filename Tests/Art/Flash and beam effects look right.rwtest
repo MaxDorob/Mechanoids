@@ -12,7 +12,7 @@ spawn Pawn:Colonist at -7,0 name="Pulse target"
 draft "Pulse target"
 overseer "Pulse" by="Mechanitor" now=true
 select "Pulse"
-gizmo "Pulse wave"
+gizmo "Pulse wave" expect=allowed
 deselect
 ask "pulse-wave" ticks=132 claim="a warm white flash bursts from the Pulse mech and a wave expands outwards over the colonist next to it; the flash is not a hard white square"
 
@@ -21,8 +21,8 @@ spawn Pawn:Colonist at 5,6 name="Laser target"
 draft "Laser target"
 overseer "Tinker" by="Mechanitor" now=true
 select "Tinker"
-gizmo "Blinding Laser"
-target "Laser target"
+gizmo "Blinding Laser" expect=allowed
+target "Laser target" expect=allowed
 deselect
 ask "blinding-laser" ticks=66 claim="a thin laser beam connects the Tinker to the colonist it aims at, starting at the Tinker and ending on the colonist's head, not somewhere beside them"
 
@@ -31,7 +31,7 @@ spawn Pawn:Colonist at 13,-6 name="Thrown"
 draft "Thrown"
 overseer "Gazer" by="Gazer mechanitor" now=true
 select "Gazer"
-gizmo "Shockwave"
+gizmo "Shockwave" expect=allowed
 deselect
 ask "shockwave" ticks=360 claim="the Gazer charges, a pale warm flash goes off, a blast wave travels outward, and the colonist in it is thrown away through the air and lands several cells away"
 assert log clean
