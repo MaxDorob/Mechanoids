@@ -17,14 +17,14 @@ overseer "Dominus" by="Left mechanitor" now=true
 overseer "Dominus boss" by="Right mechanitor" now=true
 
 select "Dominus"
-gizmo "The duel trial"
-target "Left duelist"
+gizmo "The duel trial" expect=allowed
+target "Left duelist" expect=allowed
 select "Dominus boss"
-gizmo "The duel trial"
-target "Right duelist"
+gizmo "The duel trial" expect=allowed
+target "Right duelist" expect=allowed
 deselect
-waitfor thing APM_DuelSpot ticks=240
-waitfor thing APM_DuelSpot_Boss ticks=240
+waitfor thing APM_DuelSpot ticks=240 expect=present
+waitfor thing APM_DuelSpot_Boss ticks=240 expect=present
 
 ask "duel-start" ticks=90 claim="each duel opens with a VS sign and orbiting fire orbs between the two duelists; the left set is pale steel blue-grey, the right set is orange"
 ask "duel-shield" claim="a round shield dome encloses each pair of duelists, centred between them, and neither dome is a white square or missing"

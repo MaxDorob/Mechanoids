@@ -8,15 +8,15 @@ spawn Pawn:APM_Mech_Aegis faction=player name="Aegis"
 spawn Pawn:Colonist name="Mechanitor"
 overseer "Aegis" by="Mechanitor" now=true
 
-damage "Aegis" amount=10 def=Burn part=APM_AegisShield
-work "Mechanitor" giver=RepairMech on="Aegis" forced=true
+damage "Aegis" amount=10 kind=Burn part=APM_AegisShield
+work "Mechanitor" giver=RepairMech on="Aegis" forced=true expect=allowed
 
-damage "Aegis" amount=999 def=Burn part=APM_AegisShield
+damage "Aegis" amount=999 kind=Burn part=APM_AegisShield
 assert pawn "Aegis" hediff=MissingBodyPart expect=present
 assert pawn "Aegis" hediff=Burn expect=absent
 work "Mechanitor" giver=RepairMech on="Aegis" forced=true expect=absent
 
-tick 3000 reason="the Aegis waits 3600 ticks without a hit before it rebuilds"
+tick 3000 note="the Aegis waits 3600 ticks without a hit before it rebuilds"
 assert pawn "Aegis" hediff=MissingBodyPart expect=present
 waitfor pawn "Aegis" hediff=MissingBodyPart expect=absent ticks=1500
 assert pawn "Aegis" hediff=Misc expect=present

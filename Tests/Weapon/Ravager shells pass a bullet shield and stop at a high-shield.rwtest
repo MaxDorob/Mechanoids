@@ -17,13 +17,13 @@ give "Mechanitor" need=Food value=1
 give "Inside" need=Food value=1
 give "Covered" need=Food value=1
 overseer "Ravager" by="Mechanitor" now=true
-assert pawn "Ravager" equipment=APM_Ravager_Artillery
+assert pawn "Ravager" equipment=APM_Ravager_Artillery expect=present
 draft "Ravager"
 
 spawn Thing:ShieldGeneratorBullets at 12,6 faction=Mechanoid name="Bullet shield"
 select "Ravager"
-gizmo "Starspewer"
-target "Inside"
+gizmo "Starspewer" expect=allowed
+target "Inside" expect=allowed
 deselect
 waitfor shots "Ravager" min=1 ticks=400
 waitfor impact "Ravager" min=1 ticks=300
@@ -32,10 +32,10 @@ assert hit "Inside" by="Ravager" min=1 max=1
 despawn Thing:ShieldGeneratorBullets
 
 spawn Thing:ShieldGeneratorMortar at 22,-16 faction=Mechanoid name="High shield"
-tick 1400 reason="Starspewer cooldown 22 s = 1320 ticks runs out before the second order"
+tick 1400 note="Starspewer cooldown 22 s = 1320 ticks runs out before the second order"
 select "Ravager"
-gizmo "Starspewer"
-target "Covered"
+gizmo "Starspewer" expect=allowed
+target "Covered" expect=allowed
 deselect
 waitfor shots "Ravager" min=2 ticks=400
 waitfor impact "Ravager" min=2 ticks=300

@@ -9,11 +9,11 @@ wear "Mechanitor" apparel=APM_Apparel_MechamancerPack now=true
 assert thing APM_Mech_Satellite expect=absent
 
 select "Mechanitor"
-gizmo "summon satellite"
-waitfor thing APM_Mech_Satellite ticks=180
+gizmo "summon satellite" expect=allowed
+waitfor thing APM_Mech_Satellite ticks=180 expect=present
 select "Mechanitor"
-gizmo "summon satellite"
-tick 180 reason="second use: 60 tick warmup plus the cast job"
+gizmo "summon satellite" expect=allowed
+tick 180 note="second use: 60 tick warmup plus the cast job"
 
 select "Mechanitor"
 gizmo "summon satellite" expect=refused

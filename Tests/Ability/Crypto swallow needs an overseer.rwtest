@@ -15,9 +15,9 @@ assert pawn "Fallen" hediff=APM_Hediff_Devoured expect=absent
 spawn Pawn:Colonist name="Mechanitor"
 overseer "Keeper" by="Mechanitor"
 select "Keeper"
-gizmo "Crypto Swallow"
-target "Fallen"
+gizmo "Crypto Swallow" expect=allowed
+target "Fallen" expect=allowed
 deselect
-waitfor pawn "Fallen" hediff=APM_Hediff_Devoured ticks=600
-assert pawn "Keeper" inventory=Human
+waitfor pawn "Fallen" hediff=APM_Hediff_Devoured ticks=600 expect=present
+assert pawn "Keeper" inventory=Human expect=present
 assert log clean

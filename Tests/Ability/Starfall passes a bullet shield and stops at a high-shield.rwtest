@@ -31,17 +31,17 @@ assert pawn "Target" hediff=Shredded expect=absent
 assert pawn "Target C" hediff=Shredded expect=absent
 
 select "Ravager"
-gizmo "Starfall"
-target cell=10,0
+gizmo "Starfall" expect=allowed
+target cell=10,0 expect=allowed
 deselect
 select "Ravager C"
-gizmo "Starfall"
-target cell=18,28
+gizmo "Starfall" expect=allowed
+target cell=18,28 expect=allowed
 deselect
-waitfor thing APM_StarfallCarrier ticks=400
+waitfor thing APM_StarfallCarrier ticks=400 expect=present
 waitfor thing APM_StarfallCarrier expect=absent ticks=250
-waitfor pawn "Target" hediff=Shredded ticks=300
-tick 120 reason="time for split fragments to reach the shield or the target and explode"
+waitfor pawn "Target" hediff=Shredded ticks=300 expect=present
+tick 120 note="time for split fragments to reach the shield or the target and explode"
 
 assert casts "Ravager" ability=APM_Starfall min=1 max=1
 assert casts "Ravager C" ability=APM_Starfall min=1 max=1

@@ -11,14 +11,14 @@ overseer "Dynamo" by="Mechanitor" now=true
 assert thing APM_DynamoPoweredGenerator expect=absent
 
 select "Dynamo"
-gizmo "Power Plant Mode"
+gizmo "Power Plant Mode" expect=allowed
 deselect
-waitfor thing APM_DynamoPoweredGenerator ticks=480
+waitfor thing APM_DynamoPoweredGenerator ticks=480 expect=present
 
-reload reason="the Dynamo is kept in the generator's saved container"
+reload note="the Dynamo is kept in the generator's saved container"
 assert thing APM_DynamoPoweredGenerator expect=present
 select APM_DynamoPoweredGenerator
-gizmo "Mobile Mode"
+gizmo "Mobile Mode" expect=allowed
 assert text contains "APM" expect=absent
 
 waitfor pawn "Dynamo" downed expect=absent ticks=120

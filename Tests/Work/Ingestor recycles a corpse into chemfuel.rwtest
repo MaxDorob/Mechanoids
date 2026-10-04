@@ -7,10 +7,10 @@ despawn Thing:Corpse_Human
 spawn Pawn:APM_Mech_Ingestor faction=player name="Ingestor"
 spawn Pawn:Colonist faction=enemy name="Body"
 damage "Body" amount=999
-assert pawn "Body" dead
+assert pawn "Body" dead expect=present
 assert thing Corpse_Human expect=present
 
-work "Ingestor" giver=APM_IngestorProcessCorpses on=Corpse_Human
+work "Ingestor" giver=APM_IngestorProcessCorpses on=Corpse_Human expect=allowed
 job "Ingestor" giver=APM_IngestorProcessCorpses on=Corpse_Human until=ended ticks=2000
 assert thing Corpse_Human expect=absent
 assert pawn "Ingestor" hediff=APM_AbsorbedThing expect=present
@@ -20,6 +20,6 @@ damage "Second body" amount=999
 assert thing Corpse_Human expect=present
 work "Ingestor" giver=APM_IngestorProcessCorpses on=Corpse_Human expect=absent
 
-reload reason="the pending chemfuel batch is saved on the hediff"
+reload note="the pending chemfuel batch is saved on the hediff"
 assert pawn "Ingestor" hediff=APM_AbsorbedThing expect=present
 assert log clean

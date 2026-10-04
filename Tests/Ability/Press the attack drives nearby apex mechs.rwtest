@@ -18,23 +18,23 @@ draft "Boss mechanitor"
 overseer "Dominus boss" by="Boss mechanitor" now=true
 draft "Dominus boss"
 
-assert pawn "Pulse" stat=MoveSpeed min=4.2 max=4.4
+assert pawn "Pulse" stat=MoveSpeed min=4.2 max=4.4 expect=present
 select "Dominus"
-gizmo "Press The Attack"
+gizmo "Press The Attack" expect=allowed
 select "Dominus boss"
-gizmo "Press The Attack"
+gizmo "Press The Attack" expect=allowed
 deselect
 
-waitfor pawn "Pulse" hediff=APM_Hediff_PressTheAttack ticks=180
-assert pawn "Pulse" stat=MoveSpeed min=4.6 max=4.8
-assert pawn "Pulse" capacity=Consciousness min=1.05 max=1.15
+waitfor pawn "Pulse" hediff=APM_Hediff_PressTheAttack ticks=180 expect=present
+assert pawn "Pulse" stat=MoveSpeed min=4.6 max=4.8 expect=present
+assert pawn "Pulse" capacity=Consciousness min=1.05 max=1.15 expect=present
 
 assert pawn "Far" hediff=APM_Hediff_PressTheAttack expect=absent
 assert pawn "Scyther" hediff=APM_Hediff_PressTheAttack expect=absent
 
-waitfor pawn "Pulse near boss" hediff=APM_Hediff_PressTheAttack_Boss ticks=180
-assert pawn "Dominus" hediff=APM_Hediff_PressTheAttack
-assert pawn "Dominus boss" hediff=APM_Hediff_PressTheAttack_Boss
+waitfor pawn "Pulse near boss" hediff=APM_Hediff_PressTheAttack_Boss ticks=180 expect=present
+assert pawn "Dominus" hediff=APM_Hediff_PressTheAttack expect=present
+assert pawn "Dominus boss" hediff=APM_Hediff_PressTheAttack_Boss expect=present
 assert pawn "Pulse" hediff=APM_Hediff_PressTheAttack_Boss expect=absent
 assert pawn "Pulse near boss" hediff=APM_Hediff_PressTheAttack expect=absent
 assert log clean

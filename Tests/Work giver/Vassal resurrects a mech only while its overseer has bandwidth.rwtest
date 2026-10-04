@@ -14,20 +14,20 @@ spawn Pawn:APM_Mech_Vassal in="yard" faction=player name="Vassal"
 spawn Pawn:APM_Mech_Vassal in="yard" faction=player name="Second vassal"
 spawn Pawn:Mech_Lifter in="yard" faction=player name="Fallen"
 overseer "Vassal" by="Mechanitor" now=true
-waitfor power "gestator" ticks=250
-assert pawn "Mechanitor" stat=MechBandwidth min=6 max=6
+waitfor power "gestator" ticks=250 expect=present
+assert pawn "Mechanitor" stat=MechBandwidth min=6 max=6 expect=present
 
 damage "Fallen" amount=999
-assert pawn "Fallen" dead
+assert pawn "Fallen" dead expect=present
 assert thing Corpse_Mech_Lifter expect=present
 
 select "gestator"
 tab "Bills"
 click "Add bill"
-menu "Resurrect light mechanoid"
+menu "Resurrect light mechanoid" expect=allowed
 deselect
 
-work "Vassal" giver=DoBillsMechGestator on="gestator" forced=true
+work "Vassal" giver=DoBillsMechGestator on="gestator" forced=true expect=allowed
 
 overseer "Second vassal" by="Mechanitor" now=true
 work "Vassal" giver=DoBillsMechGestator on="gestator" forced=true expect=disabled reason="Not enough bandwidth" match=equals

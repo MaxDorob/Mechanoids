@@ -15,16 +15,16 @@ draft "Ally"
 spawn Pawn:Colonist at 0,5 faction=enemy name="Foe"
 
 select "Tinker"
-gizmo "Defence Matrix"
+gizmo "Defence Matrix" expect=allowed
 target "Foe" expect=refused
 assert thing MechShield expect=absent
 down "Foe"
 
-gizmo "Defence Matrix"
-target "Ally"
+gizmo "Defence Matrix" expect=allowed
+target "Ally" expect=allowed
 deselect
 speed x1
-waitfor thing MechShield at 5,0 ticks=120
+waitfor thing MechShield at 5,0 ticks=120 expect=present
 assert thing MechShield at 0,5 expect=absent
 undraft "Tinker"
 assert log clean

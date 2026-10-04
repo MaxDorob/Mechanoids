@@ -10,14 +10,14 @@ spawn Pawn:Colonist in="cell" name="Prisoner"
 spawn Pawn:APM_Mech_Siren faction=player name="Siren"
 spawn Pawn:APM_Mech_Lasher faction=player name="Lasher"
 prisoner "Prisoner" resistance=10 mode=ReduceResistance
-assert prisoner "Prisoner" secure
+assert prisoner "Prisoner" secure expect=present
 
-work "Siren" giver=APM_SirenChatWithPrisoner on="Prisoner"
+work "Siren" giver=APM_SirenChatWithPrisoner on="Prisoner" expect=allowed
 work "Lasher" giver=APM_SirenChatWithPrisoner on="Prisoner" expect=absent
 
 prisoner "Prisoner" mode=MaintainOnly
 work "Siren" giver=APM_SirenChatWithPrisoner on="Prisoner" expect=absent
 
 prisoner "Prisoner" mode=AttemptRecruit
-work "Siren" giver=APM_SirenChatWithPrisoner on="Prisoner"
+work "Siren" giver=APM_SirenChatWithPrisoner on="Prisoner" expect=allowed
 assert log clean

@@ -11,15 +11,15 @@ overseer "Pulse" by="Mechanitor" now=true
 draft "Pulse"
 
 select "Pulse"
-gizmo "Mech longjump"
+gizmo "Mech longjump" expect=allowed
 target cell=14,0 expect=refused
-assert thing "Pulse" at 0,0
+assert thing "Pulse" at 0,0 expect=present
 
 assert thing "Pulse" at 4,0 expect=absent
-gizmo "Mech longjump"
-target cell=4,0
+gizmo "Mech longjump" expect=allowed
+target cell=4,0 expect=allowed
 deselect
-waitfor thing "Pulse" at 4,0 ticks=300
+waitfor thing "Pulse" at 4,0 ticks=300 expect=present
 assert thing "Pulse" at 0,0 expect=absent
 undraft "Pulse"
 assert log clean

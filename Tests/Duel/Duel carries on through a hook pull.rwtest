@@ -15,18 +15,18 @@ overseer "Terminus" by="Mechanitor" now=true
 draft "Terminus"
 equip "Duelist" thing=APM_Weapon_DuelistsPsySpear now=true
 
-assert thing "Duelist" at 0,0
+assert thing "Duelist" at 0,0 expect=present
 select "Duelist"
-gizmo "The duel trial"
-target "Raider"
+gizmo "The duel trial" expect=allowed
+target "Raider" expect=allowed
 deselect
-waitfor pawn "Duelist" hediff=APM_InDuel ticks=240
+waitfor pawn "Duelist" hediff=APM_InDuel ticks=240 expect=present
 
 select "Terminus"
-gizmo "Grappling Hook"
-target "Duelist"
+gizmo "Grappling Hook" expect=allowed
+target "Duelist" expect=allowed
 deselect
-waitfor thing APM_PawnFlyer_Hooked ticks=240
+waitfor thing APM_PawnFlyer_Hooked ticks=240 expect=present
 waitfor thing APM_PawnFlyer_Hooked expect=absent ticks=300
 
 assert pawn "Duelist" hediff=APM_InDuel expect=present

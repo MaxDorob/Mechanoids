@@ -13,6 +13,8 @@
 			<MarketValue>1600</MarketValue>
 			<MechEnergyLossPerHP MayRequire="Ludeon.RimWorld.Biotech">0.15</MechEnergyLossPerHP>
 			<BandwidthCost MayRequire="Ludeon.RimWorld.Biotech">4</BandwidthCost>
+			<CarryingCapacity>37.5</CarryingCapacity>
+			<Mass>50</Mass>
 			<EMPResistance MayRequire="Ludeon.Rimworld.Biotech">0.45</EMPResistance>
 		</statBases>
 		<tools>

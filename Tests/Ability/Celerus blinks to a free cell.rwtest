@@ -13,15 +13,15 @@ spawn Pawn:Colonist at 6,3 name="Bystander"
 draft "Bystander"
 
 select "Celerus"
-gizmo "Blink"
+gizmo "Blink" expect=allowed
 target cell=6,3 expect=refused
 assert thing "Celerus" at 6,3 expect=absent
 
 assert thing "Celerus" at 10,-2 expect=absent
-gizmo "Blink"
-target cell=10,-2
-waitfor thing "Celerus" at 10,-2 ticks=120
-assert thing "Bystander" at 6,3
+gizmo "Blink" expect=allowed
+target cell=10,-2 expect=allowed
+waitfor thing "Celerus" at 10,-2 ticks=120 expect=present
+assert thing "Bystander" at 6,3 expect=present
 gizmo "Blink" expect=disabled
 deselect
 assert log clean

@@ -7,6 +7,8 @@
 			<ArmorRating_Blunt>0.24</ArmorRating_Blunt>
 			<ArmorRating_Sharp>0.50</ArmorRating_Sharp>
 			<BandwidthCost MayRequire="Ludeon.Rimworld.Biotech">2</BandwidthCost>
+			<CarryingCapacity>50</CarryingCapacity>
+			<Mass>40</Mass>
 			<MechEnergyLossPerHP MayRequire="Ludeon.Rimworld.Biotech">0.20</MechEnergyLossPerHP>
 			<EMPResistance MayRequire="Ludeon.Rimworld.Biotech">0.45</EMPResistance>
 		</statBases>

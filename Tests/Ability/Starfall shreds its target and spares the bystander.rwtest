@@ -20,11 +20,11 @@ assert pawn "Target" hediff=Shredded expect=absent
 assert pawn "Far" hediff=Shredded expect=absent
 
 select "Ravager"
-gizmo "Starfall"
-target cell=10,0
-waitfor thing APM_StarfallCarrier ticks=400
-waitfor pawn "Target" hediff=Shredded ticks=600
-tick 120 reason="let every fragment land and every explosion finish"
+gizmo "Starfall" expect=allowed
+target cell=10,0 expect=allowed
+waitfor thing APM_StarfallCarrier ticks=400 expect=present
+waitfor pawn "Target" hediff=Shredded ticks=600 expect=present
+tick 120 note="let every fragment land and every explosion finish"
 
 assert pawn "Far" hediff=Shredded expect=absent
 assert pawn "Far" dead expect=absent

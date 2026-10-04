@@ -13,8 +13,8 @@ work "Frost" giver=APM_FrostivusRescueFood on="meal" expect=absent
 spawn Pawn:Colonist name="Mechanitor"
 give "Mechanitor" need=Food value=1
 overseer "Frost" by="Mechanitor"
-work "Frost" giver=APM_FrostivusRescueFood on="meal"
+work "Frost" giver=APM_FrostivusRescueFood on="meal" expect=allowed
 job "Frost" giver=APM_FrostivusRescueFood on="meal" until=done ticks=1500
-assert pawn "Frost" inventory=MealSimple
+assert pawn "Frost" inventory=MealSimple expect=present
 assert thing MealSimple expect=absent
 assert log clean

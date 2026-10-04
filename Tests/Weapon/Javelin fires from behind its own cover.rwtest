@@ -3,28 +3,7 @@ test "Javelin fires from behind its own cover" project="Apex Mechanoids" created
 
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
-spawn Thing:Wall at 3,-3
-spawn Thing:Wall at 3,-2
-spawn Thing:Wall at 3,-1
-spawn Thing:Wall at 3,0
-spawn Thing:Wall at 3,1
-spawn Thing:Wall at 3,2
-spawn Thing:Wall at 3,3
-spawn Thing:Wall at -2,-3
-spawn Thing:Wall at -2,-2
-spawn Thing:Wall at -2,-1
-spawn Thing:Wall at -2,0
-spawn Thing:Wall at -2,1
-spawn Thing:Wall at -2,2
-spawn Thing:Wall at -2,3
-spawn Thing:Wall at -1,-3
-spawn Thing:Wall at 0,-3
-spawn Thing:Wall at 1,-3
-spawn Thing:Wall at 2,-3
-spawn Thing:Wall at -1,3
-spawn Thing:Wall at 0,3
-spawn Thing:Wall at 1,3
-spawn Thing:Wall at 2,3
+room at -2,-3 size=6,7 door=none roof=false
 
 spawn Pawn:APM_Mech_Javelin at 0,0 faction=player name="Javelin"
 spawn Pawn:Colonist at -1,-2 name="Mechanitor"
@@ -32,7 +11,7 @@ draft "Mechanitor"
 give "Mechanitor" need=Food value=1
 overseer "Javelin" by="Mechanitor" now=true
 equip "Javelin" thing=APM_Gun_JavelinRocketLauncher now=true
-assert pawn "Javelin" equipment=APM_Gun_JavelinRocketLauncher
+assert pawn "Javelin" equipment=APM_Gun_JavelinRocketLauncher expect=present
 
 spawn Pawn:Colonist at 20,0 name="Dummy A"
 draft "Dummy A"
@@ -46,24 +25,24 @@ spawn Pawn:Colonist at 0,20 name="Dummy B"
 draft "Dummy B"
 
 assert pawn "Dummy A" hediff=APM_Hediff_JavelinMissileLock expect=absent
-assert pawn "Dummy A" pain max=0
+assert pawn "Dummy A" pain max=0 expect=present
 
 draft "Javelin"
 attack "Javelin" target="Dummy A"
-waitfor jobhistory "Javelin" job=AttackStatic ticks=60
+waitfor jobhistory "Javelin" job=AttackStatic ticks=60 expect=present
 waitfor shots "Javelin" min=1 ticks=600
-waitfor pawn "Dummy A" hediff=APM_Hediff_JavelinMissileLock ticks=600
-assert pawn "Dummy A" pain min=0.1
+waitfor pawn "Dummy A" hediff=APM_Hediff_JavelinMissileLock ticks=600 expect=present
+assert pawn "Dummy A" pain min=0.1 expect=present
 undraft "Javelin"
 
-tick 450 reason="cooldown 7.4 s = 444 ticks from the east shot runs out before the north order"
+tick 450 note="cooldown 7.4 s = 444 ticks from the east shot runs out before the north order"
 draft "Javelin"
 select "Javelin"
-gizmo "Javelin rocket launcher"
+gizmo "Javelin rocket launcher" expect=allowed
 target "Dummy B" expect=refused reason="Cannot hit target"
 deselect
 attack "Javelin" target="Dummy B"
-tick 600 reason="the same 244 tick warmup-plus-flight the east shot needed, with the same margin"
+tick 600 note="the same 244 tick warmup-plus-flight the east shot needed, with the same margin"
 assert shots "Javelin" min=0 max=0
 assert pawn "Dummy B" hediff=APM_Hediff_JavelinMissileLock expect=absent
 undraft "Javelin"

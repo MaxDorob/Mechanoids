@@ -8,7 +8,7 @@ spawn Pawn:Colonist at 12,1 faction=enemy name="Raider A"
 spawn Pawn:Colonist at 12,0 faction=enemy name="Raider B"
 spawn Pawn:Colonist at 12,-1 faction=enemy name="Raider C"
 equip "Gunner" thing=APM_Solus now=true
-assert pawn "Gunner" equipment=APM_Solus
+assert pawn "Gunner" equipment=APM_Solus expect=present
 draft "Gunner"
 attack "Gunner" target="Raider B"
 ask "solus-orb" ticks=480 claim="after a long charge the gunner fires a glowing orb at the middle raider; when it hits, golden lightning jumps from it to the raiders next to it; the lightning is gold, not white or pink"

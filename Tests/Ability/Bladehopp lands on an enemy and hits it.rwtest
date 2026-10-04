@@ -12,16 +12,16 @@ draft "Mantis"
 
 speed paused
 spawn Pawn:Colonist at 5,0 faction=enemy name="Raider"
-assert pawn "Raider" pain max=0
+assert pawn "Raider" pain max=0 expect=present
 
 select "Mantis"
-gizmo "Bladehopp"
-target "Raider"
+gizmo "Bladehopp" expect=allowed
+target "Raider" expect=allowed
 speed x1
-waitfor pawn "Raider" pain min=0.05 max=0.8 ticks=120
-assert pawn "Mantis" near="Raider" max=1.5
-assert thing "Mantis" at 5,0
-assert pawn "Mechanitor" pain max=0
+waitfor pawn "Raider" pain min=0.05 max=0.8 ticks=120 expect=present
+assert pawn "Mantis" near="Raider" max=1.5 expect=present
+assert thing "Mantis" at 5,0 expect=present
+assert pawn "Mechanitor" pain max=0 expect=present
 gizmo "Bladehopp" expect=disabled
 deselect
 assert log clean

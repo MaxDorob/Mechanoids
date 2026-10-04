@@ -5,7 +5,7 @@ requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 spawn Pawn:APM_Mech_Tinker faction=player name="Tinker"
 spawn Pawn:Mech_Lifter faction=player name="Patient"
-damage "Patient" amount=10 def=Blunt
+damage "Patient" amount=10 kind=Blunt
 assert pawn "Patient" hediff=Crack expect=present
 
 work "Tinker" giver=APM_TinkerRepairMech on="Patient" expect=absent
@@ -15,7 +15,7 @@ overseer "Tinker" by="Mechanitor"
 overseer "Patient" by="Mechanitor"
 assert pawn "Tinker" downed expect=absent
 assert pawn "Tinker" job=SelfShutdown expect=absent
-work "Tinker" giver=APM_TinkerRepairMech on="Patient" forced=true
+work "Tinker" giver=APM_TinkerRepairMech on="Patient" forced=true expect=allowed
 job "Tinker" giver=APM_TinkerRepairMech on="Patient" forced=true until=done ticks=2500
 assert pawn "Patient" hediff=Crack expect=absent
 assert log clean
