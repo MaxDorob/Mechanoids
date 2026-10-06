@@ -3,7 +3,6 @@ test "Ingestor recycles a corpse into chemfuel" project="Apex Mechanoids" create
 
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
-despawn Thing:Corpse_Human
 spawn Pawn:APM_Mech_Ingestor faction=player name="Ingestor"
 spawn Pawn:Colonist faction=enemy name="Body"
 damage "Body" amount=999

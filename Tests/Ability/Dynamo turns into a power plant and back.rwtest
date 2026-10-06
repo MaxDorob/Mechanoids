@@ -3,7 +3,6 @@ test "Dynamo turns into a power plant and back" project="Apex Mechanoids" create
 
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
-despawn Thing:APM_DynamoPoweredGenerator
 spawn Pawn:APM_Mech_Dynamo faction=player name="Dynamo"
 spawn Pawn:Colonist name="Mechanitor"
 draft "Mechanitor"

@@ -194,4 +194,8 @@
 
   <APM.StatFactorFromHealth.Label>{STAT} from low health</APM.StatFactorFromHealth.Label>
   <APM.StatFactorFromHealth.Description>This mechanoid's {STAT} is affected by its health condition.</APM.StatFactorFromHealth.Description>
+
+  <APM.Shockwave.Stat.Damage>Damage: {0} ({1})</APM.Shockwave.Stat.Damage>
+  <APM.Shockwave.Stat.ArmorPenetration>Armor penetration: {0}</APM.Shockwave.Stat.ArmorPenetration>
+  <APM.Shockwave.Stat.EmpDamage>EMP damage to mechanoids: {0}</APM.Shockwave.Stat.EmpDamage>
 </LanguageData>

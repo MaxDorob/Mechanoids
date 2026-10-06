@@ -104,7 +104,10 @@ namespace ApexMechanoids
                 Props.stunTicks,
                 Props.minThrowDistance,
                 Props.maxThrowDistance,
-                Props.empDamageAmount);
+                Props.empDamageAmount,
+                Props.damageDef,
+                Props.damageAmount,
+                Props.armorPenetration);
             GenSpawn.Spawn(blastWave, center, map, WipeMode.Vanish);
             return true;
         }
@@ -116,6 +119,12 @@ namespace ApexMechanoids
             {
                 Pawn pawn = pawns[i];
                 if (!ShouldThrowPawn(caster, pawn, center))
+                {
+                    continue;
+                }
+
+                ApplyBlastDamage(caster, pawn, center);
+                if (pawn.Dead || !pawn.Spawned)
                 {
                     continue;
                 }
@@ -137,6 +146,18 @@ namespace ApexMechanoids
                 flyer.Initialize(Props.stunTicks, caster);
                 GenSpawn.Spawn(flyer, pawn.PositionHeld, map, WipeMode.Vanish);
             }
+        }
+
+        private void ApplyBlastDamage(Pawn caster, Pawn pawn, IntVec3 center)
+        {
+            if (Props.damageDef == null || Props.damageAmount <= 0 || !pawn.HostileTo(caster))
+            {
+                return;
+            }
+
+            float angleFromCenter = (pawn.Position - center).AngleFlat;
+            DamageInfo blastDamage = new DamageInfo(Props.damageDef, Props.damageAmount, Props.armorPenetration, angleFromCenter, caster);
+            pawn.TakeDamage(blastDamage);
         }
 
         private void ApplyEmpToMechs(Pawn caster, Map map, IntVec3 center)
@@ -313,6 +334,20 @@ namespace ApexMechanoids
         public string castSoundDefName = "PsycastPsychicPulse";
         public float aiThreatRadius = 4f;
         public int aiMinHostilesToTrigger = 1;
+
+        public override IEnumerable<string> ExtraStatSummary()
+        {
+            if (damageDef != null && damageAmount > 0)
+            {
+                yield return "APM.Shockwave.Stat.Damage".Translate(damageAmount, damageDef.label);
+                yield return "APM.Shockwave.Stat.ArmorPenetration".Translate(armorPenetration.ToStringPercent());
+            }
+
+            if (empDamageAmount > 0)
+            {
+                yield return "APM.Shockwave.Stat.EmpDamage".Translate(empDamageAmount);
+            }
+        }
     }
 
     public static class ShockwaveAIUtility
@@ -549,17 +584,12 @@ namespace ApexMechanoids
                 return;
             }
 
-            float bandMin = ringIndex - 0.7f;
-            float bandMax = ringIndex + 0.5f;
-            foreach (IntVec3 cell in GenRadial.RadialCellsAround(originCell, ringIndex + 0.45f, true))
+            int firstCellIndex = ShockwaveRadialUtility.FirstRadialIndexAtOrBeyond(ringIndex - 0.7f);
+            int endCellIndex = GenRadial.NumCellsInRadius(ringIndex + 0.45f);
+            for (int cellIndex = firstCellIndex; cellIndex < endCellIndex; cellIndex++)
             {
+                IntVec3 cell = originCell + GenRadial.RadialPattern[cellIndex];
                 if (!cell.InBounds(MapHeld) || !cell.ShouldSpawnMotesAt(MapHeld))
-                {
-                    continue;
-                }
-
-                float distance = cell.DistanceTo(originCell);
-                if (distance < bandMin || distance > bandMax)
                 {
                     continue;
                 }

@@ -4,8 +4,6 @@ test "Starfall passes a bullet shield and stops at a high-shield" project="Apex 
 requires dlc=Biotech
 requires dlc=Royalty
 requires mod=Mortis.ApexMechanoids
-despawn Thing:ShieldGeneratorBullets
-despawn Thing:ShieldGeneratorMortar
 spawn Thing:ShieldGeneratorBullets at 12,6 faction=Mechanoid name="Bullet shield"
 spawn Thing:ShieldGeneratorMortar at 20,30 faction=Mechanoid name="High shield"
 spawn Pawn:APM_Mech_Ravager at -26,0 faction=player name="Ravager"

@@ -674,7 +674,7 @@
 				<sparkIntervalTicks>0</sparkIntervalTicks>
 			</li>
 			<li Class="ApexMechanoids.CompProperties_Shockwave">
-				<damageDef>Bomb</damageDef>
+				<damageDef>APM_Shockwave</damageDef>
 				<blastWaveDef>APM_Mote_ShockwaveBlastWave</blastWaveDef>
 				<throwFlyerDef>APM_PawnFlyer_ShockwaveThrown</throwFlyerDef>
 				<radius>8.9</radius>
