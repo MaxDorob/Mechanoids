@@ -3,7 +3,6 @@ test "Vassal resurrects a mech only while its overseer has bandwidth" project="A
 
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
-despawn Thing:Corpse_Mech_Lifter
 sky glow=1
 room size=15,11 roof=false name="yard"
 spawn Thing:WoodFiredGenerator in="yard" faction=player fueled=true

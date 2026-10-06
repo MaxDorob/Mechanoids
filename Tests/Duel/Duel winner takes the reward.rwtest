@@ -4,7 +4,6 @@ test "Duel winner takes the reward" project="Apex Mechanoids" created=2026-09-26
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 speed paused
-despawn Thing:APM_DuelSpot
 spawn Pawn:Colonist at 0,0 name="Duelist"
 spawn Pawn:Colonist at 4,0 faction=enemy name="Raider"
 equip "Duelist" thing=APM_Weapon_DuelistsPsySpear now=true

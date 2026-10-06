@@ -3,7 +3,6 @@ test "Frostivus rescues loose food" project="Apex Mechanoids" created=2026-09-26
 
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
-despawn Thing:MealSimple
 room size=7,7 door=none roof=false name="pen"
 spawn Pawn:APM_Mech_Frostivus in="pen" faction=player name="Frost"
 spawn Thing:MealSimple in="pen" name="meal"

@@ -3,7 +3,6 @@ test "Mechamancer pack deploys satellites" project="Apex Mechanoids" created=202
 
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
-despawn Thing:APM_Mech_Satellite
 spawn Pawn:Colonist name="Mechanitor"
 wear "Mechanitor" apparel=APM_Apparel_MechamancerPack
 assert thing APM_Mech_Satellite expect=absent
@@ -19,5 +18,4 @@ select "Mechanitor"
 gizmo "summon satellite" expect=refused
 assert text contains "APM" expect=absent
 deselect
-despawn Thing:APM_Mech_Satellite
 assert log clean

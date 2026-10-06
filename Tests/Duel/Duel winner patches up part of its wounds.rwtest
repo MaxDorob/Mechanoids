@@ -4,7 +4,6 @@ test "Duel winner patches up part of its wounds" project="Apex Mechanoids" creat
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
 speed paused
-despawn Thing:APM_DuelSpot
 spawn Pawn:Colonist at 0,0 name="Duelist" gear=none xenotype=Baseliner
 spawn Pawn:Colonist at 4,0 faction=enemy name="Raider" gear=none xenotype=Baseliner
 equip "Duelist" thing=APM_Weapon_DuelistsPsySpear now=true

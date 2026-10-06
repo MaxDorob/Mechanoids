@@ -3,7 +3,6 @@ test "Duel carries on through a hook pull" project="Apex Mechanoids" created=202
 
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
-despawn Thing:APM_DuelSpot
 spawn Pawn:Colonist at 0,0 name="Duelist"
 draft "Duelist"
 spawn Pawn:Colonist at 4,0 faction=enemy name="Raider"

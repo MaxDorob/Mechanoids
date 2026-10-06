@@ -3,7 +3,6 @@ test "Ingestor settings steer its work" project="Apex Mechanoids" created=2026-0
 
 requires dlc=Biotech
 requires mod=Mortis.ApexMechanoids
-despawn Thing:Corpse_Human
 spawn Pawn:APM_Mech_Ingestor faction=player name="Ingestor"
 spawn Pawn:Colonist faction=enemy name="Body"
 damage "Body" amount=999

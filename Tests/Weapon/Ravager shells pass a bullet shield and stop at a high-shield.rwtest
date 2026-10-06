@@ -4,8 +4,6 @@ test "Ravager shells pass a bullet shield and stop at a high-shield" project="Ap
 requires dlc=Biotech
 requires dlc=Royalty
 requires mod=Mortis.ApexMechanoids
-despawn Thing:ShieldGeneratorBullets
-despawn Thing:ShieldGeneratorMortar
 spawn Pawn:APM_Mech_Ravager at -26,0 faction=player name="Ravager"
 spawn Pawn:Colonist at -26,-8 name="Mechanitor"
 draft "Mechanitor"
