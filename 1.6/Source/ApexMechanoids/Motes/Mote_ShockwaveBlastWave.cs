@@ -8,6 +8,7 @@ namespace ApexMechanoids
     public class Mote_ShockwaveBlastWave : Mote
     {
         private const float ImpactBandPadding = 0.75f;
+        private const float FallbackLandingSearchRadius = 2f;
 
         private float startScale = 1f;
         private float endScale = 8f;
@@ -21,9 +22,13 @@ namespace ApexMechanoids
         private int minThrowDistance = 2;
         private int maxThrowDistance = 6;
         private int empDamageAmount;
+        private DamageDef blastDamageDef;
+        private int blastDamageAmount;
+        private float blastArmorPenetration;
         private float processedRadius = -ImpactBandPadding;
         private List<int> processedPawnIds = new List<int>();
-        private HashSet<int> processedPawnLookup;
+        private HashSet<int> processedPawnLookup = new HashSet<int>();
+        private readonly List<Pawn> pawnsInWaveBand = new List<Pawn>();
         private FleckDef electricalSparkFleck;
         private FleckDef lightningGlowFleck;
 
@@ -75,7 +80,10 @@ namespace ApexMechanoids
             int stunTicksOnImpact,
             int minThrowDistance,
             int maxThrowDistance,
-            int empDamageAmount)
+            int empDamageAmount,
+            DamageDef blastDamageDef,
+            int blastDamageAmount,
+            float blastArmorPenetration)
         {
             exactPosition = position;
             exactRotation = Rand.Range(0f, 360f);
@@ -90,8 +98,10 @@ namespace ApexMechanoids
             this.minThrowDistance = Mathf.Max(minThrowDistance, 1);
             this.maxThrowDistance = Mathf.Max(maxThrowDistance, this.minThrowDistance);
             this.empDamageAmount = Mathf.Max(empDamageAmount, 0);
+            this.blastDamageDef = blastDamageDef;
+            this.blastDamageAmount = Mathf.Max(blastDamageAmount, 0);
+            this.blastArmorPenetration = Mathf.Max(blastArmorPenetration, 0f);
             processedRadius = -ImpactBandPadding;
-            EnsureProcessedLookup();
         }
 
         public override void Tick()
@@ -119,16 +129,14 @@ namespace ApexMechanoids
                 return;
             }
 
-            EnsureProcessedLookup();
-
             float minRadius = Mathf.Max(0f, processedRadius - ImpactBandPadding);
-            float maxRadius = currentRadius + ImpactBandPadding;
+            float maxRadius = Mathf.Min(currentRadius + ImpactBandPadding, gameplayRadius);
             IntVec3 center = PositionHeld;
             EmitElectricalPulseFront(center, currentRadius);
-            IReadOnlyList<Pawn> pawns = MapHeld.mapPawns.AllPawnsSpawned;
-            for (int i = 0; i < pawns.Count; i++)
+            CollectPawnsInWaveBand(center, minRadius, maxRadius);
+            for (int pawnIndex = 0; pawnIndex < pawnsInWaveBand.Count; pawnIndex++)
             {
-                Pawn pawn = pawns[i];
+                Pawn pawn = pawnsInWaveBand[pawnIndex];
                 if (!CanImpactPawn(pawn))
                 {
                     continue;
@@ -136,12 +144,6 @@ namespace ApexMechanoids
 
                 int pawnId = pawn.thingIDNumber;
                 if (processedPawnLookup.Contains(pawnId))
-                {
-                    continue;
-                }
-
-                float distance = pawn.PositionHeld.DistanceTo(center);
-                if (distance > gameplayRadius || distance < minRadius || distance > maxRadius)
                 {
                     continue;
                 }
@@ -155,10 +157,41 @@ namespace ApexMechanoids
                     continue;
                 }
 
+                ApplyBlastDamage(pawn, center);
+                if (pawn.Dead || !pawn.Spawned)
+                {
+                    continue;
+                }
+
                 ThrowPawn(pawn, center);
             }
 
+            pawnsInWaveBand.Clear();
             processedRadius = currentRadius;
+        }
+
+        private void CollectPawnsInWaveBand(IntVec3 center, float minRadius, float maxRadius)
+        {
+            pawnsInWaveBand.Clear();
+            int firstCellIndex = ShockwaveRadialUtility.FirstRadialIndexAtOrBeyond(minRadius);
+            int endCellIndex = GenRadial.NumCellsInRadius(maxRadius);
+            for (int cellIndex = firstCellIndex; cellIndex < endCellIndex; cellIndex++)
+            {
+                IntVec3 cell = center + GenRadial.RadialPattern[cellIndex];
+                if (!cell.InBounds(MapHeld))
+                {
+                    continue;
+                }
+
+                List<Thing> thingsInCell = MapHeld.thingGrid.ThingsListAtFast(cell);
+                for (int thingIndex = 0; thingIndex < thingsInCell.Count; thingIndex++)
+                {
+                    if (thingsInCell[thingIndex] is Pawn pawn)
+                    {
+                        pawnsInWaveBand.Add(pawn);
+                    }
+                }
+            }
         }
 
         private void EmitElectricalPulseFront(IntVec3 center, float currentRadius)
@@ -263,6 +296,18 @@ namespace ApexMechanoids
             pawn.TakeDamage(empDamage);
         }
 
+        private void ApplyBlastDamage(Pawn pawn, IntVec3 center)
+        {
+            if (blastDamageDef == null || blastDamageAmount <= 0 || caster == null || !pawn.HostileTo(caster))
+            {
+                return;
+            }
+
+            float angleFromCenter = (pawn.PositionHeld - center).AngleFlat;
+            DamageInfo blastDamage = new DamageInfo(blastDamageDef, blastDamageAmount, blastArmorPenetration, angleFromCenter, caster);
+            pawn.TakeDamage(blastDamage);
+        }
+
         private void ThrowPawn(Pawn pawn, IntVec3 center)
         {
             IntVec3 destination = FindThrowDestination(pawn, center);
@@ -327,14 +372,14 @@ namespace ApexMechanoids
                 return bestCell;
             }
 
-            for (int radius = 1; radius <= 2; radius++)
+            float pawnDistanceFromCenter = pawn.PositionHeld.DistanceTo(center);
+            int fallbackCellCount = GenRadial.NumCellsInRadius(FallbackLandingSearchRadius);
+            for (int cellIndex = 0; cellIndex < fallbackCellCount; cellIndex++)
             {
-                foreach (IntVec3 cell in GenRadial.RadialCellsAround(pawn.PositionHeld, radius, true))
+                IntVec3 cell = pawn.PositionHeld + GenRadial.RadialPattern[cellIndex];
+                if (cell.InBounds(MapHeld) && CanLandIn(cell, pawn) && cell.DistanceTo(center) > pawnDistanceFromCenter)
                 {
-                    if (cell.InBounds(MapHeld) && CanLandIn(cell, pawn) && cell.DistanceTo(center) > pawn.PositionHeld.DistanceTo(center))
-                    {
-                        return cell;
-                    }
+                    return cell;
                 }
             }
 
@@ -367,19 +412,6 @@ namespace ApexMechanoids
             if (pawn.stances?.stunner != null)
             {
                 pawn.stances.stunner.StunFor(stunTicksOnImpact, caster, addBattleLog: false);
-            }
-        }
-
-        private void EnsureProcessedLookup()
-        {
-            if (processedPawnIds == null)
-            {
-                processedPawnIds = new List<int>();
-            }
-
-            if (processedPawnLookup == null)
-            {
-                processedPawnLookup = new HashSet<int>(processedPawnIds);
             }
         }
 
@@ -419,6 +451,9 @@ namespace ApexMechanoids
             Scribe_Values.Look(ref minThrowDistance, nameof(minThrowDistance), 2);
             Scribe_Values.Look(ref maxThrowDistance, nameof(maxThrowDistance), 6);
             Scribe_Values.Look(ref empDamageAmount, nameof(empDamageAmount), 0);
+            Scribe_Values.Look(ref blastDamageAmount, nameof(blastDamageAmount), 0);
+            Scribe_Values.Look(ref blastArmorPenetration, nameof(blastArmorPenetration), 0f);
+            Scribe_Defs.Look(ref blastDamageDef, nameof(blastDamageDef));
             Scribe_Values.Look(ref processedRadius, nameof(processedRadius), -ImpactBandPadding);
             Scribe_Collections.Look(ref processedPawnIds, nameof(processedPawnIds), LookMode.Value);
             Scribe_References.Look(ref caster, nameof(caster));
@@ -428,8 +463,12 @@ namespace ApexMechanoids
 
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
-                processedPawnLookup = null;
-                EnsureProcessedLookup();
+                if (processedPawnIds == null)
+                {
+                    processedPawnIds = new List<int>();
+                }
+
+                processedPawnLookup = new HashSet<int>(processedPawnIds);
             }
         }
     }
