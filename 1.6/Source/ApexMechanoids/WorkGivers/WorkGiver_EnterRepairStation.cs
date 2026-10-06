@@ -1,3 +1,4 @@
+﻿using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 using RimWorld;
@@ -12,7 +13,12 @@ namespace ApexMechanoids
         {
             if (!pawn.RaceProps.IsMechanoid) return true;
             if (pawn.Faction != Faction.OfPlayer) return true;
-            return false;
+            return !RepairStationUtility.AnyStationAwaitingPawn(pawn.Map, pawn);
+        }
+
+        public override IEnumerable<Thing> PotentialWorkThingsGlobal(Pawn pawn)
+        {
+            return RepairStationUtility.RepairStationsOnMap(pawn.Map);
         }
 
         public override bool HasJobOnThing(Pawn pawn, Thing t, bool forced = false)
