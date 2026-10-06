@@ -29,10 +29,10 @@ spawn Pawn:Colonist at -8,3 name="Mechanitor" gear=none drafted=true
 spawn Pawn:Colonist at -8,9 name="Second mechanitor" gear=none drafted=true
 overseer "Celerus" by="Mechanitor" now=true
 overseer "Gazer" by="Second mechanitor" now=true
-wear "Mechanitor" apparel=APM_Apparel_MechamancerSuit now=true
-wear "Mechanitor" apparel=APM_Apparel_ArmorHelmetMechamancerHelmet now=true
-wear "Second mechanitor" apparel=APM_Apparel_MechamancerSuit now=true
-wear "Second mechanitor" apparel=APM_Apparel_ArmorHelmetMechamancerHelmet now=true
+wear "Mechanitor" apparel=APM_Apparel_MechamancerSuit
+wear "Mechanitor" apparel=APM_Apparel_ArmorHelmetMechamancerHelmet
+wear "Second mechanitor" apparel=APM_Apparel_MechamancerSuit
+wear "Second mechanitor" apparel=APM_Apparel_ArmorHelmetMechamancerHelmet
 assert pawn "Mechanitor" stat=MechBandwidth min=43.9 max=44.1 expect=present
 assert pawn "Second mechanitor" stat=MechBandwidth min=43.9 max=44.1 expect=present
 overseer "CelerusBoss" by="Mechanitor" now=true

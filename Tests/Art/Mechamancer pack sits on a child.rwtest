@@ -10,12 +10,18 @@ spawn Pawn:Colonist at -1,0 name="Adult east" facing=east
 spawn Pawn:Colonist at 2,0 age=10 name="Child west" facing=west
 spawn Pawn:Colonist at 5,0 name="Adult west" facing=west
 spawn Pawn:Colonist at 8,0 age=10 name="Child north" facing=north
-wear "Child south" apparel=APM_Apparel_MechamancerPack now=true
-wear "Child east" apparel=APM_Apparel_MechamancerPack now=true
-wear "Adult east" apparel=APM_Apparel_MechamancerPack now=true
-wear "Child west" apparel=APM_Apparel_MechamancerPack now=true
-wear "Adult west" apparel=APM_Apparel_MechamancerPack now=true
-wear "Child north" apparel=APM_Apparel_MechamancerPack now=true
+spawn Thing:APM_Apparel_MechamancerPack at -7,-1 name="Child south pack"
+wear "Child south" apparel="Child south pack"
+spawn Thing:APM_Apparel_MechamancerPack at -3,0 name="Child east pack"
+wear "Child east" apparel="Child east pack"
+spawn Thing:APM_Apparel_MechamancerPack at 0,0 name="Adult east pack"
+wear "Adult east" apparel="Adult east pack"
+spawn Thing:APM_Apparel_MechamancerPack at 1,0 name="Child west pack"
+wear "Child west" apparel="Child west pack"
+spawn Thing:APM_Apparel_MechamancerPack at 4,0 name="Adult west pack"
+wear "Adult west" apparel="Adult west pack"
+spawn Thing:APM_Apparel_MechamancerPack at 8,1 name="Child north pack"
+wear "Child north" apparel="Child north pack"
 assert pawn "Child south" apparel=APM_Apparel_MechamancerPack expect=present
 assert pawn "Child east" apparel=APM_Apparel_MechamancerPack expect=present
 assert pawn "Child west" apparel=APM_Apparel_MechamancerPack expect=present
